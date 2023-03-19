@@ -4,18 +4,22 @@ import 'package:complaint_portal/services/user_repository.dart';
 // import 'package:complaint_portal/utils/validators.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../providers/auth_provider.dart';
+import '../providers/database_provider.dart';
+import '../validators.dart';
 import '../widgets/clipper.dart';
 import '../widgets/text_form_field_item.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -60,18 +64,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 }
 
-class RegisterForm extends StatefulWidget {
+class RegisterForm extends ConsumerStatefulWidget {
   const RegisterForm({super.key});
 
   @override
-  State<RegisterForm> createState() => _RegisterFormState();
+  ConsumerState<RegisterForm> createState() => _RegisterFormState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
+class _RegisterFormState extends ConsumerState<RegisterForm> {
   void formProcessor() async {
     try {
       UserRepository().createUser(
-        user,
+        _emailController.text,
         _nameController.text,
         _rollNumberController.text,
         _roomNoController.text,
@@ -92,31 +96,6 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _roomNoController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   late User user;
-  void _showDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-        ),
-        child: Row(
-          children: [
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF181D3D)),
-            ),
-            Container(
-                margin: const EdgeInsets.only(left: 7),
-                child: const Text("  Registering...")),
-          ],
-        ),
-      ),
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
-  }
 
   @override
   void initState() {
@@ -126,81 +105,16 @@ class _RegisterFormState extends State<RegisterForm> {
     _emailController.text = user.email!;
   }
 
-  void _createAccount() async {
-    // _showDialog(context);
-    if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Establishing Contact with the Server')));
-      _showDialog(context);
-      // loadingDialogue(context);
-      var e = UserRepository().createUser(
-        user,
-        _nameController.text,
-        _rollNumberController.text,
-        _roomNoController.text,
-      );
-      // var db = FirebaseFirestore.instance.collection('users');
-      // await db.doc(user.uid).set({
-      //   'name': _nameController.text,
-      //   'uid': user.uid,
-      //   'isAdmin': false,
-      //   'email': user.email,
-      //   'hostel': hostelName,
-      //   'rollNo': _rollNumberController.text,
-      //   'roomNo': _roomNoController.text,
-      //   'type': 'student',
-      //   'category': "general",
-      //   'profilePic': user.photoURL,
-      //   'complaintList': []
-      // }).then(
-      //   (value) => Navigator.of(context).pushReplacement(
-      //     MaterialPageRoute(
-      //       builder: (context) => const HomePage(),
-      //     ),
-      //   ),
-      // );
-      if (e != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Account Created Successfully')));
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const HomePage(),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Account Creation Failed')));
-      }
-    }
+  void setProfile() {
+    UserRepository().updateUser(
+      user.uid,
+      _rollNumberController.text,
+      _phoneNumberController.text,
+      hostelName,
+      _roomNoController.text,
+    );
   }
 
-  // void _showDialog(BuildContext context) {
-  //   AlertDialog alert = AlertDialog(
-  //     content: Container(
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(10),
-  //         color: Colors.white,
-  //       ),
-  //       child: Row(
-  //         children: [
-  //           const CircularProgressIndicator(
-  //             valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF181D3D)),
-  //           ),
-  //           Container(
-  //               margin: const EdgeInsets.only(left: 7),
-  //               child: const Text("  Registering...")),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return alert;
-  //       });
-  // }
-
-  // void _createAccount() {}
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -209,19 +123,15 @@ class _RegisterFormState extends State<RegisterForm> {
         key: _formKey,
         child: Column(children: [
           TextFormFieldItem(
-            controller: _nameController,
             labelText: 'Name',
-            validator: (String? value) {
-              if (value == null || value.isEmpty || value.trim().isEmpty) {
-                return 'Please enter your name';
-              }
-              return null;
-            },
+            canEdit: false,
+            controller: _nameController,
           ),
           const SizedBox(height: 20),
           TextFormFieldItem(
             controller: _emailController,
             labelText: 'Email',
+            canEdit: false,
             validator: (input) =>
                 !isEmail(input!) ? 'Enter a valid email' : null,
           ),
@@ -241,20 +151,15 @@ class _RegisterFormState extends State<RegisterForm> {
             controller: _phoneNumberController,
             labelText: 'PhoneNumber',
             validator: (String? value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your phone number';
-              }
-
-              return null;
+              return isPhoneNumber(value!);
             },
           ),
+          const SizedBox(height: 20),
           TextFormFieldItem(
             controller: _passwordController,
             labelText: 'Password',
             validator: (String? value) {
-              return isPassword(value!)
-                  ? null
-                  : 'Password must be at least 8 characters long';
+              return isPassword(value!);
             },
           ),
           const SizedBox(height: 20),
@@ -275,42 +180,7 @@ class _RegisterFormState extends State<RegisterForm> {
               border: Border.all(color: Colors.black.withOpacity(0.3)),
               borderRadius: const BorderRadius.all(Radius.circular(20)),
             ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                  hint: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 11),
-                    child: Text(
-                      'Hostel',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontSize: 16),
-                    ),
-                  ),
-                  value: hostelName,
-                  onChanged: (String? value) {
-                    setState(() {
-                      hostelName = value!;
-                    });
-                  },
-                  isExpanded: true,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                  items: <String>["Select", ...hostels].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 11),
-                        child: Text(
-                          value,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontSize: 16),
-                        ),
-                      ),
-                    );
-                  }).toList()),
-            ),
+            child: dropDownMenu(context),
           ),
           const SizedBox(height: 20),
           ElevatedButton(
@@ -326,18 +196,53 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                // print('Validated');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Processing Data'),
-                  ),
-                );
-                _createAccount();
+                setProfile();
               }
             },
           ),
         ]),
       ),
+    );
+    //     },
+    //   );
+  }
+
+  DropdownButtonHideUnderline dropDownMenu(BuildContext context) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<String>(
+          hint: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 11),
+            child: Text(
+              'Hostel',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(fontSize: 16),
+            ),
+          ),
+          value: hostelName,
+          onChanged: (String? value) {
+            setState(() {
+              hostelName = value!;
+            });
+          },
+          isExpanded: true,
+          style: Theme.of(context).textTheme.bodyLarge,
+          items: <String>["Select", ...hostels].map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 11),
+                child: Text(
+                  value,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontSize: 16),
+                ),
+              ),
+            );
+          }).toList()),
     );
   }
 }

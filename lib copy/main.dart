@@ -22,7 +22,7 @@ class MyApp extends ConsumerWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: initialize.when(
-        data: (value) => const AuthChecker(),
+        data: (value) => const Scaffold(),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => const Center(
           child: Text('Error'),
@@ -31,3 +31,35 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
+
+
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+//   runApp(const MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+//   @override
+//   Widget build(BuildContext context) {
+//     return GetMaterialApp(
+//       title: 'Flutter Demo',
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//         fontFamily: 'Poppins',
+//       ),
+//       home: const AuthPage(),
+//       // routes: {
+//       //   '/register': (context) => const RegisterScreen(),
+//       //   '/': (context) => (FirebaseAuth.instance.currentUser == null)
+//       //       ? const LoginScreen()
+//       //       : const HomePage(),
+//       //   'home': (context) => const HomePage(),
+//       // },
+//     );
+//   }
+// }

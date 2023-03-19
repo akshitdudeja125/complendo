@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 
 class TextFormFieldItem extends StatelessWidget {
-  TextFormFieldItem({
+  const TextFormFieldItem({
     super.key,
     required TextEditingController controller,
     required this.labelText,
-    this.canEdit = true,
     this.validator,
     this.maxLines = 1,
   }) : _controller = controller;
 
-  final TextEditingController? _controller;
+  final TextEditingController _controller;
   final String labelText;
   final String? Function(String?)? validator;
   final int maxLines;
-  bool? canEdit;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      validator: validator,
+      validator: validator != null ? null : validator,
       autocorrect: false,
       maxLines: maxLines,
       keyboardType: labelText == 'Room No.'
@@ -27,7 +25,6 @@ class TextFormFieldItem extends StatelessWidget {
               ? TextInputType.emailAddress
               : TextInputType.text,
       controller: _controller,
-      enabled: canEdit,
       obscureText: labelText == 'Password' ? true : false,
       decoration: InputDecoration(
         labelStyle: const TextStyle(

@@ -21,18 +21,3 @@ isPassword(String? value) {
   }
   return null;
 }
-
-isPhoneNumber(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Please enter your phone number';
-  }
-  if (value.length != 10) {
-    return 'Phone number must be 10 digits';
-  }
-  RegExp regex = RegExp(r'^[6-9]\d{9}$');
-
-  // if (!regex.hasMatch(value)) {
-  //   return 'Enter valid phone number';
-  // }
-  return null;
-}

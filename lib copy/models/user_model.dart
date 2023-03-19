@@ -12,41 +12,35 @@ String userModelToJson(List<UserModel> data) =>
 
 class UserModel {
   final String id;
-  final String? rollNo;
+  final String rollNo;
   final String name;
   final String email;
-  final String? hostel;
-  final String? roomNo;
-  final String? photoURL;
-  final String? phoneNumber;
-  final bool? isAdmin;
-  final bool? isProfileComplete;
+  final String hostel;
+  final String roomNo;
+  final String photoURL;
+  final bool isAdmin;
 
   UserModel({
+    required this.isAdmin,
     required this.id,
-    this.rollNo,
+    required this.rollNo,
     required this.name,
     required this.email,
-    this.hostel,
-    this.phoneNumber,
-    this.roomNo,
-    this.photoURL,
-    this.isAdmin,
-    this.isProfileComplete,
+    required this.hostel,
+    required this.roomNo,
+    required this.photoURL,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> data) {
     return UserModel(
       id: data['id'],
       rollNo: data['rollNo'],
-      isAdmin: data['isAdmin'],
       name: data['name'],
-      phoneNumber: data['phoneNumber'],
       email: data['email'],
       hostel: data['hostel'],
       roomNo: data['roomNo'],
       photoURL: data['photoURL'],
-      isProfileComplete: data['isProfileComplete'],
+      isAdmin: data['isAdmin'],
     );
   }
 
@@ -58,10 +52,8 @@ class UserModel {
       'name': name,
       'email': email,
       'hostel': hostel,
-      'phoneNumber': phoneNumber,
       'roomNo': roomNo,
       'photoURL': photoURL,
-      'isProfileComplete': isProfileComplete,
     };
   }
 }

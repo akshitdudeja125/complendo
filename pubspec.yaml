@@ -39,6 +39,9 @@ dependencies:
   get: ^4.6.5
   google_sign_in: null
   regexpattern: null
+  flutter_riverpod:
+  # flutter_lints:
+  font_awesome_flutter:
 
 dev_dependencies:
   flutter_lints: ^2.0.0
