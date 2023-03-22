@@ -3,6 +3,7 @@
 import 'package:complaint_portal/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/validators.dart';
 import '../widgets/clipper.dart';
 import '../widgets/text_form_field_item.dart';
 
@@ -37,10 +38,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: MediaQuery.of(context).size.height / 16),
                         Text(
                           'Login',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.apply(color: Colors.white),
+                          style:
+                              Theme.of(context).textTheme.headlineSmall?.apply(
+                                    color: Colors.white,
+                                  ),
                         )
                       ],
                     ),
@@ -95,14 +96,6 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    bool isEmail(String em) {
-      String p =
-          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-      RegExp regExp = RegExp(p);
-
-      return regExp.hasMatch(em);
-    }
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: Form(
@@ -120,21 +113,8 @@ class _LoginFormState extends State<LoginForm> {
             TextFormFieldItem(
               controller: _passwordController,
               labelText: 'Password',
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your password';
-                }
-                if (value.length < 8) {
-                  return 'Password must be atleast 8 characters';
-                }
-                RegExp regex = RegExp(
-                    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-
-                if (!regex.hasMatch(value)) {
-                  return 'Enter valid password';
-                }
-                return null;
-              },
+              validator: (input) =>
+                  isPassword(input!) ? 'Enter a valid password' : null,
             ),
             const SizedBox(height: 20),
             ElevatedButton(

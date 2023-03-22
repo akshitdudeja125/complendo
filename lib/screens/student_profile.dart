@@ -1,323 +1,228 @@
-// import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/material.dart';
-// import 'dart:math';
 
-// var st = FirebaseAuth.instance.currentUser;
+// import '../services/auth_service.dart';
 
-// class CurveClipper extends CustomClipper<Path> {
-//   @override
-//   Path getClip(Size size) {
-//     Path path = Path()
-//       // set the "current point"
-//       ..lineTo(0, size.width / 8)
-//       ..addArc(
-//           Rect.fromLTWH(0, size.width / 512 - size.width / 8, size.width / 2,
-//               size.width / 2),
-//           pi,
-//           -pi / 2)
-//       ..lineTo(4 * size.width / 4, size.width / 2 - size.width / 8)
-//       ..addArc(
-//           Rect.fromLTWH(2 * size.width / 4, size.width / 2 - size.width / 8,
-//               size.width / 2, size.width / 2),
-//           3.14 + 1.57,
-//           1.57)
-//       ..lineTo(size.width, 0)
-//       ..lineTo(0, 0)
-//       ..lineTo(0, size.width / 8);
-//     return path;
-//   }
+// class StudentProfile extends StatefulWidget {
+//   const StudentProfile({super.key});
 
 //   @override
-//   bool shouldReclip(oldCliper) => false;
+//   State<StudentProfile> createState() => _StudentProfileState();
 // }
 
-// GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
-// final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-//     new GlobalKey<RefreshIndicatorState>();
-
-// class Profile extends StatefulWidget {
-//   const Profile({super.key});
-
-//   @override
-//   // ignore: library_private_types_in_public_api
-//   _ProfileState createState() => _ProfileState();
-// }
-
-// class _ProfileState extends State<Profile> {
+// class _StudentProfileState extends State<StudentProfile> {
+//   final userId = FirebaseAuth.instance.currentUser!.uid;
+//   final CollectionReference _usersCollectionReference =
+//       FirebaseFirestore.instance.collection('users');
+//   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 //   @override
 //   Widget build(BuildContext context) {
-//     var query = MediaQuery.of(context);
-//     return FutureBuilder(
-//         future:
-//             FirebaseFirestore.instance.collection('users').doc(st?.uid).get(),
-//         builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> user) {
-//           switch (user.connectionState) {
-//             case ConnectionState.none:
-//             case ConnectionState.active:
-//             case ConnectionState.waiting:
-//               // return Loading();
-//               return const Scaffold(
-//                 body: Center(
-//                   child: CircularProgressIndicator(),
-//                 ),
-//               );
-//             case ConnectionState.done:
-//               if (user.hasError) return Text('Error: ${user.error}');
-//               // List<String> ls =
-//               //     List<String>.from(user.data!.data()?['complaints']);
-//               // List<String> res_list = [];
-//               /*for (var i = 0; i < ls.length; i++) {
-//                 FirebaseFirestore.instance
-//                     .collection('complaints')
-//                     .where('status', isEqualTo: 'Solved').limit(1)\\
-//                     .get()
-//                     .then((data) {
-//                   return res_list.add(FieldPath.documentId.toString());
-//                 });
-//               }*/
-//               // for (var i = 0; i < ls.length; i++) {
-//               //   FirebaseFirestore.instance
-//               //       .collection('complaints')
-//               //       .where('status', isEqualTo: 'Solved')
-//               //       .where('uid', isEqualTo: st.uid)
-//               //       .limit(1)
-//               //       .get()
-//               //       .then((value) =>
-//               //           res_list.add(FieldPath.documentId.toString()));
-//               // }
-//               // print(res_list);
-//               return Container(
-//                 color: const Color(0xFF181D3D),
-//                 child: SafeArea(
-//                   child: Scaffold(
-//                     key: _scaffoldState,
-//                     body: Container(
-//                       child: ListView(
-//                         children: [
-//                           Container(
-//                             width: MediaQuery.of(context).size.width,
-//                             height: MediaQuery.of(context).size.height / 4,
-//                             child: ClipPath(
-//                                 clipper: CurveClipper(),
-//                                 child: Container(
-//                                   constraints: const BoxConstraints.expand(),
-//                                   color: const Color(0xFF181D3D),
-//                                   child: Column(
-//                                     children: [
-//                                       const SizedBox(height: 25.0),
-//                                       Row(
-//                                         mainAxisSize: MainAxisSize.max,
-//                                         mainAxisAlignment:
-//                                             MainAxisAlignment.start,
-//                                         crossAxisAlignment:
-//                                             CrossAxisAlignment.center,
-//                                         children: [
-//                                           const CircleAvatar(
-//                                             backgroundImage: AssetImage(
-//                                                 'assets/app_logo_final_jpg_ws.jpg'),
-//                                             radius: 25.0,
-//                                           ),
-//                                           const SizedBox(
-//                                             width: 35.0,
-//                                           ),
-//                                           const Text(
-//                                             'InstiComplaints',
-//                                             style: TextStyle(
-//                                               fontSize: 25.0,
-//                                               color: Colors.white,
-//                                               fontFamily: 'Amaranth',
-//                                             ),
-//                                           ),
-//                                         ],
-//                                       ),
-//                                       SizedBox(height: query.size.height / 25),
-//                                       Text('Profile',
-//                                           style: TextStyle(
-//                                               color: Colors.white,
-//                                               fontFamily: 'Roboto',
-//                                               fontSize: (30 *
-//                                                       MediaQuery.of(context)
-//                                                           .size
-//                                                           .height) /
-//                                                   1000)),
-//                                     ],
-//                                   ),
-//                                 )),
-//                           ),
-//                           Center(child: Camera()),
-//                           SizedBox(height: query.size.height / 50),
-//                           Center(
-//                             child: Text(
-//                               //'${FirebaseAuth.instance.currentUser.displayName}',
-//                               user.data['name'],
-//                               ¯style: const TextStyle(
-//                                 fontFamily: 'Roboto',
-//                                 fontSize: 20.0,
-//                               ),
-//                               textAlign: TextAlign.center,
-//                             ),
-//                           ),
-//                           const SizedBox(height: 20.0),
-//                           SizedBox(
-//                             child: StreamBuilder(
-//                                 stream: FirebaseFirestore.instance
-//                                     .collection('complaints')
-//                                     .where('status', isEqualTo: 'Solved')
-//                                     .where('uid', isEqualTo: st.uid)
-//                                     .snapshots(),
-//                                 builder: (context, snapshot) {
-//                                   if (snapshot.connectionState ==
-//                                       ConnectionState.waiting) {
-//                                     return Text('',
-//                                         style: TextStyle(
-//                                           fontSize: 25.0,
-//                                           color: Colors.grey[800],
-//                                           fontFamily: 'Roboto',
-//                                         ));
-//                                   }
-//                                   return Row(children: [
-//                                     Expanded(
-//                                       flex: 3,
-//                                       child: FlatButton(
-//                                           onPressed: () {
-//                                             Navigator.pushNamed(
-//                                                 context, '/filed');
-//                                           },
-//                                           child: Padding(
-//                                             padding: const EdgeInsets.all(8.0),
-//                                             child: SizedBox(
-//                                               child: Column(
-//                                                 children: [
-//                                                   Text(
-//                                                       (ls.length -
-//                                                               snapshot.data.docs
-//                                                                   .length)
-//                                                           .toString(),
-//                                                       style: TextStyle(
-//                                                         fontSize: 25.0,
-//                                                         color: Colors.grey[800],
-//                                                         fontFamily: 'Roboto',
-//                                                       )),
-//                                                   const SizedBox(height: 5.0),
-//                                                   Text('Complaints Filed',
-//                                                       style: TextStyle(
-//                                                         color: Colors.grey[800],
-//                                                         fontFamily: 'Roboto',
-//                                                         fontSize: 3 *
-//                                                             query.size.width /
-//                                                             100,
-//                                                       )),
-//                                                 ],
-//                                               ),
-//                                             ),
-//                                           ),
-//                                           color: Colors.blueGrey[50],
-//                                           shape: RoundedRectangleBorder(
-//                                             side: BorderSide(
-//                                               color: Colors.grey[400],
-//                                               width: 1.0,
-//                                               style: BorderStyle.solid,
-//                                             ),
-//                                             borderRadius:
-//                                                 BorderRadius.circular(0.0),
-//                                           )),
-//                                     ),
-//                                     Expanded(
-//                                       flex: 3,
-//                                       child: FlatButton(
-//                                           onPressed: () {
-//                                             Navigator.pushNamed(
-//                                                 context, '/resolved');
-//                                           },
-//                                           child: Padding(
-//                                             padding: const EdgeInsets.all(8.0),
-//                                             child: SizedBox(
-//                                               child: Column(
-//                                                 children: [
-//                                                   Text(
-//                                                       snapshot.data.docs.length
-//                                                           .toString(),
-//                                                       style: TextStyle(
-//                                                         fontSize: 25.0,
-//                                                         color: Colors.grey[800],
-//                                                         fontFamily: 'Roboto',
-//                                                       )),
-//                                                   const SizedBox(height: 5.0),
-//                                                   Padding(
-//                                                     padding:
-//                                                         const EdgeInsets.only(
-//                                                             left: 0),
-//                                                     child: Text(
-//                                                         'Complaints Resolved',
-//                                                         style: TextStyle(
-//                                                           color:
-//                                                               Colors.grey[800],
-//                                                           fontFamily: 'Roboto',
-//                                                           fontSize: 3 *
-//                                                               querzy
-//                                                                   .size.width /
-//                                                               100,
-//                                                         )),
-//                                                   ),
-//                                                 ],
-//                                               ),
-//                                             ),
-//                                           ),
-//                                           color: Colors.blueGrey[50],
-//                                           shape: RoundedRectangleBorder(
-//                                             side: BorderSide(
-//                                               color: Colors.grey[400],
-//                                               width: 1.0,
-//                                               style: BorderStyle.solid,
-//                                             ),
-//                                             borderRadius:
-//                                                 BorderRadius.circular(0.0),
-//                                           )),
-//                                     )
-//                                   ]);
-//                                 }),
-//                           ),
-//                           const SizedBox(height: 15.0),
-//                           Card(
-//                               elevation: 5.0,
-//                               margin: EdgeInsets.symmetric(
-//                                   horizontal: query.size.width / 14,
-//                                   vertical: query.size.height / 80),
-//                               child: Padding(
-//                                 padding: const EdgeInsets.all(8.0),
-//                                 child: Column(
-//                                   crossAxisAlignment: CrossAxisAlignment.start,
-//                                   children: [
-//                                     Text('Category',
-//                                         style: TextStyle(
-//                                           color: Colors.grey[600],
-//                                           fontFamily: 'Roboto',
-//                                         )),
-//                                     const SizedBox(height: 5.0),
-//                                     Row(
-//                                       children: [
-//                                         const Icon(Icons.person),
-//                                         const SizedBox(width: 5.0),
-//                                         Text(user.data['type'],
-//                                             style: const TextStyle(
-//                                               color: Colors.black87,
-//                                               fontFamily: 'Roboto',
-//                                             )),
-//                                       ],
-//                                     )
-//                                   ],
-//                                 ),
-//                               )),
-//                           CardCategory(),
-//                         ],
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               );
+//     return Scaffold(
+//       key: _scaffoldKey,
+//       appBar: AppBar(
+//         actions: [
+//           IconButton(
+//             icon: const Icon(Icons.logout),
+//             onPressed: () {
+//               AuthService().signOut();
+//             },
+//           ),
+//         ],
+//       ),
+//       body: StreamBuilder<DocumentSnapshot>(
+//         stream: _usersCollectionReference.doc(userId).snapshots(),
+//         builder:
+//             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+//           if (snapshot.hasError) {
+//             return const Text('Something went wrong');
 //           }
-//           return null;
-//         });
+
+//           if (snapshot.connectionState == ConnectionState.waiting) {
+//             return const Center(
+//               child: CircularProgressIndicator(),
+//             );
+//           }
+//           final data = snapshot.data!.data() as Map<String, dynamic>;
+//           print(data);
+//           return Center(
+//             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 CircleAvatar(
+//                   radius: 50,
+//                   backgroundImage: NetworkImage(
+//                       data['photoURL'] ?? "https://i.pravatar.cc/150"),
+//                 ),
+//                 const SizedBox(height: 20),
+//                 Text(
+//                   'Welcome ${data['name']}',
+//                   style: Theme.of(context).textTheme.titleLarge,
+//                 ),
+//                 const SizedBox(height: 20),
+//                 Text(
+//                   'Type: ${data['type']}',
+//                   style: Theme.of(context).textTheme.titleLarge,
+//                 ),
+//                 const SizedBox(height: 20),
+//                 Text(
+//                   'User Id: ${data['id']}',
+//                   style: Theme.of(context).textTheme.titleLarge,
+//                 ),
+//                 Text(
+//                   'Admin : ${data['isAdmin']}',
+//                   style: Theme.of(context).textTheme.titleLarge,
+//                 ),
+//                 const SizedBox(height: 20),
+//                 Text(
+//                   'Email: ${data['email']}',
+//                   style: Theme.of(context).textTheme.titleLarge,
+//                 ),
+//                 const SizedBox(height: 20),
+//                 Text(
+//                   'Phone: ${data['phoneNumber']}',
+//                   style: Theme.of(context).textTheme.titleLarge,
+//                 ),
+//                 const SizedBox(height: 20),
+//                 Text(
+//                   'Email Verified: ${data['emailVerified']}',
+//                   style: Theme.of(context).textTheme.titleLarge,
+//                 ),
+//               ],
+//             ),
+//           );
+//         },
+//       ),
+//     );
 //   }
 // }
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:complaint_portal/providers/database_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+import '../utils/constants.dart';
+import '../services/auth_service.dart';
+
+class StudentProfile extends StatefulWidget {
+  const StudentProfile({super.key});
+
+  @override
+  State<StudentProfile> createState() => _StudentProfileState();
+}
+
+class _StudentProfileState extends State<StudentProfile> {
+  final userId = FirebaseAuth.instance.currentUser!.uid;
+  final CollectionReference _usersCollectionReference =
+      FirebaseFirestore.instance.collection('users');
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: _usersCollectionReference.doc(userId).snapshots(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return const Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final data = snapshot.data!.data() as Map<String, dynamic>;
+          return Scaffold(
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(defaultSpacing),
+                child: Column(
+                  children: [
+                    Center(
+                      child: Column(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          CircleAvatar(
+                            radius: 100,
+                            backgroundImage: NetworkImage(
+                              data['photoURL'] ?? "",
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: defaultSpacing / 2),
+                            child: Text(
+                              data['name'],
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: defaultSpacing / 2),
+                            child: Text(
+                              data['email'],
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => AuthService().signOut(),
+                            child: const Chip(
+                              label: Text("Log out"),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class SettingsTile extends StatelessWidget {
+  final String title;
+  final String imageUrl;
+  String? subtitle;
+  SettingsTile({
+    super.key,
+    required this.title,
+    this.subtitle = "",
+    required this.imageUrl,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Padding(
+        padding: subtitle == ""
+            ? const EdgeInsets.symmetric(horizontal: 8)
+            : const EdgeInsets.all(8),
+        child: Image.asset(imageUrl),
+      ),
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      subtitle: Text(
+        subtitle ?? "",
+        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+            // color: fontHeading,
+            ),
+      ),
+      trailing: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: defaultSpacing),
+        child: Icon(
+          Icons.arrow_forward_ios_rounded,
+          size: 20,
+          color: Colors.black26,
+        ),
+      ),
+    );
+  }
+}

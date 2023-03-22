@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'controllers/auth_controller.dart';
 import 'firebase_options.dart';
 
@@ -11,7 +12,9 @@ void main() {
 }
 
 final firebaseinitializerProvider = FutureProvider<FirebaseApp>((ref) async {
-  return await Firebase.initializeApp();
+  return await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 });
 
 class MyApp extends ConsumerWidget {
@@ -21,6 +24,9 @@ class MyApp extends ConsumerWidget {
     final initialize = ref.watch(firebaseinitializerProvider);
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: GoogleFonts.lora().fontFamily,
+      ),
       home: initialize.when(
         data: (value) => const AuthChecker(),
         loading: () => const Center(child: CircularProgressIndicator()),

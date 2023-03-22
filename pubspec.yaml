@@ -36,12 +36,14 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_form_builder: ^7.8.0
+  flutter_riverpod: null
+  font_awesome_flutter: null
   get: ^4.6.5
+  google_fonts: ^4.0.3
   google_sign_in: null
+  location: ^4.4.0
   regexpattern: null
-  flutter_riverpod:
-  # flutter_lints:
-  font_awesome_flutter:
+  svg_icon: ^0.0.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0
