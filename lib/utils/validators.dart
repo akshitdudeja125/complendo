@@ -50,3 +50,16 @@ isDescription(String? value) {
   }
   return null;
 }
+
+isRoom(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Please enter a room number';
+  }
+  // regex such that room number is of the form A/B-1-1-1
+  // RegExp regex = RegExp(r'^[A-Z]/[A-Z]-\d-\d-\d$');
+
+  // if (!regex.hasMatch(value)) {
+  //   return 'Enter valid room number';
+  // }
+  return null;
+}
