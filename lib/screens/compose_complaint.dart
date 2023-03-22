@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, library_private_types_in_public_api
+// ignore_for_file: prefer_typing_uninitialized_variables, library_private_types_in_public_api, deprecated_member_use
 
 import 'dart:io';
 
@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../models/complaint_model.dart';
 import '../providers/auth_provider.dart';
@@ -166,18 +167,13 @@ class _ComplaintFormState extends ConsumerState<ComplaintForm> {
       print('Form Validated');
 
       // Upload the image to firebase storage
-      final ref = FirebaseStorage.instance
+      final reference = FirebaseStorage.instance
           .ref()
-          .child('complaints')
-          .child(user!.uid + DateTime.now().toString());
-      // await ref.putFile(pickedImage!);
-      // final imageUrl = await ref.getDownloadURL();
-      final _firebaseStorage = FirebaseStorage.instance;
-      final file = File(pickedImage!.path);
-      var snapshot =
-          await _firebaseStorage.ref().child('images/imageName').putFile(file);
-      var downloadUrl = await snapshot.ref.getDownloadURL();
-
+          .child("complaints")
+          .child("complaint_${1}.png");
+      UploadTask uploadTask =
+          (await reference.putFile(pickedImage!)) as UploadTask;
+      final downloadURL = await (await uploadTask).ref.getDownloadURL();
       final data = {
         'name': nameController.text,
         'email': emailController.text,
@@ -186,7 +182,7 @@ class _ComplaintFormState extends ConsumerState<ComplaintForm> {
         'complaintType': complaintType,
         'status': 'Pending',
         'timestamp': DateTime.now(),
-        // 'referencePic': imageUrl,
+        'referencePic': downloadURL,
       };
       print(data);
       // ref.read(databaseProvider).addComplaint(
@@ -194,6 +190,7 @@ class _ComplaintFormState extends ConsumerState<ComplaintForm> {
       //       titleController.text,
       //       descriptionController.text,
       //       complaintType,
+
       //     );
     }
   }
@@ -331,6 +328,21 @@ class _ComplaintFormState extends ConsumerState<ComplaintForm> {
               ],
             ),
           ),
+          // ElevatedButton(
+          //   style: ElevatedButton.styleFrom(
+          //     backgroundColor: Colors.black,
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(20),
+          //     ),
+          //   ),
+          //   child: const Text(
+          //     'Upload Image',
+          //     style: TextStyle(color: Colors.white, fontSize: 14),
+          //   ),
+          //   onPressed: () {
+          //     _uploadImage();
+          //   },
+          // ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
@@ -351,3 +363,19 @@ class _ComplaintFormState extends ConsumerState<ComplaintForm> {
     );
   }
 }
+
+// _uploadImage() async {
+//   try {
+//     final pickedImage =
+//         await ImagePicker().pickImage(source: ImageSource.gallery);
+//     UploadTask? uploadTask;
+//     Reference ref =
+//         FirebaseStorage.instance.ref().child('complaints').child('/');
+//     ref.putFile(File(pickedImage!.path));
+//     await uploadTask!.whenComplete(() => null);
+//     final imageUrl = await ref.getDownloadURL();
+//     print(imageUrl);
+//   } catch (e) {
+//     print(e);
+//   }
+// }
