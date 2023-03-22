@@ -2,7 +2,7 @@ import 'package:complaint_portal/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/student_profile.dart';
-import 'compose_complaint.dart';
+import '../screens/compose_complaint.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({

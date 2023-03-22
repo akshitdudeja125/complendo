@@ -13,11 +13,13 @@ enum Status { pending, resolved, rejected }
 enum Category { electricity, water, interet, waterCooler }
 
 class Student {
-  String rollNo;
+  String uid;
   String name;
+  String rollNo;
   String email;
 
   Student({
+    required this.uid,
     required this.rollNo,
     required this.name,
     required this.email,
@@ -25,31 +27,32 @@ class Student {
 }
 
 class Complaint {
-  final String id;
-  final String title;
-  final String description;
-  final Category category;
-  final Student student;
-  List<Student> upvotes;
-  final DateTime date;
-  final DateTime resolvedDate;
-  final Status status;
+  final String cid;
+  final String? title;
+  final String? description;
+  // final Category? category;
+  final String? category;
+  final Student? student;
+  List<Student>? upvotes;
+  final DateTime? date;
+  final DateTime? resolvedDate;
+  final Status? status;
 
   Complaint({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.category,
-    required this.student,
-    required this.upvotes,
-    required this.date,
-    required this.resolvedDate,
-    required this.status,
+    required this.cid,
+    this.title,
+    this.description,
+    this.category,
+    this.student,
+    this.upvotes,
+    this.date,
+    this.resolvedDate,
+    this.status,
   });
 
   factory Complaint.fromMap(Map<String, dynamic> data) {
     return Complaint(
-      id: data['id'],
+      cid: data['id'],
       title: data['title'],
       description: data['description'],
       category: data['category'],
@@ -63,7 +66,7 @@ class Complaint {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'id': cid,
       'title': title,
       'description': description,
       'category': category,
@@ -76,35 +79,36 @@ class Complaint {
   }
 }
 
-List<Complaint> complaints = [
-  Complaint(
-    id: '1',
-    title: 'Water Cooler not working',
-    description: 'Water Cooler is not working since 2 days',
-    category: Category.waterCooler,
-    upvotes: [],
-    status: Status.pending,
-    date: DateTime.now(),
-    resolvedDate: DateTime.now(),
-    student: Student(
-      rollNo: '2018CSB1052',
-      name: 'Rahul',
-      email: '',
-    ),
-  ),
-  Complaint(
-    id: '2',
-    title: 'Internet not working',
-    description: 'Internet is not working since 2 days',
-    category: Category.interet,
-    upvotes: [],
-    status: Status.pending,
-    date: DateTime.now(),
-    resolvedDate: DateTime.now(),
-    student: Student(
-      rollNo: '2108CSB1052',
-      name: 'Akshit',
-      email: '21cs01026@iitbbs.ac.in',
-    ),
-  ),
-];
+// List<Complaint> complaints = [
+//   Complaint(
+//     id: '1',
+//     title: 'Water Cooler not working',
+//     description: 'Water Cooler is not working since 2 days',
+//     category: Category.waterCooler,
+//     upvotes: [],
+//     status: Status.pending,
+//     date: DateTime.now(),
+//     resolvedDate: DateTime.now(),
+//     student: Student(
+
+//       rollNo: '2018CSB1052',
+//       name: 'Rahul',
+//       email: '',
+//     ),
+//   ),
+//   Complaint(
+//     id: '2',
+//     title: 'Internet not working',
+//     description: 'Internet is not working since 2 days',
+//     category: Category.interet,
+//     upvotes: [],
+//     status: Status.pending,
+//     date: DateTime.now(),
+//     resolvedDate: DateTime.now(),
+//     student: Student(
+//       rollNo: '2108CSB1052',
+//       name: 'Akshit',
+//       email: '21cs01026@iitbbs.ac.in',
+//     ),
+//   ),
+// ];

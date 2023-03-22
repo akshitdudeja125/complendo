@@ -31,8 +31,10 @@ dependencies:
   cloud_firestore: null
   cupertino_icons: null
   curved_navigation_bar: ^1.0.3
+  dropdown_button2: ^2.0.0
   firebase_auth: null
   firebase_core: null
+  firebase_storage: ^11.0.16
   flutter:
     sdk: flutter
   flutter_form_builder: ^7.8.0
@@ -41,7 +43,9 @@ dependencies:
   get: ^4.6.5
   google_fonts: ^4.0.3
   google_sign_in: null
+  image_picker: ^0.8.7
   location: ^4.4.0
+  permission_handler: ^10.2.0
   regexpattern: null
   svg_icon: ^0.0.1
 

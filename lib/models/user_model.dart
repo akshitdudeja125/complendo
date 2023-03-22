@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'complaint_model.dart';
+
 List<UserModel> userModelFromJson(String str) =>
     List<UserModel>.from(json.decode(str).map((x) => UserModel.fromMap(x)));
 
@@ -21,6 +23,7 @@ class UserModel {
   final String? phoneNumber;
   final bool? isAdmin;
   final bool? isProfileComplete;
+  final List<String>? complaints;
 
   UserModel({
     required this.id,
@@ -33,6 +36,7 @@ class UserModel {
     this.photoURL,
     this.isAdmin,
     this.isProfileComplete,
+    this.complaints,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> data) {
@@ -47,6 +51,7 @@ class UserModel {
       roomNo: data['roomNo'],
       photoURL: data['photoURL'],
       isProfileComplete: data['isProfileComplete'],
+      complaints: data['complaints'],
     );
   }
 
@@ -62,6 +67,7 @@ class UserModel {
       'roomNo': roomNo,
       'photoURL': photoURL,
       'isProfileComplete': isProfileComplete,
+      'complaints': complaints,
     };
   }
 }

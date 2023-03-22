@@ -1,5 +1,5 @@
 import 'package:complaint_portal/screens/student_profile.dart';
-import 'package:complaint_portal/widgets/compose_complaint.dart';
+import 'package:complaint_portal/screens/compose_complaint.dart';
 import 'package:flutter/material.dart';
 
 List<String> hostels = [
@@ -16,7 +16,6 @@ List<String> complaintCategories = [
   'Internet',
   'Water Cooler',
 ];
-
 
 double kFormSpacing = 20;
 
