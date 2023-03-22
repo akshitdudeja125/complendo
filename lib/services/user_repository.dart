@@ -1,13 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-
 import '../models/user_model.dart';
-// import 'package:get/get.dart';
-
-// Create provider for db
 
 class UserRepository {
+  // final _db = FirebaseFirestore.instance.collection('users');
   final _db = FirebaseFirestore.instance.collection('users');
   createUser(
     String uid,
@@ -42,19 +37,22 @@ class UserRepository {
   ) {
     _db.doc(uid).get().then((value) {
       if (value.exists) {
+        final data = value.data() as Map<String, dynamic>;
         try {
-          _db.doc(uid).update(UserModel(
-                id: uid,
-                name: value.data()!['name'],
-                email: value.data()!['email'],
-                photoURL: value.data()!['photoURL'],
-                isProfileComplete: true,
-                isAdmin: false,
-                hostel: hostel!,
-                phoneNumber: phoneNumber!,
-                roomNo: roomNo!,
-                rollNo: rollNo!,
-              ).toMap());
+          _db.doc(uid).update(
+                UserModel(
+                  id: uid,
+                  name: data['name'],
+                  email: data['email'],
+                  photoURL: data['photoURL'],
+                  isProfileComplete: true,
+                  isAdmin: false,
+                  hostel: hostel!,
+                  phoneNumber: phoneNumber!,
+                  roomNo: roomNo!,
+                  rollNo: rollNo!,
+                ).toMap(),
+              );
         } catch (e) {
           rethrow;
         }

@@ -1,4 +1,4 @@
-import 'package:complaint_portal/constants.dart';
+import 'package:complaint_portal/utils/constants.dart';
 // import 'package:complaint_portal/utils/validators.dart';
 import 'package:complaint_portal/widgets/clipper.dart';
 import 'package:complaint_portal/widgets/drop_down_list.dart';
@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../validators.dart';
+import '../utils/validators.dart';
 
 class ComposeComplaint extends StatefulWidget {
   const ComposeComplaint({super.key});
@@ -105,7 +105,7 @@ class ComplaintForm extends StatefulWidget {
 }
 
 class _ComplaintFormState extends State<ComplaintForm> {
-  final _formKey = GlobalKey<FormState>();
+  late final _formKey;
   late User user;
   final ComplaintController controller = Get.put(ComplaintController());
 
@@ -125,30 +125,21 @@ class _ComplaintFormState extends State<ComplaintForm> {
         child: Column(children: [
           TextFormFieldItem(
             controller: controller.nameController,
+            canEdit: false,
             labelText: 'Name',
-            validator: (String? value) {
-              if (value == null || value.isEmpty || value.trim().isEmpty) {
-                return 'Please enter your name';
-              }
-              return null;
-            },
           ),
           SizedBox(height: kFormSpacing),
           TextFormFieldItem(
             controller: controller.emailController,
             labelText: 'Email',
-            validator: (input) =>
-                !isEmail(input!) ? 'Enter a valid email' : null,
+            canEdit: false,
           ),
           SizedBox(height: kFormSpacing),
           TextFormFieldItem(
             controller: controller.titleController,
             labelText: 'Title',
             validator: (String? value) {
-              if (value == null || value.isEmpty || value.trim().isEmpty) {
-                return 'Please enter a title';
-              }
-              return null;
+              return isTitle(value);
             },
           ),
           SizedBox(height: kFormSpacing),
@@ -156,10 +147,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
             controller: controller.descriptionController,
             labelText: 'Description',
             validator: (String? value) {
-              if (value == null || value.isEmpty || value.trim().isEmpty) {
-                return 'Please enter a description ';
-              }
-              return null;
+              return isDescription(value);
             },
             maxLines: 4,
           ),
@@ -188,7 +176,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   ),
                 );
               } else if (controller.formKey.currentState!.validate()) {
-                print('Validated');
+                // print('Validated');
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Processing Data'),

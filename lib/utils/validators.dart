@@ -29,10 +29,24 @@ isPhoneNumber(String? value) {
   if (value.length != 10) {
     return 'Phone number must be 10 digits';
   }
-  RegExp regex = RegExp(r'^[6-9]\d{9}$');
+  // RegExp regex = RegExp(r'^[6-9]\d{9}$');
 
   // if (!regex.hasMatch(value)) {
   //   return 'Enter valid phone number';
   // }
+  return null;
+}
+
+isTitle(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Please enter a title';
+  }
+  return null;
+}
+
+isDescription(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Please enter a description';
+  }
   return null;
 }
