@@ -1,16 +1,13 @@
 import 'package:complaint_portal/utils/constants.dart';
 import 'package:complaint_portal/screens/home_screen.dart';
 import 'package:complaint_portal/services/user_repository.dart';
+import 'package:complaint_portal/utils/validators.dart';
+import 'package:complaint_portal/widgets/clipper.dart';
+import 'package:complaint_portal/widgets/text_form_field_item.dart';
 // import 'package:complaint_portal/utils/validators.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../providers/auth_provider.dart';
-import '../providers/database_provider.dart';
-import '../utils/validators.dart';
-import '../widgets/clipper.dart';
-import '../widgets/text_form_field_item.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});

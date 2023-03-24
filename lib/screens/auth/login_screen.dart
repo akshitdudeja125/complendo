@@ -1,11 +1,10 @@
 // ignore_for_file: unused_field, unused_local_variable, unused_element
 
 import 'package:complaint_portal/services/auth_service.dart';
+import 'package:complaint_portal/utils/validators.dart';
+import 'package:complaint_portal/widgets/clipper.dart';
+import 'package:complaint_portal/widgets/text_form_field_item.dart';
 import 'package:flutter/material.dart';
-
-import '../utils/validators.dart';
-import '../widgets/clipper.dart';
-import '../widgets/text_form_field_item.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -114,7 +113,7 @@ class _LoginFormState extends State<LoginForm> {
               controller: _passwordController,
               labelText: 'Password',
               validator: (input) =>
-                  isPassword(input!) ? 'Enter a valid password' : null,
+                  !isPassword(input!) ? 'Enter a valid password' : null,
             ),
             const SizedBox(height: 20),
             ElevatedButton(

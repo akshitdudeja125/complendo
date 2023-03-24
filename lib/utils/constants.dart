@@ -1,5 +1,5 @@
 import 'package:complaint_portal/screens/student_profile.dart';
-import 'package:complaint_portal/screens/compose_complaint.dart';
+import 'package:complaint_portal/screens/compose_complaint_screen.dart';
 import 'package:flutter/material.dart';
 
 List<String> hostels = [

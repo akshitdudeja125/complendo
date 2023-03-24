@@ -18,6 +18,7 @@ class TextFormFieldItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      cursorHeight: 20,
       validator: validator,
       autocorrect: false,
       maxLines: maxLines,
@@ -33,6 +34,9 @@ class TextFormFieldItem extends StatelessWidget {
         labelStyle: const TextStyle(
           color: Colors.black,
         ),
+        focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderSide: BorderSide(color: Colors.black)),
         labelText: labelText,
         border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),

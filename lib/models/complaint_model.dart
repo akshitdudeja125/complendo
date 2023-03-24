@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:complaint_portal/models/user_model.dart';
-
 List<Complaint> complaintModelFromJson(String str) =>
     List<Complaint>.from(json.decode(str).map((x) => Complaint.fromMap(x)));
 
@@ -12,103 +10,73 @@ enum Status { pending, resolved, rejected }
 
 enum Category { electricity, water, interet, waterCooler }
 
-class Student {
-  String uid;
-  String name;
-  String rollNo;
-  String email;
-
-  Student({
-    required this.uid,
-    required this.rollNo,
-    required this.name,
-    required this.email,
-  });
-}
 
 class Complaint {
   final String cid;
+  final String uid;
+
   final String? title;
   final String? description;
-  // final Category? category;
   final String? category;
-  final Student? student;
-  List<Student>? upvotes;
+
+  final bool? isIndividual;
+
   final DateTime? date;
   final DateTime? resolvedDate;
-  final Status? status;
+
+  final List<String>? upvotes;
+
+  final String? status;
+  final String? imageLink;
+
+  final String? complaintType;
 
   Complaint({
+    required this.uid,
     required this.cid,
     this.title,
+    this.isIndividual,
     this.description,
     this.category,
-    this.student,
     this.upvotes,
     this.date,
     this.resolvedDate,
     this.status,
+    this.imageLink,
+    this.complaintType,
   });
 
   factory Complaint.fromMap(Map<String, dynamic> data) {
     return Complaint(
+      uid: data['uid'],
       cid: data['id'],
+      isIndividual: data['isIndividual'],
       title: data['title'],
       description: data['description'],
       category: data['category'],
-      student: data['student'],
       upvotes: data['upvotes'],
       date: data['date'],
       resolvedDate: data['resolvedDate'],
       status: data['status'],
+      imageLink: data['imageLink'],
+      complaintType: data['complaintType'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': cid,
+      'uid': uid,
       'title': title,
       'description': description,
+      'isIndividual': isIndividual,
       'category': category,
-      'student': student,
       'upvotes': upvotes,
       'date': date,
       'resolvedDate': resolvedDate,
       'status': status,
+      'imageLink': imageLink,
+      'complaintType': complaintType,
     };
   }
 }
-
-// List<Complaint> complaints = [
-//   Complaint(
-//     id: '1',
-//     title: 'Water Cooler not working',
-//     description: 'Water Cooler is not working since 2 days',
-//     category: Category.waterCooler,
-//     upvotes: [],
-//     status: Status.pending,
-//     date: DateTime.now(),
-//     resolvedDate: DateTime.now(),
-//     student: Student(
-
-//       rollNo: '2018CSB1052',
-//       name: 'Rahul',
-//       email: '',
-//     ),
-//   ),
-//   Complaint(
-//     id: '2',
-//     title: 'Internet not working',
-//     description: 'Internet is not working since 2 days',
-//     category: Category.interet,
-//     upvotes: [],
-//     status: Status.pending,
-//     date: DateTime.now(),
-//     resolvedDate: DateTime.now(),
-//     student: Student(
-//       rollNo: '2108CSB1052',
-//       name: 'Akshit',
-//       email: '21cs01026@iitbbs.ac.in',
-//     ),
-//   ),
-// ];

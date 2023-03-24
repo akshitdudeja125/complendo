@@ -39,3 +39,12 @@ post_install do |installer|
     flutter_additional_ios_build_settings(target)
   end
 end
+
+# # ...
+# target 'Runner' do
+#   # ...
+#   pod 'Firebase/AppCheck'
+#   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+# end
+
+# # ...

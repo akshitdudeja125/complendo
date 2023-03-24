@@ -9,7 +9,6 @@ Column customDropDownMenu({
   required Function(String?) onChanged,
   String? Function(dynamic value)? validator,
   required BuildContext context,
-  // Function(String?)?<Dynamic> validator,
 }) {
   return Column(
     children: [

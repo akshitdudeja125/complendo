@@ -13,18 +13,3 @@ final authStateProvider = StreamProvider<User?>((ref) {
 final fireBaseAuthProvider = Provider<FirebaseAuth>((ref) {
   return FirebaseAuth.instance;
 });
-final dataProvider = StreamProvider<Map?>((ref) {
-  final userStream = ref.watch(authStateProvider);
-  return userStream.when(
-    data: (user) {
-      if (user == null) return const Stream.empty();
-      return FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .snapshots()
-          .map((event) => event.data());
-    },
-    loading: () => const Stream.empty(),
-    error: (_, __) => const Stream.empty(),
-  );
-});
