@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:complaint_portal/providers/auth_provider.dart';
+import 'package:complaint_portal/services/auth_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final userDataProvider = StreamProvider<Map?>((ref) {
@@ -18,36 +19,62 @@ final userDataProvider = StreamProvider<Map?>((ref) {
   );
 });
 
-final complaintDataProvider = StreamProvider<List>((ref) {
-  final userStream = ref.watch(authStateProvider);
-  return userStream.when(
-    data: (user) {
-      if (user == null) return const Stream.empty();
-      return FirebaseFirestore.instance
-          .collection('complaints')
-          .snapshots()
-          .map((event) => event.docs.map((e) => e.data()).toList());
-    },
-    loading: () => const Stream.empty(),
-    error: (_, __) => const Stream.empty(),
-  );
+// final userDataProvider = FutureProvider((ref) async {
+//   final user = ref.read(fireBaseAuthProvider).currentUser!;
+//   final docSnapshot =
+//       await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+//   return docSnapshot.data();
+// });
+
+// Firebasefirestore isntance provider
+final fireStoreInstanceProvider = Provider<FirebaseFirestore>((ref) {
+  return FirebaseFirestore.instance;
 });
 
-final userComplaintsDataProvider = StreamProvider<List>((ref) {
-  final userStream = ref.watch(authStateProvider);
-  return userStream.when(
-    data: (user) {
-      if (user == null) return const Stream.empty();
-      return FirebaseFirestore.instance
-          .collection('complaints')
-          .where('uid', isEqualTo: user.uid)
-          .snapshots()
-          .map((event) => event.docs.map((e) => e.data()).toList());
-    },
-    loading: () => const Stream.empty(),
-    error: (_, __) => const Stream.empty(),
-  );
-});
+// final comlaintCollectionProvider = Provider<CollectionReference>(
+//   (ref) => ref.watch(fireStoreInstanceProvider).collection('complaints'),
+// );
+
+// final currentUserData = FutureProvider((ref) async {
+//   final user = ref.watch(currentUserProvider).value!;
+//   final firestore = ref.watch(fireStoreInstanceProvider);
+//   final doc = await firestore.collection('users').doc(user.uid).get();
+//   return doc.data();
+// });
+
+
+
+
+// final complaintDataProvider = StreamProvider<List>((ref) {
+//   final userStream = ref.watch(authStateProvider);
+//   return userStream.when(
+//     data: (user) {
+//       if (user == null) return const Stream.empty();
+//       return FirebaseFirestore.instance
+//           .collection('complaints')
+//           .snapshots()
+//           .map((event) => event.docs.map((e) => e.data()).toList());
+//     },
+//     loading: () => const Stream.empty(),
+//     error: (_, __) => const Stream.empty(),
+//   );
+// });
+
+// final userComplaintsDataProvider = StreamProvider<List>((ref) {
+//   final userStream = ref.watch(authStateProvider);
+//   return userStream.when(
+//     data: (user) {
+//       if (user == null) return const Stream.empty();
+//       return FirebaseFirestore.instance
+//           .collection('complaints')
+//           .where('uid', isEqualTo: user.uid)
+//           .snapshots()
+//           .map((event) => event.docs.map((e) => e.data()).toList());
+//     },
+//     loading: () => const Stream.empty(),
+//     error: (_, __) => const Stream.empty(),
+//   );
+// });
 
 
 

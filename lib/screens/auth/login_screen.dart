@@ -181,8 +181,8 @@ class GoogleSignInButton extends StatelessWidget {
           ),
         ],
       ),
-      onPressed: () {
-        AuthService().signInWithGoogle(context);
+      onPressed: () async {
+        await AuthService().signInWithGoogle(context);
       },
     );
   }

@@ -29,26 +29,29 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   bottom_navy_bar: ^6.0.0
-  cloud_firestore: null
   connectivity_plus: ^3.0.3
   cupertino_icons: null
   curved_navigation_bar: ^1.0.3
   date_format: ^2.0.7
   dropdown_button2: ^2.0.0
+  equatable: ^2.0.5
   firebase_app_check: ^0.1.1+14
-  firebase_auth: null
-  firebase_core: null
+  firebase_auth: ^4.3.0
+  firebase_core: ^2.8.0
   firebase_storage: ^11.0.16
+  cloud_firestore: ^4.4.5
+
+  firebase_performance: ^0.9.0+16
   flutter:
     sdk: flutter
-  flutter_form_builder:
+  flutter_form_builder: null
   flutter_riverpod: null
   font_awesome_flutter: null
   get: ^4.6.5
   google_fonts: ^4.0.3
   google_sign_in: null
   image_picker: ^0.8.7
-  intl:
+  intl: null
   json_annotation: ^4.8.0
   json_serializable: ^6.6.1
   location: ^4.4.0

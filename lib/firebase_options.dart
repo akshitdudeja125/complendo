@@ -49,7 +49,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '591494154369',
     projectId: 'complaint-portal-flutter',
     authDomain: 'complaint-portal-flutter.firebaseapp.com',
-    databaseURL: 'https://complaint-portal-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://complaint-portal-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'complaint-portal-flutter.appspot.com',
   );
 
@@ -58,7 +59,8 @@ class DefaultFirebaseOptions {
     appId: '1:591494154369:android:03ec6733745744cc1de580',
     messagingSenderId: '591494154369',
     projectId: 'complaint-portal-flutter',
-    databaseURL: 'https://complaint-portal-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://complaint-portal-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'complaint-portal-flutter.appspot.com',
   );
 
@@ -67,9 +69,11 @@ class DefaultFirebaseOptions {
     appId: '1:591494154369:ios:3afedc6f6db0a1ce1de580',
     messagingSenderId: '591494154369',
     projectId: 'complaint-portal-flutter',
-    databaseURL: 'https://complaint-portal-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://complaint-portal-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'complaint-portal-flutter.appspot.com',
-    iosClientId: '591494154369-obcia02025js6ufqrpqi90pkr2pgo8cf.apps.googleusercontent.com',
+    iosClientId:
+        '591494154369-obcia02025js6ufqrpqi90pkr2pgo8cf.apps.googleusercontent.com',
     iosBundleId: 'com.example.complaintPortal',
   );
 
@@ -78,9 +82,11 @@ class DefaultFirebaseOptions {
     appId: '1:591494154369:ios:3afedc6f6db0a1ce1de580',
     messagingSenderId: '591494154369',
     projectId: 'complaint-portal-flutter',
-    databaseURL: 'https://complaint-portal-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://complaint-portal-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'complaint-portal-flutter.appspot.com',
-    iosClientId: '591494154369-obcia02025js6ufqrpqi90pkr2pgo8cf.apps.googleusercontent.com',
+    iosClientId:
+        '591494154369-obcia02025js6ufqrpqi90pkr2pgo8cf.apps.googleusercontent.com',
     iosBundleId: 'com.example.complaintPortal',
   );
 }

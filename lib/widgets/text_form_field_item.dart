@@ -1,35 +1,48 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 class TextFormFieldItem extends StatelessWidget {
-  TextFormFieldItem({
-    super.key,
-    required TextEditingController controller,
-    required this.labelText,
-    this.canEdit = true,
-    this.validator,
-    this.maxLines = 1,
-  }) : _controller = controller;
-
-  final TextEditingController? _controller;
+  final TextEditingController? controller;
   final String labelText;
   final String? Function(String?)? validator;
   final int maxLines;
   bool? canEdit;
+  String? initValue;
+  Function(String)? onChanged;
+  TextInputType? keyboardType;
+  bool? obsureText;
+  TextCapitalization? textCapitalization;
+
+  TextFormFieldItem({
+    this.initValue,
+    super.key,
+    this.controller,
+    required this.labelText,
+    this.validator,
+    this.maxLines = 1,
+    this.canEdit = true,
+    this.onChanged,
+    this.keyboardType,
+    this.obsureText = false,
+    this.textCapitalization = TextCapitalization.none,
+  });
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: initValue,
+      autofocus: true,
+      enableSuggestions: true,
       cursorHeight: 20,
       validator: validator,
       autocorrect: false,
+      obscureText: obsureText!,
       maxLines: maxLines,
-      keyboardType: labelText == 'Room No.'
-          ? TextInputType.number
-          : labelText == 'Email'
-              ? TextInputType.emailAddress
-              : TextInputType.text,
-      controller: _controller,
+      keyboardType: keyboardType,
+      onChanged: onChanged,
+      controller: controller,
       enabled: canEdit,
-      obscureText: labelText == 'Password' ? true : false,
+      textCapitalization: textCapitalization!,
       decoration: InputDecoration(
         labelStyle: const TextStyle(
           color: Colors.black,

@@ -10,10 +10,10 @@ class UserRepository {
     String? email,
     String? photoURL,
   ) {
-    _db.doc(uid).get().then((value) {
+    _db.doc(uid).get().then((value) async {
       if (!value.exists) {
         try {
-          _db.doc(uid).set(UserModel(
+          await _db.doc(uid).set(UserModel(
                 id: uid,
                 name: displayName!,
                 email: email!,
@@ -35,11 +35,11 @@ class UserRepository {
     String? hostel,
     String? roomNo,
   ) {
-    _db.doc(uid).get().then((value) {
+    _db.doc(uid).get().then((value) async {
       if (value.exists) {
         final data = value.data() as Map<String, dynamic>;
         try {
-          _db.doc(uid).update(
+          await _db.doc(uid).update(
                 UserModel(
                   id: uid,
                   name: data['name'],

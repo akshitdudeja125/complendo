@@ -19,6 +19,7 @@ class BottomBar extends StatelessWidget {
       animationDuration: const Duration(
         milliseconds: 300,
       ),
+      
       backgroundColor: const Color(0xFF181D3D),
       selectedIndex: currentIndex,
       showElevation: true,

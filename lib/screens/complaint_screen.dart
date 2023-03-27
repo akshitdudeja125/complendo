@@ -1,1 +1,0 @@
-//recieve the complaint from the database and display it

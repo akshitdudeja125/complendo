@@ -4,12 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/constants.dart';
-import '../services/auth_service.dart';
-import '../widgets/clipper.dart';
+import '../../utils/constants.dart';
+import '../../services/auth_service.dart';
+import '../../widgets/clipper.dart';
 import 'package:intl/intl.dart';
 
-import '../widgets/complaint_card.dart';
+import '../../widgets/complaint_card.dart';
 
 // class SettingsTile extends StatelessWidget {
 //   final String title;

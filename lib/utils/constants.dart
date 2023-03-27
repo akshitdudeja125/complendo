@@ -1,4 +1,4 @@
-import 'package:complaint_portal/screens/student_profile.dart';
+import 'package:complaint_portal/screens/profile/student_profile.dart';
 import 'package:complaint_portal/screens/compose_complaint_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +19,6 @@ List<String> complaintCategories = [
 
 double kFormSpacing = 20;
 
-const kPrimaryColor = Color(0xFFFF7643);
 const kPrimaryLightColor = Color(0xFFFFECDF);
 const kPrimaryGradientColor = LinearGradient(
   begin: Alignment.topLeft,
@@ -38,3 +37,5 @@ const double defaultRadius = 12.0;
 const double fontSizeHeading = 20.0;
 const double fontSizeTitle = 18.0;
 const double fontSizeBody = 13.0;
+
+const Color kPrimaryColor = Color(0xFF181D3D);
