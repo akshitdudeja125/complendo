@@ -1,12 +1,11 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:complaint_portal/models/complaint_model.dart';
-import 'package:complaint_portal/providers/auth_provider.dart';
 import 'package:complaint_portal/providers/complaint_form_provider.dart';
+import 'package:complaint_portal/providers/database_provider.dart';
 import 'package:complaint_portal/providers/page_controller_provider.dart';
 import 'package:complaint_portal/services/connectivity_service.dart';
 import 'package:complaint_portal/widgets/display_snack_bar.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 void formSubmit(ref) async {
@@ -80,6 +79,7 @@ void formSubmit(ref) async {
     ref.watch(isLoadingProvider.notifier).state = false;
     return;
   } finally {
+    await FirebaseAnalytics.instance.logEvent(name: 'complaint_submitted');
     displaySnackBar('Success', 'Complaint submitted successfully');
     ref.watch(isLoadingProvider.notifier).state = false;
     ref.watch(onPageChangeProvider).call(0);

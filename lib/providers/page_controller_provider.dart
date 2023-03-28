@@ -6,9 +6,11 @@ class Index extends StateNotifier<int> {
   set value(int index) => state = index;
 }
 
-final indexProvider = StateNotifierProvider((ref) => Index());
-final pageControllerProvider = Provider((ref) => PageController());
-final onPageChangeProvider = Provider((ref) => (int index) {
+final indexProvider = StateNotifierProvider.autoDispose((ref) => Index());
+// make sure to dispose the pageController
+
+final pageControllerProvider = Provider.autoDispose((ref) => PageController());
+final onPageChangeProvider = Provider.autoDispose((ref) => (int index) {
       ref.read(indexProvider.notifier).value = index;
       ref.read(pageControllerProvider).animateToPage(
             index,
@@ -17,5 +19,4 @@ final onPageChangeProvider = Provider((ref) => (int index) {
             ),
             curve: Curves.ease,
           );
-    }); 
-
+    });

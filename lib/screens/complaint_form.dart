@@ -1,5 +1,6 @@
 import 'package:complaint_portal/providers/auth_provider.dart';
 import 'package:complaint_portal/providers/complaint_form_provider.dart';
+import 'package:complaint_portal/providers/database_provider.dart';
 import 'package:complaint_portal/screens/image_picker.dart';
 import 'package:complaint_portal/services/submit_complaint_form.dart';
 import 'package:complaint_portal/utils/constants.dart';
