@@ -1,4 +1,4 @@
-import 'package:complaint_portal/providers/complaint_provider.dart';
+import 'package:complaint_portal/features/complaint/screen/provider/complaint_provider.dart';
 import 'package:complaint_portal/common/widgets/complaint_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

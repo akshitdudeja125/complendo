@@ -1,5 +1,5 @@
 import 'package:complaint_portal/features/auth/controllers/auth_controller.dart';
-import 'package:complaint_portal/features/services/analytics/analytics_service.dart';
+import 'package:complaint_portal/common/services/analytics/analytics_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';

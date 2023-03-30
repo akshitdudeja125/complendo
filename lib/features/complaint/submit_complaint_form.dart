@@ -1,10 +1,10 @@
-import 'package:complaint_portal/features/services/connectivity_service.dart';
+import 'package:complaint_portal/common/services/connectivity_service.dart';
 import 'package:complaint_portal/models/complaint_model.dart';
-import 'package:complaint_portal/providers/complaint_form_provider.dart';
-import 'package:complaint_portal/providers/complaint_provider.dart';
-import 'package:complaint_portal/providers/firebase_instance_provider.dart';
+import 'package:complaint_portal/features/complaint/screen/form/providers/complaint_form_provider.dart';
+import 'package:complaint_portal/features/complaint/screen/provider/complaint_provider.dart';
+import 'package:complaint_portal/common/providers/firebase_instance_provider.dart';
 
-import 'package:complaint_portal/providers/page_controller_provider.dart';
+import 'package:complaint_portal/common/providers/page_controller_provider.dart';
 import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 

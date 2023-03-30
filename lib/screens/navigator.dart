@@ -1,7 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/features/complaint/screen/compose_complaint_screen.dart';
-import 'package:complaint_portal/providers/page_controller_provider.dart';
+import 'package:complaint_portal/common/providers/page_controller_provider.dart';
 import 'package:complaint_portal/features/error/error_screen.dart';
 import 'package:complaint_portal/features/profile/student_profile.dart';
 import 'package:flutter/material.dart';

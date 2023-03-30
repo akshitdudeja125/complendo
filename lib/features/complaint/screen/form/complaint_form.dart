@@ -1,6 +1,6 @@
 import 'package:complaint_portal/common/utils/validators.dart';
 import 'package:complaint_portal/features/complaint/submit_complaint_form.dart';
-import 'package:complaint_portal/providers/complaint_form_provider.dart';
+import 'package:complaint_portal/features/complaint/screen/form/providers/complaint_form_provider.dart';
 import 'package:complaint_portal/common/services/image_picker.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:complaint_portal/common/widgets/custom_drop_down_menu.dart';

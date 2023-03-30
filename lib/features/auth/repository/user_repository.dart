@@ -1,5 +1,5 @@
 import 'package:complaint_portal/models/user_model.dart';
-import 'package:complaint_portal/providers/firebase_instance_provider.dart';
+import 'package:complaint_portal/common/providers/firebase_instance_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final userRepoProvider = Provider<UserRepository>((ref) => UserRepository());
@@ -42,8 +42,6 @@ class UserRepository {
     String? hostel,
     String? roomNo,
     bool? isAdmin,
-    // onSetUserComplete,
-    // Function? onSetUserComplete,
   }) {
     final db = ref.watch(firebaseFirestoreProvider).collection('users');
     db.doc(uid).get().then((value) {
@@ -58,12 +56,10 @@ class UserRepository {
               isAdmin: isAdmin ?? false,
               hostel: hostel!,
               phoneNumber: phoneNumber!,
-              roomNo: '',
+              roomNo: roomNo!,
               rollNo: rollNo!,
             ).toMap())
-            .then((value) {
-          // onSetUserComplete!();
-        });
+            .then((value) {});
       } else {
         db.doc(uid).update({
           if (photoURL != null) 'photoURL': photoURL,
@@ -72,9 +68,7 @@ class UserRepository {
           if (hostel != null) 'hostel': hostel,
           if (roomNo != null) 'roomNo': roomNo,
           if (isAdmin != null) 'isAdmin': isAdmin,
-        }).then((value) {
-          // onSetUserComplete!();
-        });
+        }).then((value) {});
       }
     });
   }
