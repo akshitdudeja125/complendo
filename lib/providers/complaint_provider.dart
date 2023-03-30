@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
+import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
 import 'package:complaint_portal/models/complaint_model.dart';
-import 'package:complaint_portal/providers/user_provider.dart';
 import 'package:complaint_portal/providers/firebase_instance_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

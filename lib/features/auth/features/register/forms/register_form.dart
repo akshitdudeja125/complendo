@@ -1,3 +1,4 @@
+import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
 import 'package:complaint_portal/features/auth/repository/auth_repository.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:complaint_portal/common/utils/validators.dart';
@@ -6,7 +7,6 @@ import 'package:complaint_portal/common/widgets/custom_elevated_button.dart';
 import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
 import 'package:complaint_portal/features/auth/features/register/provider/register_form_providers.dart';
 import 'package:complaint_portal/features/auth/features/register/services/register_form_submit.dart';
-import 'package:complaint_portal/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,7 +35,7 @@ class RegisterForm extends ConsumerWidget {
             SizedBox(height: kFormSpacing),
             TextFormFieldItem(
               onChanged: (value) =>
-                  ref.read(rollNoProvider.notifier).state = value,
+                  ref.read(rollNoProvider.notifier).state = value.toUpperCase(),
               textCapitalization: TextCapitalization.characters,
               labelText: 'Roll No.',
               validator: (String? value) {

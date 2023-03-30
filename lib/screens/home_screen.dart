@@ -17,8 +17,8 @@ class SelectedSegmentIndexNotifier extends StateNotifier<int> {
 
 class HomePage extends StatelessWidget {
   // get complaintStreamProvider from ComplaintRepository
-
-  const HomePage({Key? key}) : super(key: key);
+  final Map<String, dynamic> userData;
+  const HomePage({Key? key, required this.userData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,64 +29,61 @@ class HomePage extends StatelessWidget {
     ];
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 5,
-            ),
-            Consumer(builder: (BuildContext context, WidgetRef ref, _) {
-              final selectedSegmentIndex =
-                  ref.watch(selectedSegmentIndexProvider) as int;
+      child: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height / 5,
+          ),
+          Consumer(builder: (BuildContext context, WidgetRef ref, _) {
+            final selectedSegmentIndex =
+                ref.watch(selectedSegmentIndexProvider) as int;
 
-              return SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: CupertinoSlidingSegmentedControl(
-                  children: {
-                    for (var e in segments)
-                      segments.indexOf(e): Text(
-                        e,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      )
-                  },
-                  groupValue: selectedSegmentIndex,
-                  onValueChanged: (value) {
-                    ref
-                        .read(selectedSegmentIndexProvider.notifier)
-                        .setSelectedSegmentIndex(value as int);
-                  },
-                ),
-              );
-            }),
-            Consumer(builder: (BuildContext context, WidgetRef ref, _) {
-              final selectedSegmentIndex =
-                  ref.watch(selectedSegmentIndexProvider) as int;
-              final complaintSnapshot = ref.watch(complaintStreamProvider(
-                  _getSegmentName(selectedSegmentIndex)));
-              return complaintSnapshot.when(
-                data: (data) {
-                  final complaints = data.docs;
-                  return Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: complaints.length,
-                      itemBuilder: (context, index) {
-                        return ComplaintCard(
-                          complaint: complaints[index],
-                        );
-                      },
-                    ),
-                  );
+            return SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: CupertinoSlidingSegmentedControl(
+                children: {
+                  for (var e in segments)
+                    segments.indexOf(e): Text(
+                      e,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    )
                 },
-                loading: () => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                error: (error, stackTrace) =>
-                    const Text('Something went wrong'),
-              );
-            }),
-          ],
-        ),
+                groupValue: selectedSegmentIndex,
+                onValueChanged: (value) {
+                  ref
+                      .read(selectedSegmentIndexProvider.notifier)
+                      .setSelectedSegmentIndex(value as int);
+                },
+              ),
+            );
+          }),
+          Consumer(builder: (BuildContext context, WidgetRef ref, _) {
+            final selectedSegmentIndex =
+                ref.watch(selectedSegmentIndexProvider) as int;
+            final complaintSnapshot = ref.watch(
+                complaintStreamProvider(_getSegmentName(selectedSegmentIndex)));
+            return complaintSnapshot.when(
+              data: (data) {
+                final complaints = data.docs;
+                return Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: complaints.length,
+                    itemBuilder: (context, index) {
+                      return ComplaintCard(
+                        complaint: complaints[index],
+                      );
+                    },
+                  ),
+                );
+              },
+              loading: () => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              error: (error, stackTrace) => const Text('Something went wrong'),
+            );
+          }),
+        ],
       ),
     );
   }

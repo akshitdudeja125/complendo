@@ -1,9 +1,9 @@
 import 'package:complaint_portal/features/auth/features/login/login_page.dart';
 import 'package:complaint_portal/features/auth/features/register/screens/register_page.dart';
+import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
 import 'package:complaint_portal/features/landing/landing_page.dart';
-import 'package:complaint_portal/providers/auth_provider.dart';
 import 'package:complaint_portal/providers/firebase_instance_provider.dart';
-import 'package:complaint_portal/screens/error_screen.dart';
+import 'package:complaint_portal/features/error/error_screen.dart';
 import 'package:complaint_portal/screens/loading_screen.dart';
 import 'package:complaint_portal/screens/page_handler.dart';
 

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final roomNoProvider = StateProvider<String?>((ref) => "");
+final roomNoProvider = StateProvider<String?>((ref) => null);
 final titleProvider = StateProvider<String?>((ref) => null);
 final descriptionProvider = StateProvider<String?>((ref) => null);
 final complaintTypeProvider = StateProvider<String?>((ref) => null);

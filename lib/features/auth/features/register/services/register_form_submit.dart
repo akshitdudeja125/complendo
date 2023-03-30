@@ -1,8 +1,8 @@
 import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
 import 'package:complaint_portal/features/auth/features/register/provider/register_form_providers.dart';
+import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
 import 'package:complaint_portal/features/services/connectivity_service.dart';
 import 'package:complaint_portal/features/services/user_repository.dart';
-import 'package:complaint_portal/providers/user_provider.dart';
 
 void setProfile(ref) async {
   if (ref.watch(hostelProvider.notifier).state == null) {

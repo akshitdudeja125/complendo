@@ -3,12 +3,12 @@ import 'package:complaint_portal/models/complaint_model.dart';
 import 'package:complaint_portal/providers/complaint_form_provider.dart';
 import 'package:complaint_portal/providers/complaint_provider.dart';
 import 'package:complaint_portal/providers/firebase_instance_provider.dart';
-import 'package:complaint_portal/providers/user_provider.dart';
+
 import 'package:complaint_portal/providers/page_controller_provider.dart';
 import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
-void submitComplaint(ref) async {
+void submitComplaint(ref, userData) async {
   if (ref.watch(hostelProvider.notifier).state == null) {
     displaySnackBar('Error', 'Please select a hostel');
     return;
@@ -34,7 +34,7 @@ void submitComplaint(ref) async {
         .getDownloadURL(ref, complaintId, ref.watch(pickedImageProvider));
 
     final Complaint complaint = Complaint(
-      uid: ref.watch(authUserProvider).uid,
+      uid: userData['uid'],
       cid: complaintId,
       title: ref.watch(titleProvider),
       description: ref.watch(descriptionProvider),
