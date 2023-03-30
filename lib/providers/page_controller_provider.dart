@@ -7,9 +7,9 @@ class Index extends StateNotifier<int> {
 }
 
 final indexProvider = StateNotifierProvider.autoDispose((ref) => Index());
-// make sure to dispose the pageController
 
 final pageControllerProvider = Provider.autoDispose((ref) => PageController());
+
 final onPageChangeProvider = Provider.autoDispose((ref) => (int index) {
       ref.read(indexProvider.notifier).value = index;
       ref.read(pageControllerProvider).animateToPage(

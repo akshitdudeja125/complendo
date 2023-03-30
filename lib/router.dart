@@ -1,23 +1,14 @@
-// import 'package:complaint_portal/screens/home_screen.dart';
-// import 'package:complaint_portal/screens/login_screen.dart';
-// import 'package:complaint_portal/screens/register_page.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 
-// class RouteManager extends StatelessWidget {
-//   const RouteManager({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     SystemChrome.setPreferredOrientations(
-//         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-//     return MaterialApp(title: 'InstiComplaints', routes: {
-//       '/register': (context) => const RegisterScreen(),
-//       '/': (context) => (FirebaseAuth.instance.currentUser == null)
-//           ? const LoginScreen()
-//           : const HomePage(),
-//       'home': (context) => const HomePage(),
-//     });
-//   }
-// }
+Route<dynamic> generateRoute(RouteSettings settings) {
+  switch (settings.name) {
+    default:
+      return MaterialPageRoute(
+        builder: (context) => Scaffold(
+          body: Center(
+            child: Text('No route defined for ${settings.name}'),
+          ),
+        ),
+      );
+  }
+}
