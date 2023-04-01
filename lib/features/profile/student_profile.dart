@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:complaint_portal/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,10 +8,12 @@ import '../../common/utils/constants.dart';
 import '../auth/repository/auth_repository.dart';
 
 class StudentProfile extends ConsumerWidget {
-  final Map<String, dynamic> userData;
+  // final Map<String, dynamic> userData;
+  final UserModel user;
   const StudentProfile({
     super.key,
-    required this.userData,
+    required this.user,
+    // required this.userData,
   });
 
   @override
@@ -21,24 +24,28 @@ class StudentProfile extends ConsumerWidget {
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.2,
         ),
-        if (userData['photoURL'] != null)
+        // if (userData['photoURL'] != null)
+        if (user.photoURL != null)
           CircleAvatar(
             radius: 40,
             backgroundImage: NetworkImage(
-              userData['photoURL'],
+              // userData['photoURL'],
+              user.photoURL!,
             ),
           ),
         Padding(
-          padding: const EdgeInsets.only(top: defaultSpacing / 2),
+          padding: const EdgeInsets.only(top: kDefaultSpacing / 2),
           child: Text(
-            userData['name'],
+            // userData['name'],
+            user.name,
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: defaultSpacing / 2),
+          padding: const EdgeInsets.only(bottom: kDefaultSpacing / 2),
           child: Text(
-            userData['rollNo'],
+            // userData['rollNo'],
+            user.rollNo!,
             style: Theme.of(context).textTheme.titleSmall,
           ),
         ),

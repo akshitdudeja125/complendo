@@ -1,34 +1,86 @@
 // Display all detailds of a complaint
 
-import 'package:complaint_portal/common/utils/constants.dart';
-import 'package:complaint_portal/common/widgets/custom_drop_down_menu.dart';
-import 'package:drop_down_list/drop_down_list.dart';
-import 'package:drop_down_list/model/selected_list_item.dart';
+import 'package:complaint_portal/models/complaint_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 final selectedItemProvider = StateProvider<String?>((ref) => null);
 
 class ComplaintScreen extends ConsumerWidget {
-  final String complaintId;
+  // final String complaintId;
+  final Complaint complaint;
   const ComplaintScreen({
     super.key,
-    required this.complaintId,
+    required this.complaint,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-          
-          // title: const Text('Complaint Details'),
-          // centerTitle: true,
-          // backgroundColor: kPrimaryColor,
+
+
           ),
       body: Column(
         children: [
-          Text('Complaint Id: $complaintId'),
-          const SizedBox(height: 20),
+          // ignore: prefer_const_constructors
+          Text(
+            "Complaint Details",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            "Title: ${complaint.title}",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            "cid: ${complaint.cid}",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            "Category: ${complaint.category}",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            "Description: ${complaint.description}",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            "Status: ${complaint.status}",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            "Date: ${DateFormat.yMMMd().format(complaint.date!)}",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            "Time: ${DateFormat.jm().format(complaint.date!)}",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
     );

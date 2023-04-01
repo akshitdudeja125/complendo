@@ -1,5 +1,7 @@
 import 'package:complaint_portal/features/complaint/screen/provider/complaint_provider.dart';
 import 'package:complaint_portal/common/widgets/complaint_card.dart';
+import 'package:complaint_portal/models/complaint_model.dart';
+import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,15 +19,16 @@ class SelectedSegmentIndexNotifier extends StateNotifier<int> {
 
 class HomePage extends StatelessWidget {
   // get complaintStreamProvider from ComplaintRepository
-  final Map<String, dynamic> userData;
-  const HomePage({Key? key, required this.userData}) : super(key: key);
+  // final Map<String, dynamic> userData;
+  final UserModel user;
+  const HomePage({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final segments = [
       "Open",
       "All",
-      "Closed",
+      "Resolved",
     ];
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -64,14 +67,17 @@ class HomePage extends StatelessWidget {
                 complaintStreamProvider(_getSegmentName(selectedSegmentIndex)));
             return complaintSnapshot.when(
               data: (data) {
-                final complaints = data.docs;
+                final complaintList = data.docs
+                    .map((e) => Complaint.fromObject(e.data()))
+                    .toList();
+
                 return Expanded(
                   child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: complaints.length,
+                    itemCount: complaintList.length,
                     itemBuilder: (context, index) {
                       return ComplaintCard(
-                        complaint: complaints[index],
+                        user: user,
+                        complaint: complaintList[index],
                       );
                     },
                   ),
@@ -80,7 +86,9 @@ class HomePage extends StatelessWidget {
               loading: () => const Center(
                 child: CircularProgressIndicator(),
               ),
-              error: (error, stackTrace) => const Text('Something went wrong'),
+              error: (error, stackTrace) {
+                return Text('Something went wron Error:$error');
+              },
             );
           }),
         ],

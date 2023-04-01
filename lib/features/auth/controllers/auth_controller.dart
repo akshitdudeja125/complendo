@@ -4,8 +4,8 @@ import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
 import 'package:complaint_portal/features/landing/landing_page.dart';
 import 'package:complaint_portal/common/providers/firebase_instance_provider.dart';
 import 'package:complaint_portal/features/error/error_screen.dart';
-import 'package:complaint_portal/screens/loading_screen.dart';
-import 'package:complaint_portal/screens/navigator.dart';
+import 'package:complaint_portal/features/loading/loading_screen.dart';
+import 'package:complaint_portal/features/navigation/navigator.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

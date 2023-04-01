@@ -16,12 +16,13 @@ final complaintStreamProvider =
       query = firestore
           .collection('complaints')
           .where('uid', isEqualTo: user.uid)
-          .where('status', isEqualTo: "Pending");
+          .where('status', isEqualTo: "pending")
+          .orderBy('date', descending: false);
       break;
     case "Closed":
       query = firestore
           .collection('complaints')
-          .where('status', isEqualTo: "Closed")
+          .where('status', isEqualTo: "resolved")
           .where('uid', isEqualTo: user.uid);
       break;
     case "All":
@@ -36,14 +37,20 @@ final complaintStreamProvider =
 
 class FirebaseStorageRepository {
   Future<String?> getDownloadURL(ref, String cid, image) async {
-    if (image == null) return null;
+    if (image == null) {
+      return null;
+    }
+    String? downloadURL;
     final firebaseStorage = ref.watch(firebaseStorageProvider);
     final storageReference =
         firebaseStorage.ref().child('complaints/complaint_$cid.jpg');
-    storageReference.putFile(image).whenComplete(() {
-      return storageReference.getDownloadURL();
+    final uploadTask = storageReference.putFile(
+      image,
+    );
+    await uploadTask.whenComplete(() async {
+      downloadURL = await storageReference.getDownloadURL();
     });
-    return null;
+    return downloadURL;
   }
 }
 
@@ -72,12 +79,15 @@ class ComplaintRepository {
     await displaySnackBar('Success', 'Complaint Registered');
   }
 
-  Future<void> updateComplaint(Complaint complaint, ref) async {
+  Future<void> updateComplaint(ref, Complaint complaint) async {
     final firestore = ref.read(firebaseFirestoreProvider);
-    await firestore
-        .collection('complaints')
-        .doc(complaint.cid)
-        .update(complaint.toMap());
+    await firestore.collection('complaints').doc(complaint.cid).set({}
+        // complaint.toMap(),
+        ).whenComplete(() {
+      displaySnackBar('Success', 'Complaint Updated');
+    }).catchError((e) {
+      displaySnackBar('Error', e.toString());
+    });
   }
 }
 

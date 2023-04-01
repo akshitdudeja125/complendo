@@ -8,14 +8,17 @@ class Index extends StateNotifier<int> {
 
 final indexProvider = StateNotifierProvider.autoDispose((ref) => Index());
 
-final pageControllerProvider = Provider.autoDispose((ref) => PageController());
+final pageControllerProvider = Provider.autoDispose((ref) => PageController(
+      keepPage: true,
+      initialPage: 0,
+    ));
 
 final onPageChangeProvider = Provider.autoDispose((ref) => (int index) {
       ref.read(indexProvider.notifier).value = index;
       ref.read(pageControllerProvider).animateToPage(
             index,
             duration: const Duration(
-              milliseconds: 300,
+              milliseconds: 200,
             ),
             curve: Curves.ease,
           );

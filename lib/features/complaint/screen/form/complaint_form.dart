@@ -1,18 +1,20 @@
 import 'package:complaint_portal/common/utils/validators.dart';
-import 'package:complaint_portal/features/complaint/submit_complaint_form.dart';
 import 'package:complaint_portal/features/complaint/screen/form/providers/complaint_form_provider.dart';
+import 'package:complaint_portal/features/complaint/submit_complaint_form.dart';
+
 import 'package:complaint_portal/common/services/image_picker.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:complaint_portal/common/widgets/custom_drop_down_menu.dart';
 import 'package:complaint_portal/common/widgets/custom_elevated_button.dart';
 import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
+import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ComplaintForm extends ConsumerWidget {
-  final Map<String, dynamic> userData;
-  const ComplaintForm({super.key, required this.userData});
+  final UserModel user;
+  const ComplaintForm({super.key, required this.user});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
@@ -24,19 +26,19 @@ class ComplaintForm extends ConsumerWidget {
             child: Column(
               children: [
                 TextFormFieldItem(
-                  initValue: userData['name'],
+                  initValue: user.name,
                   canEdit: false,
                   labelText: 'Name',
                 ),
                 SizedBox(height: kFormSpacing),
                 TextFormFieldItem(
-                  initValue: userData['email'],
+                  initValue: user.email,
                   labelText: 'Email',
                   canEdit: false,
                 ),
                 SizedBox(height: kFormSpacing),
                 TextFormFieldItem(
-                  initValue: userData['rollNo']!,
+                  initValue: user.rollNo,
                   labelText: 'Roll Number',
                   canEdit: false,
                   textCapitalization: TextCapitalization.characters,
@@ -54,16 +56,8 @@ class ComplaintForm extends ConsumerWidget {
                 ),
                 SizedBox(height: kFormSpacing),
                 TextFormFieldItem(
-                  // controller: TextEditingController(
-                  // text: ref.watch(roomNoProvider)),
-                  textCapitalization: TextCapitalization.sentences,
                   onChanged: (value) {
-                    TextEditingValue(
-                      text: value.toUpperCase(),
-                      selection: TextSelection.collapsed(offset: value.length),
-                    );
-                    ref.watch(roomNoProvider.notifier).state =
-                        value.toUpperCase();
+                    ref.watch(roomNoProvider.notifier).state = value;
                   },
                   labelText: 'Room No',
                   validator: (String? value) {
@@ -189,7 +183,7 @@ class ComplaintForm extends ConsumerWidget {
                 SizedBox(height: kFormSpacing),
                 SubmitButton(
                   isLoadingProvider: isLoadingProvider,
-                  onClick: () => submitComplaint(ref, userData),
+                  onClick: () => submitComplaint(ref, user),
                 ),
               ],
             ),

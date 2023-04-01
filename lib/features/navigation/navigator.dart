@@ -1,23 +1,25 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:complaint_portal/common/widgets/bottom_navbar.dart';
+import 'package:complaint_portal/common/widgets/clipper.dart';
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/features/complaint/screen/compose_complaint_screen.dart';
-import 'package:complaint_portal/common/providers/page_controller_provider.dart';
 import 'package:complaint_portal/features/error/error_screen.dart';
+import 'package:complaint_portal/features/home/home_screen.dart';
+import 'package:complaint_portal/features/loading/loading_screen.dart';
 import 'package:complaint_portal/features/profile/student_profile.dart';
+import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../common/widgets/bottom_navbar.dart';
-import '../common/widgets/clipper.dart';
-import 'home_screen.dart';
-import 'loading_screen.dart';
+
+import 'provider/page_controller_provider.dart';
 
 class PageNavigator extends ConsumerWidget {
   const PageNavigator({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final pageController = ref.watch(pageControllerProvider);
     final int currentIndex = ref.watch(indexProvider) as int;
-    // final data = ref.watch(userDataProvider(ref.watch(authUserProvider)!.uid));
     final data = ref.watch(userDataProvider);
     return data.when(
         error: (e, trace) => ErrorScreen(e, trace),
@@ -25,6 +27,8 @@ class PageNavigator extends ConsumerWidget {
         data: (data) {
           final Map<String, dynamic> value =
               data.data() as Map<String, dynamic>;
+
+          final UserModel user = UserModel.fromMap(value);
           return Scaffold(
             body: Stack(
               children: [
@@ -53,42 +57,37 @@ class PageNavigator extends ConsumerWidget {
                   ),
                 ),
                 PageView(
-                  controller: ref.watch(pageControllerProvider),
-                  onPageChanged: (index) =>
-                      ref.read(onPageChangeProvider).call(index),
-                  children: value['isAdmin']
-                      ? adminPages
-                      : [
-                          HomePage(
-                            userData: value,
-                          ),
-                          ComposeComplaint(
-                            userData: value,
-                          ),
-                          StudentProfile(
-                            userData: value,
-                          ),
-                        ],
+                  controller: pageController,
+                  onPageChanged: (index) {
+                    ref.watch(indexProvider.notifier).value = index;
+                  },
+                  children: <Widget>[
+                    HomePage(user: user),
+                    ComposeComplaint(
+                      user: user,
+                    ),
+                    StudentProfile(user: user),
+                  ],
                 ),
-                // ),
               ],
             ),
             bottomNavigationBar: BottomBar(
-              currentIndex: currentIndex,
-              items:
-                  value['isAdmin'] ? adminBottomBarItems : userBottomBarItems,
-              onTap: (index) => ref.read(onPageChangeProvider).call(index),
-            ),
+                currentIndex: ref.watch(indexProvider) as int,
+                items:
+                    value['isAdmin'] ? adminBottomBarItems : userBottomBarItems,
+                onTap: (index) {
+                  // ref.read(onPageChangeProvider).call(index);
+                  pageController.animateToPage(
+                    index,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  );
+                  ref.read(indexProvider.notifier).value = index;
+                }),
           );
         });
   }
 }
-
-// List<Widget> userPages = [
-//   const HomePage(),
-//   const ComposeComplaint(),
-//   const StudentProfile(),
-// ];
 
 List<String> userPagesHeading = [
   "Complaints",
