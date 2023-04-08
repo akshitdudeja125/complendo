@@ -1,11 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:complaint_portal/features/auth/repository/user_repository.dart';
 import 'package:complaint_portal/models/user_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../common/utils/constants.dart';
-import '../auth/repository/auth_repository.dart';
+import 'package:popup_banner/popup_banner.dart';
 
 class StudentProfile extends ConsumerWidget {
   // final Map<String, dynamic> userData;
@@ -15,71 +12,273 @@ class StudentProfile extends ConsumerWidget {
     required this.user,
     // required this.userData,
   });
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextEditingController nameController = TextEditingController();
-    return Column(
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.2,
-        ),
-        // if (userData['photoURL'] != null)
-        if (user.photoURL != null)
-          CircleAvatar(
-            radius: 40,
-            backgroundImage: NetworkImage(
-              // userData['photoURL'],
-              user.photoURL!,
-            ),
+    // precacheImage(NetworkImage(user.photoURL!), context);x
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 2),
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.04,
+              ),
+              ListTile(
+                title: const Text(
+                  "Profile",
+                  style: TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                leading: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.arrow_back_ios),
+                ),
+              ),
+              if (user.photoURL != null)
+                InkWell(
+                  onTap: () {
+                    showDefaultPopup(
+                        context: context, images: [user.photoURL!]);
+                  },
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundImage: NetworkImage(
+                      // userData['photoURL'],
+                      user.photoURL!,
+                    ),
+                  ),
+                ),
+              Text(
+                // userData['name'],
+                user.name,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Text(
+                user.rollNo!,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.04,
+              ),
+              const ListTile(
+                title: Text(
+                  "Personal Information",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              ListTile(
+                title: const Text(
+                  "Name",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  // userData['name'],
+                  user.name,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+              ListTile(
+                title: const Text(
+                  "Roll No.",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  user.rollNo!,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+              ListTile(
+                title: const Text(
+                  "Email",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  user.email,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+              ListTile(
+                title: const Text(
+                  "Phone No.",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  user.phoneNumber!,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                trailing: IconButton(
+                  onPressed: () {
+                    final TextEditingController controller =
+                        TextEditingController();
+                    showDialog(
+                      context: context,
+                      builder: (context) => alertDialog(
+                        title: "Change Phone Number",
+                        controller: controller,
+                        hintText: "Enter new phone number",
+                        onSubmit: () {
+                          // update phone number
+                          // Check if phone number is valid
+                          // if valid then update
+                          // else show error
+                          if (controller.text.length != 10) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Invalid Phone Number"),
+                              ),
+                            );
+                            return;
+                          }
+                          UserRepository()
+                              .updateUserField(
+                            user.id,
+                            'phoneNumber',
+                            controller.text,
+                          )
+                              .then((value) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Phone Number Updated"),
+                              ),
+                            );
+                          });
+
+                          // update phone number
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   const SnackBar(
+                          //     content: Text("Phone Number Updated"),
+                          //   ),
+                          // );
+                          //
+                          Navigator.pop(context);
+                        },
+                        // "Change Phone Number",
+                        // controller,
+                        // "Enter new phone number",
+                        // ()
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.edit),
+                ),
+              ),
+              ListTile(
+                title: const Text(
+                  "Hostel",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  user.hostel!,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+              ListTile(
+                title: const Text(
+                  "Room Number",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  user.roomNo!,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                trailing: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.edit),
+                ),
+              ),
+            ],
           ),
-        Padding(
-          padding: const EdgeInsets.only(top: kDefaultSpacing / 2),
-          child: Text(
-            // userData['name'],
-            user.name,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: kDefaultSpacing / 2),
-          child: Text(
-            // userData['rollNo'],
-            user.rollNo!,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-        ),
-        GestureDetector(
-          onTap: () => AuthService().signOut(ref),
-          child: const Chip(
-            label: Text("Log out"),
-          ),
-        ),
-        const SizedBox(height: 20),
-        TextField(
-          controller: nameController,
-          decoration: const InputDecoration(
-            labelText: "Name",
-            border: OutlineInputBorder(),
-          ),
-        ),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: () async {
-            try {
-              FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .update({
-                'name': nameController.text,
-              });
-            } catch (e) {
-              print(e);
-            }
-          },
-          child: const Text("Update"),
-        ),
-      ],
+      ),
     );
   }
+}
+
+// image in full screen
+// Path: lib/features/profile/student_profile.dart
+
+class DetailScreen extends StatelessWidget {
+  final String imageUrl;
+  const DetailScreen({super.key, required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Hero(
+          tag: 'imageHero',
+          child: Image.network(
+            imageUrl,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+AlertDialog alertDialog({
+  required String title,
+  required TextEditingController controller,
+  String? hintText,
+  Function()? onSubmit,
+}) =>
+    AlertDialog(
+      title: Text(title),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextFormField(
+            controller: controller,
+            decoration: const InputDecoration(
+              hintText: "Enter new phone number",
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          ElevatedButton(
+            onPressed: onSubmit,
+            child: const Text("Change"),
+          ),
+        ],
+      ),
+    );
+
+void showDefaultPopup({
+  required BuildContext context,
+  required List<String> images,
+}) {
+  PopupBanner(
+    fit: BoxFit.contain,
+    fromNetwork: true,
+    context: context,
+    images: images,
+    onClick: (index) {
+      debugPrint("CLICKED $index");
+    },
+  ).show();
 }

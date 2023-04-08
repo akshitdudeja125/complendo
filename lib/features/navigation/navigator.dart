@@ -7,6 +7,7 @@ import 'package:complaint_portal/features/error/error_screen.dart';
 import 'package:complaint_portal/features/home/home_screen.dart';
 import 'package:complaint_portal/features/loading/loading_screen.dart';
 import 'package:complaint_portal/features/profile/student_profile.dart';
+import 'package:complaint_portal/features/settings/settings_page.dart';
 import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,6 +57,16 @@ class PageNavigator extends ConsumerWidget {
                     ),
                   ),
                 ),
+                // if (currentIndex == 0)
+                //   HomePage(user: user)
+                // else if (currentIndex == 1)
+                //   ComposeComplaint(
+                //     user: user,
+                //   )
+                // else if (currentIndex == 2)
+                //   SettingsPage(user: user)
+                // else
+                //   const Text('Error'),
                 PageView(
                   controller: pageController,
                   onPageChanged: (index) {
@@ -66,7 +77,8 @@ class PageNavigator extends ConsumerWidget {
                     ComposeComplaint(
                       user: user,
                     ),
-                    StudentProfile(user: user),
+                    // StudentProfile(user: user),
+                    SettingsPage(user: user),
                   ],
                 ),
               ],
@@ -76,7 +88,7 @@ class PageNavigator extends ConsumerWidget {
                 items:
                     value['isAdmin'] ? adminBottomBarItems : userBottomBarItems,
                 onTap: (index) {
-                  // ref.read(onPageChangeProvider).call(index);
+                  ref.read(onPageChangeProvider).call(index);
                   pageController.animateToPage(
                     index,
                     duration: const Duration(milliseconds: 500),

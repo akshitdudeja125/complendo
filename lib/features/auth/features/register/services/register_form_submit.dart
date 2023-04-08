@@ -3,6 +3,7 @@ import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
 import 'package:complaint_portal/features/auth/features/register/provider/register_form_providers.dart';
 import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
 import 'package:complaint_portal/features/auth/repository/user_repository.dart';
+import 'package:complaint_portal/models/user_model.dart';
 
 void setProfile(ref) async {
   if (ref.watch(hostelProvider.notifier).state == null) {
@@ -19,17 +20,19 @@ void setProfile(ref) async {
 
   try {
     final user = ref.watch(authUserProvider);
-    final userRepo = ref.read(userRepoProvider);
+    final userRepo = ref.read(userRepositoryProvider);
     await userRepo.setUser(
-      uid: user.uid,
-      displayName: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
-      hostel: ref.watch(hostelProvider),
-      roomNo: ref.watch(roomNoProvider),
-      phoneNumber: ref.watch(phoneNoProvider),
-      rollNo: ref.watch(rollNoProvider),
-      ref: ref,
+      UserModel(
+        id: user.uid,
+        name: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        hostel: ref.watch(hostelProvider),
+        roomNo: ref.watch(roomNoProvider),
+        phoneNumber: ref.watch(phoneNoProvider),
+        rollNo: ref.watch(rollNoProvider),
+        isAdmin: false,
+      ),
     );
     displaySnackBar('Success', 'User Registered Successfully');
   } catch (e) {

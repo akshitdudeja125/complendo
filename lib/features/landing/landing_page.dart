@@ -29,17 +29,11 @@ class LandingScreen extends StatelessWidget {
                 height: 50,
               ),
               Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Welcome to Complendo",
-                    style: TextStyle(
-                      // fontSize: 33,
-                      fontSize: MediaQuery.of(context).size.width / 12,
-                      fontWeight: FontWeight.w600,
-                      color: kPrimaryColor,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
-                    ),
+                child: Text(
+                  "Welcome to Complendo",
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width / 15,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -79,7 +73,7 @@ class LandingScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height:kDefaultSpacing,
+                height: kDefaultSpacing,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -238,7 +232,7 @@ class LandingScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height:kDefaultSpacing,
+                height: kDefaultSpacing,
               ),
               Consumer(builder: (context, ref, child) {
                 return CustomElevatedButton(
