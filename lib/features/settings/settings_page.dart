@@ -1,12 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:complaint_portal/common/services/notifications/push_notifications.dart';
 import 'package:complaint_portal/common/theme/theme_provider.dart';
-import 'package:complaint_portal/features/auth/repository/user_repository.dart';
-
+import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/features/profile/student_profile.dart';
 import 'package:complaint_portal/features/settings/about_page.dart';
 import 'package:complaint_portal/models/user_model.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -17,28 +14,21 @@ import '../auth/repository/auth_repository.dart';
 
 final switchProvider = StateProvider<bool>((ref) => false);
 
-class SettingsPage extends StatelessWidget {
-  final UserModel user;
-  const SettingsPage({
-    super.key,
-    required this.user,
-    // required this.userData,
-  });
-  @override
-  Widget build(BuildContext context) {
-    // Provider.of<DarkThemeProvider>(context);
+// class SettingsPage extends ConsumerStatefulWidget {
+class SettingsPage extends ConsumerWidget {
+  const SettingsPage({super.key});
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userModelProvider);
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.04,
-          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListTile(
               title: const Text(
-                "Settings",
+                'Settings',
                 style: TextStyle(
                   fontSize: 23,
                   fontWeight: FontWeight.bold,
@@ -64,7 +54,6 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
           ),
-
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -218,93 +207,12 @@ class SettingsPage extends StatelessWidget {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.04,
                       ),
-                      // Container(
-                      //   color: Colors.yellow[200],
-                      //   height: 400,
-                      //   width: 400,
-                      //   // alignment: Alignment(1, 1),
-                      //   // child: Positioned(
-                      //   //   width: 200,
-                      //   //   height: 200,
-                      //   //   bottom: 0,
-                      //   //   right: 0,
-                      //   //   child: Container(
-                      //   //       color: Colors.red[200],
-                      //   //       ),
-                      //   //   // color: Colors.red[200],
-                      //   // ),
-                      // ),
-                      Center(
-                        child: Container(
-                          color: Colors.yellow[200],
-                          height: 300,
-                          width: 300,
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                width: 100,
-                                height: 100,
-                                bottom: 0,
-                                right: 0,
-                                child: Container(
-                                  color: Colors.red[200],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.04,
-                      ),
                     ],
                   ),
                 ],
               ),
             ),
           ),
-//create a text Account in the start of the page
-          // const Padding(
-          //   padding: EdgeInsets.only(left: 20.0),
-          //   child: Align(
-          //     alignment: Alignment.centerLeft,
-          //     child: Text(
-          //       "Account",
-          //       style: TextStyle(
-          //         fontSize: 20,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Container(
-          //     decoration: BoxDecoration(
-          //       color: Colors.grey[200],
-          //       borderRadius: BorderRadius.circular(10),
-          //     ),
-          //     child: ListTile(
-          //       leading: CircleAvatar(
-          //         backgroundImage: NetworkImage(user.photoURL ?? ""),
-          //       ),
-          //       title: Text(user.name),
-          //       subtitle: Text(user.email),
-          //       trailing: IconButton(
-          //         onPressed: () {},
-          //         // icon: const Icon(),
-          //         // load icon from assets
-          //         icon: Image.asset(
-          //           "assets/images/edit.png",
-          //           width: 20,
-          //           height: 20,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // )
-          // // if (userData['photoURL'] != null)
         ],
       ),
     );

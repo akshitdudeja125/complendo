@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:app_settings/app_settings.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class NotificationService {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -132,5 +135,29 @@ class NotificationService {
     _firebaseMessaging.onTokenRefresh.listen((event) {
       print('Token refreshed: $event');
     });
+  }
+
+  Future<void> sendNotifcationToUser({
+    required String? reciever,
+    required String? title,
+    required String? body,
+  }) async {
+    const title = 'Complaint Resolved';
+    var data = {
+      "to": reciever,
+      "priority": "high",
+      "notification": {
+        "body": body,
+        "title": title,
+      },
+    };
+    var serverToken =
+        "AAAAibfMiIE:APA91bFKdtE2CuszLZFGntD63lRuOhi6FRvo-uoCYMJLtyfFzOy0FDq1nxKkYUE39uODH6aGN1YOByMZSqJ0pgeUT7I_2922XihgqueMelzEkEA76xXIavvgijaHlCXkPKBa3JukGewX";
+    await http.post(Uri.parse("https://fcm.googleapis.com/fcm/send"),
+        body: jsonEncode(data),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'key=$serverToken'
+        });
   }
 }

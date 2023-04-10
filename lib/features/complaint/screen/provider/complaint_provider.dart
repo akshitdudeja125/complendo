@@ -22,11 +22,13 @@ final complaintStreamProvider =
     case "Closed":
       query = firestore
           .collection('complaints')
-          .where('status', isEqualTo: "resolved")
-          .where('uid', isEqualTo: user.uid);
+          .where('uid', isEqualTo: user.uid)
+          .where('status', isEqualTo: "resolved");
       break;
     case "All":
-      query = firestore.collection('complaints');
+      query = firestore
+          .collection('complaints')
+          .where('uid', isNotEqualTo: user.uid);
       break;
     default:
       query = FirebaseFirestore.instance.collection('complaints');

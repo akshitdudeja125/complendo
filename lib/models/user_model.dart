@@ -13,6 +13,7 @@ class UserModel {
   final bool? isAdmin;
   final List<String>? complaints;
   bool? notifications;
+  final String? deviceToken;
 
   UserModel({
     required this.id,
@@ -26,6 +27,7 @@ class UserModel {
     this.isAdmin,
     this.complaints,
     this.notifications = true,
+    this.deviceToken,
   });
 
   UserModel copyWith({
@@ -40,6 +42,7 @@ class UserModel {
     bool? isAdmin,
     List<String>? complaints,
     bool? notifications,
+    String? deviceToken,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -53,6 +56,7 @@ class UserModel {
       isAdmin: isAdmin ?? this.isAdmin,
       complaints: complaints ?? this.complaints,
       notifications: notifications ?? this.notifications,
+      deviceToken: deviceToken ?? this.deviceToken,
     );
   }
 
@@ -69,26 +73,30 @@ class UserModel {
       'isAdmin': isAdmin,
       'complaints': complaints,
       'notifications': notifications,
+      'deviceToken': deviceToken,
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-        id: map['id'] as String,
-        rollNo: map['rollNo'] != null ? map['rollNo'] as String : null,
-        name: map['name'] as String,
-        email: map['email'] as String,
-        hostel: map['hostel'] != null ? map['hostel'] as String : null,
-        roomNo: map['roomNo'] != null ? map['roomNo'] as String : null,
-        photoURL: map['photoURL'] != null ? map['photoURL'] as String : null,
-        phoneNumber:
-            map['phoneNumber'] != null ? map['phoneNumber'] as String : null,
-        isAdmin: map['isAdmin'] != null ? map['isAdmin'] as bool : null,
-        complaints: map['complaints'] != null
-            ? List<String>.from(map['complaints'] as List<dynamic>)
-            : null,
-        notifications:
-            map['notifications'] != null ? map['notifications'] as bool : null);
+      id: map['id'] as String,
+      rollNo: map['rollNo'] != null ? map['rollNo'] as String : null,
+      name: map['name'] as String,
+      email: map['email'] as String,
+      hostel: map['hostel'] != null ? map['hostel'] as String : null,
+      roomNo: map['roomNo'] != null ? map['roomNo'] as String : null,
+      photoURL: map['photoURL'] != null ? map['photoURL'] as String : null,
+      phoneNumber:
+          map['phoneNumber'] != null ? map['phoneNumber'] as String : null,
+      isAdmin: map['isAdmin'] != null ? map['isAdmin'] as bool : null,
+      complaints: map['complaints'] != null
+          ? List<String>.from(map['complaints'] as List<dynamic>)
+          : null,
+      notifications:
+          map['notifications'] != null ? map['notifications'] as bool : null,
+      deviceToken:
+          map['deviceToken'] != null ? map['deviceToken'] as String : null,
+    );
   }
 
   String toJson() => json.encode(toMap());

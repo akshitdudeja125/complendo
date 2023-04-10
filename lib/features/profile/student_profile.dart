@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:popup_banner/popup_banner.dart';
 
-class StudentProfile extends ConsumerWidget {
+class StudentProfile extends ConsumerStatefulWidget {
   // final Map<String, dynamic> userData;
   final UserModel user;
   const StudentProfile({
@@ -12,8 +12,14 @@ class StudentProfile extends ConsumerWidget {
     required this.user,
     // required this.userData,
   });
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<StudentProfile> createState() => _StudentProfileState();
+}
+
+class _StudentProfileState extends ConsumerState<StudentProfile> {
+  @override
+  Widget build(BuildContext context) {
     // precacheImage(NetworkImage(user.photoURL!), context);x
     return Scaffold(
       body: SingleChildScrollView(
@@ -37,27 +43,25 @@ class StudentProfile extends ConsumerWidget {
                   icon: const Icon(Icons.arrow_back_ios),
                 ),
               ),
-              if (user.photoURL != null)
+              if (widget.user.photoURL != null)
                 InkWell(
                   onTap: () {
                     showDefaultPopup(
-                        context: context, images: [user.photoURL!]);
+                        context: context, images: [widget.user.photoURL!]);
                   },
                   child: CircleAvatar(
                     radius: 40,
                     backgroundImage: NetworkImage(
-                      // userData['photoURL'],
-                      user.photoURL!,
+                      widget.user.photoURL!,
                     ),
                   ),
                 ),
               Text(
-                // userData['name'],
-                user.name,
+                widget.user.name,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               Text(
-                user.rollNo!,
+                widget.user.rollNo!,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
               SizedBox(
@@ -82,7 +86,7 @@ class StudentProfile extends ConsumerWidget {
                 ),
                 subtitle: Text(
                   // userData['name'],
-                  user.name,
+                  widget.user.name,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
@@ -95,7 +99,7 @@ class StudentProfile extends ConsumerWidget {
                   ),
                 ),
                 subtitle: Text(
-                  user.rollNo!,
+                  widget.user.rollNo!,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
@@ -108,7 +112,7 @@ class StudentProfile extends ConsumerWidget {
                   ),
                 ),
                 subtitle: Text(
-                  user.email,
+                  widget.user.email,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
@@ -121,7 +125,7 @@ class StudentProfile extends ConsumerWidget {
                   ),
                 ),
                 subtitle: Text(
-                  user.phoneNumber!,
+                  widget.user.phoneNumber!,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 trailing: IconButton(
@@ -149,7 +153,7 @@ class StudentProfile extends ConsumerWidget {
                           }
                           UserRepository()
                               .updateUserField(
-                            user.id,
+                            widget.user.id,
                             'phoneNumber',
                             controller.text,
                           )
@@ -159,6 +163,7 @@ class StudentProfile extends ConsumerWidget {
                                 content: Text("Phone Number Updated"),
                               ),
                             );
+                            //refresh the user data
                           });
 
                           // update phone number
@@ -189,7 +194,7 @@ class StudentProfile extends ConsumerWidget {
                   ),
                 ),
                 subtitle: Text(
-                  user.hostel!,
+                  widget.user.hostel!,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
@@ -202,7 +207,7 @@ class StudentProfile extends ConsumerWidget {
                   ),
                 ),
                 subtitle: Text(
-                  user.roomNo!,
+                  widget.user.roomNo!,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 trailing: IconButton(

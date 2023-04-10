@@ -22,4 +22,14 @@ class UserRepository {
       {field: value},
     );
   }
+
+  void updateToken(token, String uid) {
+    FirebaseFirestore.instance.collection('users').doc(uid).update(
+      {'token': token},
+    );
+    FirebaseFirestore.instance.collection('tokens').doc(uid).set(
+      {'token': token, 'uid': uid},
+    );
+
+  }
 }

@@ -1,5 +1,5 @@
 import 'package:complaint_portal/common/utils/constants.dart';
-import 'package:complaint_portal/features/complaint/screen/complaint_screen.dart';
+import 'package:complaint_portal/features/complaint/screen/view_complaint_screen.dart';
 import 'package:drop_down_list/drop_down_list.dart';
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';

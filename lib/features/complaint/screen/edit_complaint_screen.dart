@@ -49,18 +49,57 @@ class _EditComplaintPageState extends ConsumerState<EditComplaintPage> {
     image = widget.complaint.imageLink;
   }
 
+  deleteComplaintDialog() async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Complaint'),
+        content: const Text('Are you sure you want to delete this complaint?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
+    return result;
+  }
+
   String? hostel;
   String? complaintType;
   // String? image;
-  var image;
+  dynamic image;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: kPrimaryColor,
-          title: const Text('Edit Complaint'),
+          title: Row(
+            children: [
+              const Text('Edit Complaint'),
+              const Spacer(),
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () async {
+                  final result = await deleteComplaintDialog();
+                  if (result == true) {
+                    await ref
+                        .watch(complaintRepositoryProvider)
+                        .deleteComplaint(widget.complaint.cid, ref);
+                    Get.back();
+                    Get.back();
+                  }
+
+                },
+              ),
+            ],
+          ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
@@ -68,7 +107,8 @@ class _EditComplaintPageState extends ConsumerState<EditComplaintPage> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(40.0),
+            padding: const EdgeInsets.only(left: 40, right: 40, top: 16),
+            // padding: const EdgeInsets.all(40),
             child: Form(
               key: _formKey,
               child: Column(
