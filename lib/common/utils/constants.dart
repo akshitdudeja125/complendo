@@ -9,11 +9,24 @@ List<String> hostels = [
 ];
 
 List<String> complaintCategories = [
-  'Electricity',
-  'Water',
+  'Electrical',
+  'Plumbing',
   'Internet',
   'Water Cooler',
 ];
+
+final Map<String, String> categoryImageMap = {
+  'Electrical': 'assets/images/complaint_icons/electric.png',
+  'Internet': 'assets/images/complaint_icons/internet.png',
+  'Plumbing': 'assets/images/complaint_icons/water.png',
+  'Water Cooler': 'assets/images/complaint_icons/water-dispenser.png',
+};
+
+final filterOptions = {
+  "status": ["pending", "resolved", "rejected"],
+  "hostel": hostels,
+  "category": complaintCategories
+};
 
 double kFormSpacing = 20;
 

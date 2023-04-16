@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:complaint_portal/common/theme/theme_data.dart';
 import 'package:complaint_portal/common/theme/theme_provider.dart';
 import 'package:complaint_portal/features/auth/controllers/auth_controller.dart';

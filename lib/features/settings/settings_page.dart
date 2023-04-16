@@ -1,9 +1,7 @@
 import 'package:complaint_portal/common/theme/theme_provider.dart';
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
-import 'package:complaint_portal/features/profile/student_profile.dart';
+import 'package:complaint_portal/features/profile/profile.dart';
 import 'package:complaint_portal/features/settings/about_page.dart';
-import 'package:complaint_portal/models/user_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -14,13 +12,12 @@ import '../auth/repository/auth_repository.dart';
 
 final switchProvider = StateProvider<bool>((ref) => false);
 
-// class SettingsPage extends ConsumerStatefulWidget {
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userModelProvider);
+    final user = ref.watch(userProvider);
     return Scaffold(
       body: Column(
         children: [
@@ -84,7 +81,7 @@ class SettingsPage extends ConsumerWidget {
                           padding: const EdgeInsets.only(
                               bottom: kDefaultSpacing / 2),
                           child: Text(
-                            user.rollNo ?? "Roll No",
+                            user.isAdmin! ? "Admin" : "Student",
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                         ),
@@ -103,9 +100,7 @@ class SettingsPage extends ConsumerWidget {
                         icon: const Icon(Icons.person),
                         onTap: () {
                           Get.to(
-                            StudentProfile(
-                              user: user,
-                            ),
+                            const StudentProfile(),
                           );
                         },
                       ),
@@ -122,8 +117,6 @@ class SettingsPage extends ConsumerWidget {
                               final prefs =
                                   await SharedPreferences.getInstance();
                               prefs.setBool('isDark', value);
-                              print("Prefs ->  ${prefs.getBool("isDark")}");
-                              print(prefs.getBool('isDark'));
                               ref.watch(isDarkProvider.notifier).state = value;
                             },
                           ),
@@ -139,28 +132,6 @@ class SettingsPage extends ConsumerWidget {
                           subtitle: "Turn on/off notifications",
                           icon: const Icon(Icons.notifications),
                           onTap: () {},
-                          // trailing: Switch(
-                          //   activeColor: kPrimaryColor,
-                          //   // value: ref.watch(switchProvider),
-                          //   value: user.notifications ?? true,
-                          //   onChanged: (value) {
-                          //     // ref.read(switchProvider.notifier).state = value;
-                          //     ref.read(userRepositoryProvider).updateUserField(
-                          //           user.id,
-                          //           'notifications',
-                          //           value,
-                          //         );
-                          //     UserRepository().updateUserField(
-                          //       user.id,
-                          //       'notifications',
-                          //       value,
-                          //     );
-                          //   },
-                          // ),
-                          // onTap: () {
-                          //   ref.read(switchProvider.notifier).state =
-                          //       !ref.watch(switchProvider);
-                          // },
                         ),
                       ),
                       SettingsTile(
@@ -196,7 +167,6 @@ class SettingsPage extends ConsumerWidget {
                           children: const [
                             Text(
                               "Version 1.0.0",
-                              // s
                             ),
                             Text(
                               "Made with ❤️ by Akshit",

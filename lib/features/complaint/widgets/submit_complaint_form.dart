@@ -1,16 +1,13 @@
-// ignore_for_file: unused_local_variable
-
-import 'package:complaint_portal/common/services/connectivity_service.dart';
+import 'package:complaint_portal/common/services/network/connectivity_service.dart';
+import 'package:complaint_portal/features/complaint/repository/complaint_repository.dart';
 import 'package:complaint_portal/features/navigation/provider/page_controller_provider.dart';
 import 'package:complaint_portal/models/complaint_model.dart';
-import 'package:complaint_portal/features/complaint/screen/provider/complaint_provider.dart';
+import 'package:complaint_portal/features/complaint/providers/complaint_provider.dart';
 import 'package:complaint_portal/common/providers/firebase_instance_provider.dart';
 import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'screen/form/providers/complaint_form_provider.dart';
+import '../providers/complaint_form_provider.dart';
 
 void submitComplaint(ref, user) async {
   if (ref.watch(hostelProvider.notifier).state == null) {
@@ -65,7 +62,6 @@ void submitComplaint(ref, user) async {
                 date: DateTime.now(),
                 imageLink: downloadURL,
               );
-              print(complaint.toMap());
               await ref
                   .watch(complaintRepositoryProvider)
                   .registerComplaint(ref, complaint);

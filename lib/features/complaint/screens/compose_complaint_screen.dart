@@ -1,11 +1,8 @@
-import 'package:complaint_portal/features/complaint/screen/form/complaint_form.dart';
-import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:complaint_portal/features/complaint/screens/complaint_form.dart';
 
 class ComposeComplaint extends StatelessWidget {
-  // final Map<String, dynamic> userData;
-  final UserModel user;
-  const ComposeComplaint({super.key, required this.user});
+  const ComposeComplaint({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +45,11 @@ class ComposeComplaint extends StatelessWidget {
                       ),
                     )),
               ),
-              Expanded(
+              const Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: ComplaintForm(
-                      user: user,
-                    ),
+                    padding: EdgeInsets.only(top: 8.0),
+                    child: ComplaintForm(),
                   ),
                 ),
               ),

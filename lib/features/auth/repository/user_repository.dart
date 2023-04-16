@@ -10,7 +10,9 @@ class UserRepository {
     UserModel user,
   ) async {
     final db = FirebaseFirestore.instance.collection('users');
-    await db.doc(user.id).set(user.toMap());
+    await db.doc(user.id).set(
+          user.toMap(),
+        );
   }
 
   Future<void> updateUserField(
@@ -25,11 +27,10 @@ class UserRepository {
 
   void updateToken(token, String uid) {
     FirebaseFirestore.instance.collection('users').doc(uid).update(
-      {'token': token},
+      {'deviceToken': token},
     );
     FirebaseFirestore.instance.collection('tokens').doc(uid).set(
-      {'token': token, 'uid': uid},
+      {'deviceToken': token, 'uid': uid},
     );
-
   }
 }

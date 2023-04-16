@@ -13,7 +13,10 @@ class TextFormFieldItem extends StatelessWidget {
   TextInputType? keyboardType;
   bool? obsureText;
   TextCapitalization? textCapitalization;
-
+  Widget? suffixIcon;
+  int? maxLength;
+  Color? textColor;
+  FontWeight? fontWeight;
   TextFormFieldItem({
     this.initValue,
     super.key,
@@ -26,6 +29,10 @@ class TextFormFieldItem extends StatelessWidget {
     this.keyboardType,
     this.obsureText = false,
     this.textCapitalization = TextCapitalization.none,
+    this.suffixIcon,
+    this.maxLength,
+    this.textColor,
+    this.fontWeight,
   });
   @override
   Widget build(BuildContext context) {
@@ -48,17 +55,31 @@ class TextFormFieldItem extends StatelessWidget {
         controller: controller,
         enabled: canEdit,
         textCapitalization: textCapitalization!,
+        maxLength: maxLength,
+        style: TextStyle(
+          color: textColor ?? Colors.black,
+          fontWeight: fontWeight ?? FontWeight.normal,
+        ),
         decoration: InputDecoration(
-          labelStyle: const TextStyle(
-            color: Colors.black,
-          ),
+          suffix: suffixIcon,
+          labelStyle: const TextStyle(color: Colors.black),
           focusedBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              borderSide: BorderSide(color: Colors.black)),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderSide: BorderSide(
+              color: Colors.black,
+            ),
+          ),
           labelText: labelText,
           border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              borderSide: BorderSide(color: Colors.black)),
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                20,
+              ),
+            ),
+            borderSide: BorderSide(
+              color: Colors.black,
+            ),
+          ),
         ),
       ),
     );

@@ -1,4 +1,4 @@
-import 'package:complaint_portal/common/services/connectivity_service.dart';
+import 'package:complaint_portal/common/services/network/connectivity_service.dart';
 import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
 import 'package:complaint_portal/features/auth/features/register/provider/register_form_providers.dart';
 import 'package:complaint_portal/features/auth/providers/auth_provider.dart';

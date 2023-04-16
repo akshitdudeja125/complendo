@@ -1,6 +1,7 @@
 import 'package:complaint_portal/common/utils/validators.dart';
-import 'package:complaint_portal/features/complaint/screen/form/providers/complaint_form_provider.dart';
-import 'package:complaint_portal/features/complaint/submit_complaint_form.dart';
+import 'package:complaint_portal/features/auth/providers/user_provider.dart';
+import 'package:complaint_portal/features/complaint/providers/complaint_form_provider.dart';
+import 'package:complaint_portal/features/complaint/widgets/submit_complaint_form.dart';
 
 import 'package:complaint_portal/common/services/image_picker.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
@@ -13,10 +14,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ComplaintForm extends ConsumerWidget {
-  final UserModel user;
-  const ComplaintForm({super.key, required this.user});
+  const ComplaintForm({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider);
     return Column(
       children: [
         Padding(

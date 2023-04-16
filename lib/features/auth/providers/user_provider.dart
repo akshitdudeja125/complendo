@@ -15,9 +15,40 @@ final userDataStreamProvider = StreamProvider.autoDispose
   return value;
 });
 
-final userModelProvider = Provider.autoDispose<UserModel>((ref) {
+final userProvider = Provider.autoDispose<UserModel>((ref) {
   final userData =
       ref.watch(userDataStreamProvider(FirebaseAuth.instance.currentUser!.uid));
+  return userData.when(
+    data: (data) {
+      return UserModel.fromMap(data!);
+    },
+    loading: () => UserModel(
+      id: '',
+      email: '',
+      name: '',
+    ),
+    error: (_, __) => UserModel(
+      id: '',
+      email: '',
+      name: '',
+    ),
+  );
+});
+final firebaseDataProvider = Provider.autoDispose((ref) {
+  final userData =
+      ref.watch(userDataStreamProvider(FirebaseAuth.instance.currentUser!.uid));
+  return userData.when(
+    data: (data) {
+      return data;
+    },
+    loading: () => null,
+    error: (_, __) => null,
+  );
+});
+
+final complaintUserProvider =
+    Provider.family.autoDispose<UserModel, String>((ref, uid) {
+  final userData = ref.watch(userDataStreamProvider(uid));
   return userData.when(
     data: (data) {
       return UserModel.fromMap(data!);

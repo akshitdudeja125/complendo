@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:app_settings/app_settings.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:complaint_portal/features/complaint/screens/view_complaint_screen.dart';
+import 'package:complaint_portal/models/complaint_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -120,8 +123,19 @@ class NotificationService {
   }
 
   void handleMessage(RemoteMessage message) {
-    if (message.data['type'] == 'key') {
-      Get.to(() => const Scaffold());
+    if (message.data['id'] != null) {
+      final cid = message.data['id'];
+      FirebaseFirestore.instance
+          .collection('complaints')
+          .doc(cid)
+          .get()
+          .then((value) {
+        Get.to(
+          () => ComplaintScreen(
+            complaint: Complaint.fromMap(value.data()!),
+          ),
+        );
+      });
     }
   }
 
@@ -133,7 +147,7 @@ class NotificationService {
 
   void isTokenRefreshed() {
     _firebaseMessaging.onTokenRefresh.listen((event) {
-      print('Token refreshed: $event');
+      debugPrint('Token refreshed: $event');
     });
   }
 
@@ -141,8 +155,9 @@ class NotificationService {
     required String? reciever,
     required String? title,
     required String? body,
+    // String? id,
+    String? cid,
   }) async {
-    const title = 'Complaint Resolved';
     var data = {
       "to": reciever,
       "priority": "high",
@@ -150,14 +165,19 @@ class NotificationService {
         "body": body,
         "title": title,
       },
+      "data": {
+        "id": cid,
+      }
     };
     var serverToken =
         "AAAAibfMiIE:APA91bFKdtE2CuszLZFGntD63lRuOhi6FRvo-uoCYMJLtyfFzOy0FDq1nxKkYUE39uODH6aGN1YOByMZSqJ0pgeUT7I_2922XihgqueMelzEkEA76xXIavvgijaHlCXkPKBa3JukGewX";
-    await http.post(Uri.parse("https://fcm.googleapis.com/fcm/send"),
-        body: jsonEncode(data),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'key=$serverToken'
-        });
+    await http.post(
+      Uri.parse("https://fcm.googleapis.com/fcm/send"),
+      body: jsonEncode(data),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'key=$serverToken'
+      },
+    );
   }
 }

@@ -1,9 +1,6 @@
-import 'package:complaint_portal/common/utils/enums.dart';
-
 class Complaint {
-  final String cid;
-  final String uid;
-
+  final String? cid;
+  final String? uid;
   final String? title;
   final String? description;
   final String? category;
@@ -14,7 +11,12 @@ class Complaint {
   final bool? isIndividual;
 
   final DateTime? date;
-  final DateTime? resolvedDate;
+  final DateTime? resolvedAt;
+
+  // comment
+  final String? comment;
+
+  final String? resolvedBy;
 
   final List<String>? upvotes;
 
@@ -24,20 +26,22 @@ class Complaint {
   final String? imageLink;
 
   Complaint({
+    this.comment,
     this.roomNo,
     this.hostel,
-    required this.cid,
-    required this.uid,
+    this.cid,
+    this.uid,
     this.title,
     this.description,
     this.category,
     this.isIndividual,
     this.date,
-    this.resolvedDate,
+    this.resolvedAt,
     this.upvotes,
     this.status,
     this.imageLink,
     this.complaintType,
+    this.resolvedBy,
   });
 
   Complaint copyWith({
@@ -48,13 +52,15 @@ class Complaint {
     String? category,
     bool? isIndividual,
     DateTime? date,
-    DateTime? resolvedDate,
+    DateTime? resolvedAt,
     List<String>? upvotes,
     String? status,
     String? complaintType,
     String? imageLink,
     String? hostel,
     String? roomNo,
+    String? resolvedBy,
+    String? comment,
   }) {
     return Complaint(
       cid: cid ?? this.cid,
@@ -64,13 +70,15 @@ class Complaint {
       category: category ?? this.category,
       isIndividual: isIndividual ?? this.isIndividual,
       date: date ?? this.date,
-      resolvedDate: resolvedDate ?? this.resolvedDate,
+      resolvedAt: resolvedAt ?? this.resolvedAt,
       upvotes: upvotes ?? this.upvotes,
       status: status ?? this.status,
       complaintType: complaintType ?? this.complaintType,
       imageLink: imageLink ?? this.imageLink,
       hostel: hostel ?? this.hostel,
       roomNo: roomNo ?? this.roomNo,
+      resolvedBy: resolvedBy ?? this.resolvedBy,
+      comment: comment ?? this.comment,
     );
   }
 
@@ -83,13 +91,15 @@ class Complaint {
       'category': category,
       'isIndividual': isIndividual,
       'date': date,
-      'resolvedDate': resolvedDate,
+      'resolvedAt': resolvedAt,
       'upvotes': upvotes,
       'status': status,
       'complaintType': complaintType,
       'imageLink': imageLink,
       'hostel': hostel,
       'roomNo': roomNo,
+      'resolvedBy': resolvedBy,
+      'comment': comment,
     };
   }
 
@@ -103,12 +113,14 @@ class Complaint {
       category: data['category'] as String,
       upvotes: data['upvotes'] as List<String>,
       date: data['date']?.toDate(),
-      resolvedDate: data['resolvedDate']?.toDate(),
+      resolvedAt: data['resolvedAt']?.toDate(),
       status: data['status'] as String,
       imageLink: data['imageLink'] as String,
       complaintType: data['complaintType'] as String,
       hostel: data['hostel'] as String,
       roomNo: data['roomNo'] as String,
+      resolvedBy: data['resolvedBy'] as String,
+      comment: data['comment'] as String,
     );
   }
   factory Complaint.fromMap(Map<String, dynamic> map) {
@@ -119,14 +131,16 @@ class Complaint {
       description: map['description'] as String,
       category: map['category'] as String,
       isIndividual: map['isIndividual'] as bool,
-      date: map['date'] as DateTime,
-      resolvedDate: map['resolvedDate'] as DateTime,
+      date: map['date']?.toDate(),
+      resolvedAt: map['resolvedAt']?.toDate(),
       upvotes: map['upvotes'] as List<String>,
       status: map['status'] as String,
       imageLink: map['imageLink'] as String,
       complaintType: map['complaintType'] as String,
       hostel: map['hostel'] as String,
       roomNo: map['roomNo'] as String,
+      resolvedBy: map['resolvedBy'] as String,
+      comment: map['comment'] as String,
     );
   }
 }

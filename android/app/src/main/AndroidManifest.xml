@@ -20,6 +20,7 @@
     <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@string/default_notification_icon" />
 
 
+
     <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
 
 
@@ -35,6 +36,9 @@
       </intent-filter> -->
 
     </activity>
+
+    <!-- <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-3940256099942544/1033173712"/> -->
+    <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-5525344062173064~3034304324"/>
 
     <meta-data android:name="flutterEmbedding" android:value="2" />
     <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />

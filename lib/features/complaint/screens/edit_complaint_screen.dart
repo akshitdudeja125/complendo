@@ -1,18 +1,22 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:complaint_portal/common/services/connectivity_service.dart';
+import 'package:complaint_portal/common/services/network/connectivity_service.dart';
 import 'package:complaint_portal/common/services/image_picker.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:complaint_portal/common/utils/validators.dart';
+import 'package:complaint_portal/common/widgets/custom_app_bar.dart';
 import 'package:complaint_portal/common/widgets/custom_drop_down_menu.dart';
 import 'package:complaint_portal/common/widgets/custom_elevated_button.dart';
 import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
 import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
-import 'package:complaint_portal/features/complaint/screen/provider/complaint_provider.dart';
+import 'package:complaint_portal/features/auth/providers/user_provider.dart';
+import 'package:complaint_portal/features/complaint/repository/complaint_repository.dart';
+import 'package:complaint_portal/features/complaint/providers/complaint_provider.dart';
 import 'package:complaint_portal/models/complaint_model.dart';
 import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,10 +24,11 @@ import 'package:image_picker/image_picker.dart';
 final isLoadingProvider = StateProvider<bool>((ref) => false);
 
 class EditComplaintPage extends ConsumerStatefulWidget {
-  final UserModel user;
   final Complaint complaint;
-  const EditComplaintPage(
-      {super.key, required this.complaint, required this.user});
+  const EditComplaintPage({
+    super.key,
+    required this.complaint,
+  });
 
   @override
   ConsumerState<EditComplaintPage> createState() => _EditComplaintPageState();
@@ -34,6 +39,7 @@ class _EditComplaintPageState extends ConsumerState<EditComplaintPage> {
   late final TextEditingController _descriptionController;
   late final TextEditingController _categoryController;
   late final TextEditingController _roomNoController;
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +50,7 @@ class _EditComplaintPageState extends ConsumerState<EditComplaintPage> {
     _categoryController =
         TextEditingController(text: widget.complaint.category);
     _roomNoController = TextEditingController(text: widget.complaint.roomNo);
-    hostel = widget.user.hostel;
+    hostel = widget.complaint.hostel;
     complaintType = widget.complaint.complaintType;
     image = widget.complaint.imageLink;
   }
@@ -72,39 +78,103 @@ class _EditComplaintPageState extends ConsumerState<EditComplaintPage> {
 
   String? hostel;
   String? complaintType;
-  // String? image;
   dynamic image;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider);
     return Scaffold(
+        // appBar: CustomAppBar(
+        // elevation: 0,
+        // heading: 'Edit Complaint',
+        // trailing: Flexible(
+        //   child: Row(
+        //     children: [
+        //       IconButton(
+        //         icon: const Icon(
+        //           FeatherIcons.trash2,
+        //           color: Colors.black,
+        //         ),
+        //         onPressed: () async {
+        //           final result = await deleteComplaintDialog();
+        //           if (result == true) {
+        //             await ref
+        //                 .watch(complaintRepositoryProvider)
+        //                 .deleteComplaint(widget.complaint.cid!, ref);
+        //             Get.back();
+        //             Get.back();
+        //           }
+        //         },
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // ),
         appBar: AppBar(
-          elevation: 0,
-          title: Row(
-            children: [
-              const Text('Edit Complaint'),
-              const Spacer(),
-              IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () async {
-                  final result = await deleteComplaintDialog();
-                  if (result == true) {
-                    await ref
-                        .watch(complaintRepositoryProvider)
-                        .deleteComplaint(widget.complaint.cid, ref);
-                    Get.back();
-                    Get.back();
-                  }
-
-                },
-              ),
-            ],
+            title: Row(children: [
+          const Text('Edit Complaint'),
+          const Spacer(),
+          IconButton(
+            icon: const Icon(
+              FeatherIcons.trash2,
+              color: Colors.black,
+            ),
+            onPressed: () async {
+              final result = await deleteComplaintDialog();
+              if (result == true) {
+                await ref
+                    .watch(complaintRepositoryProvider)
+                    .deleteComplaint(widget.complaint.cid!, ref);
+                Get.back();
+                Get.back();
+              }
+            },
           ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(),
+          const SizedBox(width: 5),
+          //save BUTTON
+          IconButton(
+            icon: const Icon(
+              FeatherIcons.save,
+              color: Colors.black,
+            ),
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                final result = await showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Save Changes'),
+                    content: const Text(
+                        'Are you sure you want to save the changes?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text('No'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: const Text('Yes'),
+                      ),
+                    ],
+                  ),
+                );
+                if (result == true) {
+                  editComplaint(
+                    ref,
+                    user,
+                    _titleController.text,
+                    _descriptionController.text,
+                    hostel,
+                    complaintType,
+                    _roomNoController.text,
+                    image,
+                    _formKey,
+                    widget.complaint,
+                  );
+                }
+              }
+            },
           ),
-        ),
+        ])),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(left: 40, right: 40, top: 16),
@@ -115,19 +185,19 @@ class _EditComplaintPageState extends ConsumerState<EditComplaintPage> {
                 children: [
                   SizedBox(height: kFormSpacing),
                   TextFormFieldItem(
-                    initValue: widget.user.name,
+                    initValue: user.name,
                     canEdit: false,
                     labelText: 'Name',
                   ),
                   SizedBox(height: kFormSpacing),
                   TextFormFieldItem(
-                    initValue: widget.user.email,
+                    initValue: user.email,
                     labelText: 'Email',
                     canEdit: false,
                   ),
                   SizedBox(height: kFormSpacing),
                   TextFormFieldItem(
-                    initValue: widget.user.rollNo,
+                    initValue: user.rollNo,
                     labelText: 'Roll Number',
                     canEdit: false,
                     textCapitalization: TextCapitalization.characters,
@@ -286,21 +356,21 @@ class _EditComplaintPageState extends ConsumerState<EditComplaintPage> {
                     ),
                   ),
                   SizedBox(height: kFormSpacing),
-                  SubmitButton(
-                    isLoadingProvider: isLoadingProvider,
-                    onClick: () => editComplaint(
-                      ref,
-                      widget.user,
-                      _titleController.text,
-                      _descriptionController.text,
-                      hostel,
-                      complaintType,
-                      _roomNoController.text,
-                      image,
-                      _formKey,
-                      widget.complaint,
-                    ),
-                  ),
+                  // SubmitButton(
+                  //   isLoadingProvider: isLoadingProvider,
+                  //   onClick: () => editComplaint(
+                  //     ref,
+                  //     user,
+                  //     _titleController.text,
+                  //     _descriptionController.text,
+                  //     hostel,
+                  //     complaintType,
+                  //     _roomNoController.text,
+                  //     image,
+                  //     _formKey,
+                  //     widget.complaint,
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -365,11 +435,11 @@ editComplaint(
     if (image != null) 'imageLink': image,
   }).whenComplete(() {
     // wait 1 second
-    Future.delayed(const Duration(microseconds: 50), () {
-      Get.back();
-      Get.back();
-      return displaySnackBar('Success', 'Complaint Edited');
-    });
+    // Future.delayed(const Duration(microseconds: 50), () {
+    // Get.back();
+    // Get.back();
+    displaySnackBar('Success', 'Complaint Edited');
+    // });
   }).catchError((e) => displaySnackBar(
         'Error',
         e.toString(),
