@@ -9,15 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
-
-
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
   ConsumerState<HomePage> createState() => _HomePageState();
 }
-
 
 class _HomePageState extends ConsumerState<HomePage> {
   @override
@@ -34,70 +31,84 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: const Key("homePage"),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              Consumer(builder: (BuildContext context, WidgetRef ref, _) {
-                final user = ref.watch(userProvider);
-                return ListTile(
-                  title: Text(
-                    "Welcome ${user.name.split(" ")[0].capitalizeFirst} ",
-                    style: const TextStyle(
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold,
+    return RefreshIndicator(
+      onRefresh: () async {},
+      //p
+      child: Scaffold(
+        key: const Key("homePage"),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                Consumer(builder: (BuildContext context, WidgetRef ref, _) {
+                  final user = ref.watch(userProvider);
+                  return ListTile(
+                    title: Text(
+                      "Welcome ${user.name.split(" ")[0].capitalizeFirst} ",
+                      // style: const TextStyle(
+                      //   fontSize: 23,
+                      //   fontWeight: FontWeight.bold,
+                      // ),
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
                     ),
-                  ),
-                  trailing: InkWell(
-                    onTap: () {
-                      Get.to(
-                        () => const StudentProfile(),
+                    trailing: InkWell(
+                      onTap: () {
+                        Get.to(
+                          () => const StudentProfile(),
+                        );
+                      },
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(user.photoURL!),
+                      ),
+                    ),
+                  );
+                }),
+                const SizedBox(height: 10),
+                const FilterDialog(),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: Consumer(
+                    builder: (BuildContext context, WidgetRef ref, _) {
+                      final filterOptions = ref.watch(filteredOptionsProvider);
+                      final user = ref.watch(userProvider);
+                      final List<Complaint> complaints = ref.watch(
+                          !user.isAdmin!
+                              ? myComplaintListProvider
+                              : complaintListProvider);
+                      //sort by date
+                      complaints.sort((a, b) {
+                        return b.date!.compareTo(a.date!);
+                      });
+                      return ListView.builder(
+                        itemCount: complaints.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final complaint = complaints[index];
+                          if (filterOptions['status']!
+                                  .contains(complaint.status) ||
+                              filterOptions['status']!.isEmpty &&
+                                  (filterOptions['category']!
+                                          .contains(complaint.category) ||
+                                      filterOptions['category']!.isEmpty) &&
+                                  (filterOptions['hostel']!
+                                          .contains(complaint.hostel) ||
+                                      filterOptions['hostel']!.isEmpty)) {
+                            return ComplaintCard(
+                              complaint: complaint,
+                              user: ref.watch(userProvider),
+                            );
+                          }
+                          return Container();
+                        },
                       );
                     },
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage(user.photoURL!),
-                    ),
                   ),
-                );
-              }),
-              const SizedBox(height: 10),
-              const FilterDialog(),
-              const SizedBox(height: 10),
-              Expanded(
-                child: Consumer(
-                  builder: (BuildContext context, WidgetRef ref, _) {
-                    final filterOptions = ref.watch(filteredOptionsProvider);
-                    final List<Complaint> complaints =
-                        ref.watch(myComplaintListProvider);
-                    return ListView.builder(
-                      itemCount: complaints.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final complaint = complaints[index];
-                        if (filterOptions['status']!
-                                .contains(complaint.status) ||
-                            filterOptions['status']!.isEmpty &&
-                                (filterOptions['category']!
-                                        .contains(complaint.category) ||
-                                    filterOptions['category']!.isEmpty) &&
-                                (filterOptions['hostel']!
-                                        .contains(complaint.hostel) ||
-                                    filterOptions['hostel']!.isEmpty)) {
-                          return ComplaintCard(
-                            complaint: complaint,
-                            user: ref.watch(userProvider),
-                          );
-                        }
-                        return Container();
-                      },
-                    );
-                  },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

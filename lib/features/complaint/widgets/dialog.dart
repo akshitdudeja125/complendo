@@ -1,4 +1,6 @@
 //create a new function for this
+import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
+import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
 import 'package:complaint_portal/features/complaint/repository/complaint_repository.dart';
 import 'package:complaint_portal/models/complaint_model.dart';
 import 'package:complaint_portal/models/user_model.dart';
@@ -86,8 +88,6 @@ void markAsResolvedDialog({
   );
 }
 
-// markAsRejectedDialog
-
 void markAsPendingDialog({
   required Complaint complaint,
   required WidgetRef ref,
@@ -119,39 +119,6 @@ void markAsPendingDialog({
     ),
   );
 }
-
-// markAsRejectedDialog
-// void markAsRejectedDialog({
-//   required Complaint complaint,
-//   required WidgetRef ref,
-// }) {
-//   Get.dialog(
-//     AlertDialog(
-//       title: const Text("Mark as Rejected"),
-//       content: const Text(
-//           "Are you sure you want to mark this complaint as rejected?"),
-//       actions: [
-//         TextButton(
-//           child: const Text("No"),
-//           onPressed: () {
-//             Get.back();
-//           },
-//         ),
-//         TextButton(
-//           child: const Text("Yes"),
-//           onPressed: () {
-//             Get.back();
-//             ref.read(complaintRepositoryProvider).changeComplaintStatus(
-//                   complaint: complaint,
-//                   ref: ref,
-//                   to: 'rejected',
-//                 );
-//           },
-//         ),
-//       ],
-//     ),
-//   );
-// }
 
 void markAsRejectedDialog({
   required Complaint complaint,
@@ -224,6 +191,44 @@ void markAsRejectedDialog({
             );
           },
           child: const Text('Yes'),
+        ),
+      ],
+    ),
+  );
+}
+
+void changeCommentDialog({
+  required Complaint complaint,
+  required WidgetRef ref,
+  required String status,
+}) {
+  final textController = TextEditingController();
+  Get.dialog(
+    AlertDialog(
+      backgroundColor: Colors.white,
+      title: const Text('Edit Complaint'),
+      content: TextFormFieldItem(
+        labelText: 'Comment',
+        controller: textController,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            Get.back();
+            ref.read(complaintRepositoryProvider).changeComplaintStatus(
+                  complaint: complaint,
+                  ref: ref,
+                  comment: textController.text,
+                  to: status,
+                );
+          },
+          child: const Text('Submit'),
         ),
       ],
     ),

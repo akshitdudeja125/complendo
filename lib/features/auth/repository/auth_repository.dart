@@ -65,19 +65,19 @@ class AuthService {
   }
 
   //  SignIn the user Google
-  Future<void> signInWithGoogle(BuildContext context) async {
-    // Trigger the authentication flow
+  Future<void> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth =
         await googleUser!.authentication;
 
-    // Create a new credential
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
+
+    //log out from other devices
+    await _auth.setPersistence(Persistence.LOCAL);
 
     _auth.signInWithCredential(credential).then((value) {}).onError(
         (error, stackTrace) =>
@@ -86,8 +86,8 @@ class AuthService {
 
   //  SignOut the current user
   Future<void> signOut(ref) async {
-    ref.read(isTermsCheckedProvider.notifier).state = false;
     await _auth.signOut();
     await _googleSignIn.signOut();
+    ref.read(isTermsCheckedProvider.notifier).state = false;
   }
 }

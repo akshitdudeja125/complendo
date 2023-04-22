@@ -1,7 +1,8 @@
+import 'package:complaint_portal/common/widgets/dialog.dart';
 import 'package:complaint_portal/features/complaint/repository/complaint_repository.dart';
-import 'package:complaint_portal/features/complaint/screens/view_complaint_screen.dart';
-import 'package:complaint_portal/features/complaint/screens/edit_complaint_screen.dart';
-import 'package:complaint_portal/features/complaint/widgets/delete_complaint_dialogue.dart';
+import 'package:complaint_portal/features/complaint/screens/view/view_complaint_screen.dart';
+import 'package:complaint_portal/features/complaint/screens/edit/edit_complaint_screen.dart';
+
 import 'package:complaint_portal/features/complaint/widgets/dialog.dart';
 import 'package:complaint_portal/models/complaint_model.dart';
 import 'package:complaint_portal/models/user_model.dart';
@@ -19,7 +20,7 @@ bottomModelSheet(
           children: [
             ListTile(
               title: const Text('View Details'),
-              onTap: () => Get.to(() => ComplaintScreen(complaint: complaint)),
+              onTap: () => Get.to(() => ComplaintScreen(cid: complaint.cid!)),
             ),
             if (complaint.status == 'pending' &&
                 (complaint.uid == user.id || user.isAdmin!))
@@ -34,7 +35,8 @@ bottomModelSheet(
               ListTile(
                 title: const Text('Delete'),
                 onTap: () async {
-                  final result = await deleteComplaintDialog(context);
+                  final result = await dialogResult("Delete Complaint",
+                      "Are you sure you want to delete this complaint?");
                   if (result == true) {
                     await ref
                         .watch(complaintRepositoryProvider)

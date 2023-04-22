@@ -3,7 +3,8 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:complaint_portal/common/widgets/bottom_navbar.dart';
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
-import 'package:complaint_portal/features/complaint/screens/compose_complaint_screen.dart';
+import 'package:complaint_portal/features/complaint/screens/compose/compose_complaint_screen.dart';
+
 import 'package:complaint_portal/features/home/home_screen.dart';
 import 'package:complaint_portal/features/settings/settings_page.dart';
 import 'package:flutter/material.dart';

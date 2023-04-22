@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final container = ProviderContainer();
 @pragma('vm:entry-point')
@@ -20,11 +21,12 @@ Future<void> main() async {
   MobileAds.instance.initialize();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
+  final prefs = await SharedPreferences.getInstance();
   runApp(
     ProviderScope(
       child: MyApp(
         container: container,
+        prefs: prefs,
       ),
     ),
   );

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:complaint_portal/features/complaint/screens/view_complaint_screen.dart';
+import 'package:complaint_portal/features/complaint/screens/view/view_complaint_screen.dart';
 import 'package:complaint_portal/models/complaint_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -132,7 +132,7 @@ class NotificationService {
           .then((value) {
         Get.to(
           () => ComplaintScreen(
-            complaint: Complaint.fromMap(value.data()!),
+            cid: Complaint.fromMap(value.data()!).cid!,
           ),
         );
       });

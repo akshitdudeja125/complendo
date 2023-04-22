@@ -1,5 +1,4 @@
 import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
-import 'package:complaint_portal/features/auth/repository/auth_repository.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:complaint_portal/common/utils/validators.dart';
 import 'package:complaint_portal/common/widgets/custom_drop_down_menu.dart';
@@ -87,7 +86,7 @@ class RegisterForm extends ConsumerWidget {
             CustomElevatedButton(
               bgColor: Colors.red.shade300,
               onClick: () {
-                AuthService().signOut(ref);
+                ref.read(authRepositoryProvider).signOut(ref);
               },
               text: 'Sign Out',
             ),

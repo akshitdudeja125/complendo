@@ -28,15 +28,21 @@ class ComplaintRepository {
     await displaySnackBar('Success', 'Complaint Registered');
   }
 
-  Future<void> updateComplaint(ref, Complaint complaint) async {
+  Future<bool> updateComplaint(ref, Complaint complaint) async {
     final firestore = ref.read(firebaseFirestoreProvider);
-    await firestore.collection('complaints').doc(complaint.cid).set({}
-        // complaint.toMap(),
-        ).whenComplete(() {
-      displaySnackBar('Success', 'Complaint Updated');
+    bool isUpdated = false;
+    await firestore
+        .collection('complaints')
+        .doc(complaint.cid)
+        .set(
+          complaint.toMap(),
+        )
+        .whenComplete(() {
+      isUpdated = true;
     }).catchError((e) {
       displaySnackBar('Error', e.toString());
     });
+    return isUpdated;
   }
 
   void changeComplaintStatus(
@@ -123,7 +129,6 @@ class ComplaintRepository {
 final complaintRepositoryProvider = Provider.autoDispose(
   (ref) => ComplaintRepository(),
 );
-
 
 class FirebaseStorageRepository {
   Future<String?> getDownloadURL(ref, String cid, image) async {

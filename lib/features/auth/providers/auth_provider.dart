@@ -2,12 +2,12 @@ import 'package:complaint_portal/features/auth/repository/auth_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-final authenticationProvider = Provider<AuthService>((ref) {
+final authRepositoryProvider = Provider<AuthService>((ref) {
   return AuthService();
 });
 
 final authStateProvider = StreamProvider<User?>((ref) {
-  return ref.read(authenticationProvider).authStateChange;
+  return ref.read(authRepositoryProvider).authStateChange;
 });
 
 final authUserProvider = Provider<User?>((ref) {

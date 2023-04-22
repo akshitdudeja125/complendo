@@ -81,7 +81,10 @@ final complaintProvider =
   final complaintData = ref.watch(complaintDataStreamProvider(cid));
   return complaintData.when(
     data: (data) {
-      return Complaint.fromObject(data!);
+      if (data == null) {
+        return Complaint();
+      }
+      return Complaint.fromObject(data);
     },
     loading: () => Complaint(),
     error: (_, __) => Complaint(),

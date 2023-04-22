@@ -17,7 +17,7 @@ class ComplaintForm extends ConsumerWidget {
   const ComplaintForm({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider);
+    final UserModel user = ref.watch(userProvider);
     return Column(
       children: [
         Padding(
@@ -44,16 +44,15 @@ class ComplaintForm extends ConsumerWidget {
                   canEdit: false,
                   textCapitalization: TextCapitalization.characters,
                 ),
-                SizedBox(height: kFormSpacing * 0.59),
+                SizedBox(height: kFormSpacing * 0.5),
                 customDropDownMenu(
-                  context: context,
                   headerText: "Hostel:",
-                  items: hostels,
-                  hintText: "Select Hostel",
+                  context: context,
+                  hintText: 'Hostel',
                   value: ref.watch(hostelProvider),
-                  onChanged: (value) => ref
-                      .watch(hostelProvider.notifier)
-                      .update((state) => value),
+                  items: hostels,
+                  onChanged: (value) =>
+                      ref.watch(hostelProvider.notifier).state = value,
                 ),
                 SizedBox(height: kFormSpacing),
                 TextFormFieldItem(
@@ -65,7 +64,7 @@ class ComplaintForm extends ConsumerWidget {
                     return isRoom(value);
                   },
                 ),
-                SizedBox(height: kFormSpacing),
+                SizedBox(height: kFormSpacing * 0.5),
                 customDropDownMenu(
                   headerText: "Complaint Type:",
                   context: context,
@@ -75,7 +74,7 @@ class ComplaintForm extends ConsumerWidget {
                   onChanged: (value) =>
                       ref.watch(complaintTypeProvider.notifier).state = value,
                 ),
-                SizedBox(height: kFormSpacing),
+                SizedBox(height: kFormSpacing * 0.5),
                 customDropDownMenu(
                   headerText: "Complaint Category:",
                   context: context,

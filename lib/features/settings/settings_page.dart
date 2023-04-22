@@ -1,117 +1,119 @@
 import 'package:complaint_portal/common/theme/theme_provider.dart';
+import 'package:complaint_portal/common/utils/constants.dart';
+import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/features/profile/profile.dart';
 import 'package:complaint_portal/features/settings/about_page.dart';
+import 'package:complaint_portal/features/settings/settings_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../common/utils/constants.dart';
-import '../auth/repository/auth_repository.dart';
-
 final switchProvider = StateProvider<bool>((ref) => false);
 
-class SettingsPage extends ConsumerWidget {
+class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider);
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              title: const Text(
-                'Settings',
-                style: TextStyle(
-                  fontSize: 23,
-                  fontWeight: FontWeight.bold,
+      body: Consumer(builder: (context, ref, _) {
+        final user = ref.watch(userProvider);
+        final isDark = ref.watch(isDarkProvider);
+        // print("user: $user");
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                title: const Text(
+                  'Settings',
+                  style: TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              trailing: Consumer(
-                builder: (context, ref, child) => Row(
+                trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      onPressed: () {
-                        ref.watch(isDarkProvider.notifier).state =
-                            !ref.watch(isDarkProvider);
+                      onPressed: () async {
+                        ref.watch(isDarkProvider.notifier).state = !isDark;
+                        final prefs = await SharedPreferences.getInstance();
+                        prefs.setBool('isDark', isDark);
                       },
                       icon: const Icon(Icons.light),
                     ),
                     IconButton(
-                      onPressed: () => AuthService().signOut(context),
+                      onPressed: () async {
+                        await ref.read(authRepositoryProvider).signOut(ref);
+                      },
                       icon: const Icon(Icons.logout),
                     ),
                   ],
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Center(
-                    child: Column(
-                      children: [
-                        user.photoURL != null
-                            ? CircleAvatar(
-                                radius: 50,
-                                backgroundImage: NetworkImage(user.photoURL!),
-                              )
-                            : const CircleAvatar(
-                                radius: 50,
-                              ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(top: kDefaultSpacing / 2),
-                          child: Text(
-                            user.name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(fontSize: 20),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Center(
+                      child: Column(
+                        children: [
+                          user.photoURL != null
+                              ? CircleAvatar(
+                                  radius: 50,
+                                  backgroundImage: NetworkImage(user.photoURL!),
+                                )
+                              : const CircleAvatar(
+                                  radius: 50,
+                                ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: kDefaultSpacing / 2),
+                            child: Text(
+                              user.name,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(fontSize: 20),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: kDefaultSpacing / 2),
-                          child: Text(
-                            user.isAdmin! ? "Admin" : "Student",
-                            style: Theme.of(context).textTheme.titleSmall,
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: kDefaultSpacing / 2),
+                            child: Text(
+                              user.isAdmin! ? "Admin" : "Student",
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SettingsTile(
-                        title: "Profile",
-                        subtitle: "Edit your profile",
-                        icon: const Icon(Icons.person),
-                        onTap: () {
-                          Get.to(
-                            const StudentProfile(),
-                          );
-                        },
-                      ),
-                      Consumer(
-                        builder: (context, ref, _) => SettingsTile(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SettingsTile(
+                          title: "Profile",
+                          subtitle: "Edit your profile",
+                          icon: const Icon(Icons.person),
+                          onTap: () {
+                            Get.to(
+                              const StudentProfile(),
+                            );
+                          },
+                        ),
+                        SettingsTile(
                           title: "Dark Mode",
                           subtitle: "Turn on/off dark mode",
                           icon: const Icon(Icons.dark_mode),
                           trailing: Switch(
                             activeColor: kPrimaryColor,
-                            // value: ThemeController.of(context).isDark,
                             value: ref.watch(isDarkProvider),
                             onChanged: (value) async {
                               final prefs =
@@ -120,131 +122,69 @@ class SettingsPage extends ConsumerWidget {
                               ref.watch(isDarkProvider.notifier).state = value;
                             },
                           ),
-                          onTap: () {
-                            ref.watch(isDarkProvider.notifier).state =
-                                !ref.watch(isDarkProvider);
-                          },
                         ),
-                      ),
-                      Consumer(
-                        builder: (context, ref, _) => SettingsTile(
+                        SettingsTile(
                           title: "Notifications",
                           subtitle: "Turn on/off notifications",
                           icon: const Icon(Icons.notifications),
-                          onTap: () {},
+                          onTap: () {
+                            //set user notif in firebase
+                          },
                         ),
-                      ),
-                      SettingsTile(
-                        title: "Change Password",
-                        subtitle: "Change your password",
-                        icon: const Icon(Icons.lock),
-                        onTap: () {
-                          // show Get Dialog
-                        },
-                      ),
-                      SettingsTile(
-                        title: "About",
-                        subtitle: "About the app",
-                        icon: const Icon(Icons.info),
-                        onTap: () {
-                          Get.to(
-                            const AboutPage(),
-                          );
-                        },
-                      ),
-                      Consumer(
-                        builder: (context, ref, _) => SettingsTile(
+                        SettingsTile(
+                          title: "Change Password",
+                          subtitle: "Change your password",
+                          icon: const Icon(Icons.lock),
+                          onTap: () {
+                            // show Get Dialog
+                          },
+                        ),
+                        SettingsTile(
+                          title: "About",
+                          subtitle: "About the app",
+                          icon: const Icon(Icons.info),
+                          onTap: () {
+                            Get.to(
+                              const AboutPage(),
+                            );
+                          },
+                        ),
+                        SettingsTile(
                           title: "Logout",
                           icon: const Icon(Icons.logout),
-                          onTap: () => AuthService().signOut(ref),
+                          onTap: () async {
+                            await ref
+                                .watch(authRepositoryProvider)
+                                .signOut(ref);
+                          },
                         ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.04,
-                      ),
-                      Center(
-                        child: Column(
-                          children: const [
-                            Text(
-                              "Version 1.0.0",
-                            ),
-                            Text(
-                              "Made with ❤️ by Akshit",
-                            ),
-                          ],
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.04,
                         ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.04,
-                      ),
-                    ],
-                  ),
-                ],
+                        Center(
+                          child: Column(
+                            children: const [
+                              Text(
+                                "Version 1.0.0",
+                              ),
+                              Text(
+                                "Made with ❤️ by Akshit",
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.04,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SettingsTile extends StatelessWidget {
-  final String title;
-  String? imageUrl;
-  String? subtitle;
-  Icon? icon;
-  IconData? trailingIcon;
-  final VoidCallback? onTap;
-  Widget? trailing;
-  SettingsTile({
-    super.key,
-    required this.title,
-    this.subtitle = "",
-    this.imageUrl,
-    this.icon,
-    this.onTap,
-    this.trailing,
-    this.trailingIcon = Icons.chevron_right,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: ListTile(
-        leading: Padding(
-            padding: subtitle == ""
-                ? const EdgeInsets.symmetric(horizontal: 8)
-                : const EdgeInsets.all(8),
-            child: imageUrl == null
-                ? icon
-                : Image.network(
-                    imageUrl!,
-                    fit: BoxFit.cover,
-                    width: 40,
-                    height: 40,
-                  )),
-        title: Text(
-          title,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        subtitle: Text(
-          subtitle ?? "",
-          style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                color: Colors.black54,
-              ),
-        ),
-        trailing: trailing ??
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: kDefaultSpacing),
-              child: Icon(
-                trailingIcon,
-                size: 20,
-                color: Colors.black26,
-              ),
-            ),
-      ),
+          ],
+        );
+      }),
     );
   }
 }

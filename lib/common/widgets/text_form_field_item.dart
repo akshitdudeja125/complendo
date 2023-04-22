@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 
 class TextFormFieldItem extends StatelessWidget {
@@ -17,9 +15,11 @@ class TextFormFieldItem extends StatelessWidget {
   int? maxLength;
   Color? textColor;
   FontWeight? fontWeight;
+  // onSuffixTap
+  Function()? onSuffixTap;
   TextFormFieldItem({
-    this.initValue,
     super.key,
+    this.initValue,
     this.controller,
     required this.labelText,
     this.validator,
@@ -33,14 +33,15 @@ class TextFormFieldItem extends StatelessWidget {
     this.maxLength,
     this.textColor,
     this.fontWeight,
+    this.onSuffixTap,
   });
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-        color: Colors.white.withOpacity(0.5),
-      ),
+      // decoration: BoxDecoration(
+      //   borderRadius: const BorderRadius.all(Radius.circular(20)),
+      //   color: Colors.white.withOpacity(0.5),
+      // ),
       child: TextFormField(
         initialValue: initValue,
         autofocus: true,
@@ -61,12 +62,47 @@ class TextFormFieldItem extends StatelessWidget {
           fontWeight: fontWeight ?? FontWeight.normal,
         ),
         decoration: InputDecoration(
-          suffix: suffixIcon,
+          // suffix: suffixIcon != null
+          //     ? GestureDetector(
+          //         onTap: (){
+          //           print ('onSuffixTap');
+          //           // onSuffixTap!();
+          //         },
+          //         child: suffixIcon,
+          //       )
+          //     : GestureDetector(
+          //         onTap: (){
+          //           print ('onSuffixTap');
+          //         },
+          //         child: const Icon(
+          //           Icons.visibility,
+          //           color: Colors.black,
+          //         ),
+          //       ),
           labelStyle: const TextStyle(color: Colors.black),
           focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             borderSide: BorderSide(
               color: Colors.black,
+            ),
+          ),
+          enabled: canEdit ?? true,
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderSide: BorderSide(
+              color: Colors.grey,
+            ),
+          ),
+          errorBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderSide: BorderSide(
+              color: Colors.red,
+            ),
+          ),
+          disabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderSide: BorderSide(
+              color: Colors.grey,
             ),
           ),
           labelText: labelText,
@@ -77,8 +113,8 @@ class TextFormFieldItem extends StatelessWidget {
               ),
             ),
             borderSide: BorderSide(
-              color: Colors.black,
-            ),
+                // color: Colors.black,
+                ),
           ),
         ),
       ),

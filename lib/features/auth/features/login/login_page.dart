@@ -1,10 +1,11 @@
 // ignore_for_file: unused_field, unused_local_variable, unused_element
 
-import 'package:complaint_portal/features/auth/repository/auth_repository.dart';
+import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
 import 'package:complaint_portal/common/utils/validators.dart';
 import 'package:complaint_portal/common/widgets/clipper.dart';
 import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -151,12 +152,12 @@ class _LoginFormState extends State<LoginForm> {
   }
 }
 
-class GoogleSignInButton extends StatelessWidget {
+class GoogleSignInButton extends ConsumerWidget {
   final BuildContext context;
   const GoogleSignInButton({super.key, required this.context});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
@@ -182,7 +183,7 @@ class GoogleSignInButton extends StatelessWidget {
         ],
       ),
       onPressed: () async {
-        await AuthService().signInWithGoogle(context);
+        ref.read(authRepositoryProvider).signInWithGoogle();
       },
     );
   }
