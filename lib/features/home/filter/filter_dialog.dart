@@ -1,18 +1,17 @@
+import 'package:complaint_portal/common/utils/enums.dart';
+import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/features/home/filter/filter_section.dart';
+import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
-class FilterDialog extends StatefulWidget {
-  const FilterDialog({super.key});
-
+class FilterDialog extends ConsumerWidget {
+  const FilterDialog({Key? key}) : super(key: key);
   @override
-  State<FilterDialog> createState() => _FilterDialogState();
-}
-
-class _FilterDialogState extends State<FilterDialog> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final UserModel? user = ref.watch(userProvider);
     return ListTile(
       title: const Text(
         "Complaints:",
@@ -31,18 +30,26 @@ class _FilterDialogState extends State<FilterDialog> {
                   title: const Text("Filter Options"),
                   content: SingleChildScrollView(
                     child: Column(
-                      children: const [
-                        FilterSection(
+                      children: [
+                        const FilterSection(
                           headerText: 'Status',
                           filtername: 'status',
                         ),
-                        FilterSection(
-                          headerText: 'Category',
-                          filtername: 'category',
+                        Visibility(
+                          visible: user!.userType! == UserType.student ||
+                              user.userType == UserType.admin ||
+                              user.userType == UserType.warden,
+                          child: const FilterSection(
+                            headerText: 'Category',
+                            filtername: 'category',
+                          ),
                         ),
-                        FilterSection(
-                          headerText: 'Hostel',
-                          filtername: 'hostel',
+                        Visibility(
+                          visible: user.userType != UserType.student,
+                          child: const FilterSection(
+                            headerText: 'Hostel',
+                            filtername: 'hostel',
+                          ),
                         ),
                       ],
                     ),

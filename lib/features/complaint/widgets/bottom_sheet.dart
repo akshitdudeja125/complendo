@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/widgets/dialog.dart';
 import 'package:complaint_portal/features/complaint/repository/complaint_repository.dart';
 import 'package:complaint_portal/features/complaint/screens/view/view_complaint_screen.dart';
@@ -20,18 +21,27 @@ bottomModelSheet(
           children: [
             ListTile(
               title: const Text('View Details'),
-              onTap: () => Get.to(() => ComplaintScreen(cid: complaint.cid!)),
+              // onTap: () => Get.to(() => ComplaintScreen(cid: complaint.cid!)),
+              onTap: () => Get.to(() => ComplaintScreen(
+                    complaint: complaint,
+                  )),
             ),
-            if (complaint.status == 'pending' &&
-                (complaint.uid == user.id || user.isAdmin!))
+            // if (complaint.status == 'pending' &&
+            // (complaint.uid == user.id || user.isAdmin!))
+            // if (complaint.status == 'pending' &&
+            if (complaint.status == ComplaintStatus.pending &&
+                (complaint.uid == user.id || user.userType!.value != 'student'))
               ListTile(
                 title: const Text('Edit'),
                 onTap: () => Get.to(
                   () => EditComplaintPage(complaint: complaint),
                 ),
               ),
-            if ((complaint.status == 'pending' && complaint.uid == user.id) ||
-                user.isAdmin!)
+            if ((complaint.status == ComplaintStatus.pending &&
+                    complaint.uid == user.id) ||
+                user.userType!.value != 'student')
+              // if ((complaint.status == 'pending' && complaint.uid == user.id) ||
+              //     user.isAdmin!)
               ListTile(
                 title: const Text('Delete'),
                 onTap: () async {
@@ -46,7 +56,9 @@ bottomModelSheet(
                   Get.back();
                 },
               ),
-            if (user.isAdmin! && complaint.status == 'pending')
+            // if (user.isAdmin! && complaint.status == 'pending')
+            if (user.userType!.value != 'student' &&
+                complaint.status == ComplaintStatus.pending)
               ListTile(
                   title: const Text('Mark as Resolved'),
                   onTap: () {
@@ -57,7 +69,9 @@ bottomModelSheet(
                       user: user,
                     );
                   }),
-            if (user.isAdmin! && complaint.status == 'pending')
+            // if (user.isAdmin! && complaint.status == 'pending')
+            if (user.userType!.value != 'student' &&
+                complaint.status == ComplaintStatus.pending)
               ListTile(
                   title: const Text('Reject'),
                   onTap: () {
@@ -67,7 +81,9 @@ bottomModelSheet(
                       ref: ref,
                     );
                   }),
-            if (user.isAdmin! && complaint.status == 'rejected')
+            // if (user.isAdmin! && complaint.status == 'rejected')
+            if (user.userType!.value != 'student' &&
+                complaint.status == ComplaintStatus.rejected)
               ListTile(
                 title: const Text('Mark as Pending'),
                 onTap: () {
@@ -78,7 +94,9 @@ bottomModelSheet(
                   );
                 },
               ),
-            if (user.isAdmin! && complaint.status == 'resolved')
+            // if (user.isAdmin! && complaint.status == 'resolved')
+            if (user.userType!.value != 'student' &&
+                complaint.status == ComplaintStatus.resolved)
               ListTile(
                 title: const Text('Mark as Pending'),
                 onTap: () {

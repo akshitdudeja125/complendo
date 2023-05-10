@@ -1,4 +1,5 @@
 import 'package:complaint_portal/common/utils/constants.dart';
+import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/utils/extensions.dart';
 import 'package:complaint_portal/common/utils/validators.dart';
 import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
@@ -114,9 +115,9 @@ class ComplaintDetailsSection extends ConsumerWidget {
                       text: complaint.status.toString().capitalizeFirst),
                   canEdit: false,
                   labelText: 'Status',
-                  textColor: complaint.status == 'pending'
+                  textColor: complaint.status == ComplaintStatus.pending
                       ? Colors.orange
-                      : complaint.status == 'resolved'
+                      : complaint.status == ComplaintStatus.resolved
                           ? Colors.green
                           : Colors.red,
                   fontWeight: FontWeight.bold,

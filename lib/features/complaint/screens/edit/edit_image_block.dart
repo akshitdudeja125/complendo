@@ -39,32 +39,34 @@ class EditImageBlock extends StatelessWidget {
                           color: Color(0xFF181D3D))),
                 ),
                 const Spacer(),
-                IconButton(
-                  icon: image == null
-                      ? const Icon(Icons.image)
-                      : const Icon(Icons.edit),
-                  onPressed: () async {
-                    if (loading) return;
-                    ref.watch(imageProvider.notifier).state =
-                        await pickImage(ImageSource.gallery);
-                  },
-                ),
-                image == null
-                    ? IconButton(
-                        icon: const Icon(Icons.camera_alt),
-                        onPressed: () async {
-                          if (loading) return;
-                          ref.watch(imageProvider.notifier).state =
-                              await pickImage(ImageSource.camera);
-                        },
-                      )
-                    : IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () async {
-                          if (loading) return;
-                          ref.watch(imageProvider.notifier).state = null;
-                        },
-                      ),
+                if (loading == false)
+                  IconButton(
+                    icon: image == null
+                        ? const Icon(Icons.image)
+                        : const Icon(Icons.edit),
+                    onPressed: () async {
+                      if (loading) return;
+                      ref.watch(imageProvider.notifier).state =
+                          await pickImage(ImageSource.gallery);
+                    },
+                  ),
+                if (loading == false)
+                  image == null
+                      ? IconButton(
+                          icon: const Icon(Icons.camera_alt),
+                          onPressed: () async {
+                            if (loading) return;
+                            ref.watch(imageProvider.notifier).state =
+                                await pickImage(ImageSource.camera);
+                          },
+                        )
+                      : IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () async {
+                            if (loading) return;
+                            ref.watch(imageProvider.notifier).state = null;
+                          },
+                        ),
               ],
             ),
             if (image is File)

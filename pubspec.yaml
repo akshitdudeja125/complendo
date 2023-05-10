@@ -64,6 +64,7 @@ dependencies:
   shared_preferences_riverpod: null
   sliding_up_panel: null
   url_launcher: null
+  flutter_dotenv:
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
@@ -77,7 +78,7 @@ flutter:
     - assets/lottie/
     - assets/images/AppIcon/
     - assets/images/complaint_icons/
-
+    - .env
 flutter_icons:
   android: "launcher_icon"
   ios: true

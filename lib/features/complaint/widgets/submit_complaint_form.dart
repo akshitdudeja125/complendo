@@ -1,8 +1,9 @@
 import 'package:complaint_portal/common/services/network/connectivity_service.dart';
+import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/features/complaint/repository/complaint_repository.dart';
+import 'package:complaint_portal/features/complaint/screens/view/view_complaint_screen.dart';
 import 'package:complaint_portal/features/navigation/provider/page_controller_provider.dart';
 import 'package:complaint_portal/models/complaint_model.dart';
-import 'package:complaint_portal/features/complaint/providers/complaint_provider.dart';
 import 'package:complaint_portal/common/providers/firebase_instance_provider.dart';
 import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,9 @@ void submitComplaint(ref, user) async {
           onPressed: () async {
             Navigator.pop(context);
             try {
+              print('Submitting Complaint');
+              print(ref.watch(hostelProvider));
+              // print(Hostel.fromString(ref.watch(hostelProvider)));
               ref.watch(isLoadingProvider.notifier).state = true;
               displaySnackBar('Details Verified', 'Processing Data');
               final firestore = ref.watch(firebaseFirestoreProvider);
@@ -53,8 +57,9 @@ void submitComplaint(ref, user) async {
                 title: ref.watch(titleProvider),
                 description: ref.watch(descriptionProvider),
                 category: ref.watch(complaintCategoryProvider),
-                status: 'pending',
-                hostel: ref.watch(hostelProvider),
+                status: ComplaintStatus.pending,
+                hostel: Hostel.fromString(ref.watch(hostelProvider)),
+                // hostel: ref.watch(hostelProvider),
                 roomNo: ref.watch(roomNoProvider),
                 isIndividual:
                     ref.watch(complaintTypeProvider) == 'Common' ? false : true,
@@ -67,6 +72,9 @@ void submitComplaint(ref, user) async {
                   .registerComplaint(ref, complaint);
 
               await ref.watch(onPageChangeProvider).call(0);
+              Get.to(ComplaintScreen(
+                complaint: complaint,
+              ));
               clearForm(ref);
             } catch (error) {
               displaySnackBar('Error', '$error');

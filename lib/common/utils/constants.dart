@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
-List<String> hostels = [
-  "RHR",
-  "BHR",
-  "MHR",
-  "GHR",
-  "SHR",
-];
+import 'enums.dart';
+
 
 List<String> complaintCategories = [
   'Electrical',
@@ -14,6 +9,11 @@ List<String> complaintCategories = [
   'Internet',
   'Water Cooler',
 ];
+
+Map<UserType, String> userTypeToComplaintTypeMap = {
+  UserType.electrician: "Electrical",
+  UserType.plumber: "Plumbing",
+};
 
 final Map<String, String> categoryImageMap = {
   'Electrical': 'assets/images/complaint_icons/electric.png',
@@ -24,7 +24,7 @@ final Map<String, String> categoryImageMap = {
 
 final filterOptions = {
   "status": ["pending", "resolved", "rejected"],
-  "hostel": hostels,
+  "hostel": Hostel.getHostels(),
   "category": complaintCategories
 };
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
 class TextFormFieldItem extends StatelessWidget {
   final TextEditingController? controller;
@@ -11,12 +12,18 @@ class TextFormFieldItem extends StatelessWidget {
   TextInputType? keyboardType;
   bool? obsureText;
   TextCapitalization? textCapitalization;
-  Widget? suffixIcon;
   int? maxLength;
   Color? textColor;
   FontWeight? fontWeight;
-  // onSuffixTap
+  IconData? suffixIcon;
   Function()? onSuffixTap;
+  Function()? onDelete;
+  bool allowDelete = false;
+  bool enabled;
+
+  Function()? onTap;
+
+  Widget? suffix;
   TextFormFieldItem({
     super.key,
     this.initValue,
@@ -34,88 +41,98 @@ class TextFormFieldItem extends StatelessWidget {
     this.textColor,
     this.fontWeight,
     this.onSuffixTap,
+    this.suffix,
+    this.allowDelete = false,
+    this.onDelete,
+    this.enabled = true,
+    this.onTap,
   });
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // decoration: BoxDecoration(
-      //   borderRadius: const BorderRadius.all(Radius.circular(20)),
-      //   color: Colors.white.withOpacity(0.5),
-      // ),
-      child: TextFormField(
-        initialValue: initValue,
-        autofocus: true,
-        enableSuggestions: true,
-        cursorHeight: 20,
-        validator: validator,
-        autocorrect: false,
-        obscureText: obsureText!,
-        maxLines: maxLines,
-        keyboardType: keyboardType,
-        onChanged: onChanged,
-        controller: controller,
-        enabled: canEdit,
-        textCapitalization: textCapitalization!,
-        maxLength: maxLength,
-        style: TextStyle(
-          color: textColor ?? Colors.black,
-          fontWeight: fontWeight ?? FontWeight.normal,
+    return TextFormField(
+      initialValue: initValue,
+      autofocus: true,
+      enableSuggestions: true,
+      readOnly: !canEdit!,
+      cursorHeight: 20,
+      validator: validator,
+      autocorrect: false,
+      obscureText: obsureText!,
+      maxLines: maxLines,
+      keyboardType: keyboardType,
+      onChanged: onChanged,
+      controller: controller,
+      enabled: enabled,
+      textCapitalization: textCapitalization!,
+      maxLength: maxLength,
+      style: TextStyle(
+        color: textColor ?? Colors.black,
+        fontWeight: fontWeight ?? FontWeight.normal,
+      ),
+      decoration: InputDecoration(
+        suffix: suffix ??
+            (suffixIcon != null && onSuffixTap != null || allowDelete == true
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          if (onSuffixTap != null) {
+                            onSuffixTap!();
+                          } else if (allowDelete == true) {
+                            onDelete!();
+                          }
+                        },
+                        child: Icon(
+                          suffixIcon ?? FeatherIcons.trash2,
+                          size: 18,
+                        ),
+                      ),
+                    ),
+                  )
+                : null),
+        labelStyle: const TextStyle(color: Colors.black),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderSide: BorderSide(
+            color: Colors.black,
+          ),
         ),
-        decoration: InputDecoration(
-          // suffix: suffixIcon != null
-          //     ? GestureDetector(
-          //         onTap: (){
-          //           print ('onSuffixTap');
-          //           // onSuffixTap!();
-          //         },
-          //         child: suffixIcon,
-          //       )
-          //     : GestureDetector(
-          //         onTap: (){
-          //           print ('onSuffixTap');
-          //         },
-          //         child: const Icon(
-          //           Icons.visibility,
-          //           color: Colors.black,
-          //         ),
-          //       ),
-          labelStyle: const TextStyle(color: Colors.black),
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            borderSide: BorderSide(
-              color: Colors.black,
+        // enabled: canEdit ?? true,
+        enabledBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderSide: BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        errorBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderSide: BorderSide(
+            color: Colors.red,
+          ),
+        ),
+        disabledBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderSide: BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        labelText: labelText,
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(
+              20,
             ),
           ),
-          enabled: canEdit ?? true,
-          enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            borderSide: BorderSide(
-              color: Colors.grey,
-            ),
-          ),
-          errorBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            borderSide: BorderSide(
-              color: Colors.red,
-            ),
-          ),
-          disabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            borderSide: BorderSide(
-              color: Colors.grey,
-            ),
-          ),
-          labelText: labelText,
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(
-                20,
+          borderSide: BorderSide(
+              // color: Colors.black,
               ),
-            ),
-            borderSide: BorderSide(
-                // color: Colors.black,
-                ),
-          ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/widgets/custom_app_bar.dart';
 import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
@@ -11,16 +12,16 @@ import '../../models/user_model.dart';
 import 'edit_profile.dart';
 import 'personal_information.dart';
 
-class StudentProfile extends ConsumerStatefulWidget {
-  const StudentProfile({
+class Profile extends ConsumerStatefulWidget {
+  const Profile({
     super.key,
   });
 
   @override
-  ConsumerState<StudentProfile> createState() => _StudentProfileState();
+  ConsumerState<Profile> createState() => _ProfileState();
 }
 
-class _StudentProfileState extends ConsumerState<StudentProfile> {
+class _ProfileState extends ConsumerState<Profile> {
   bool _pdv = true;
   bool _cdv = false;
 
@@ -67,7 +68,8 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   Text(
-                    user.isAdmin! ? "Admin" : "Student",
+                    // user.isAdmin! ? "Admin" : "Student",
+                    user.userType!.value.capitalize!,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ],
@@ -108,70 +110,71 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.005,
                     ),
-                    Row(
-                      children: [
-                        const Text(
-                          "Complaint Data",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Spacer(),
-                        // down arrow to expand
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              _cdv = !_cdv;
-                            });
-                          },
-                          child: const Icon(
-                            Icons.arrow_drop_down,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.03,
-                    ),
-                    if (_cdv)
-                      Column(
+                    if (user.userType == UserType.student)
+                      Row(
                         children: [
-                          TextFormFieldItem(
-                            controller: TextEditingController(
-                              text: user.complaints?.length.toString() ?? '0',
+                          const Text(
+                            "Complaint Data",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
-                            labelText: 'Complaints Registered',
-                            canEdit: false,
                           ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.03,
-                          ),
-                          Consumer(builder: (context, ref, _) {
-                            final pendingRequestsAsyncValue =
-                                ref.watch((pendingRequestsProvider));
-                            return pendingRequestsAsyncValue.when(
-                              data: (value) {
-                                return TextFormFieldItem(
-                                  controller: TextEditingController(
-                                    text: value.toString(),
-                                  ),
-                                  labelText: 'Pending Complaints',
-                                  canEdit: false,
-                                );
-                              },
-                              loading: () => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              error: (error, stackTrace) =>
-                                  Text(error.toString()),
-                            );
-                          }),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.03,
+                          const Spacer(),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                _cdv = !_cdv;
+                              });
+                            },
+                            child: const Icon(
+                              Icons.arrow_drop_down,
+                            ),
                           ),
                         ],
                       ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.03,
+                    ),
+                    if (user.userType == UserType.student)
+                      if (_cdv)
+                        Column(
+                          children: [
+                            TextFormFieldItem(
+                              controller: TextEditingController(
+                                text: user.complaints?.length.toString() ?? '0',
+                              ),
+                              labelText: 'Complaints Registered',
+                              canEdit: false,
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.03,
+                            ),
+                            Consumer(builder: (context, ref, _) {
+                              final pendingRequestsAsyncValue =
+                                  ref.watch((pendingRequestsProvider));
+                              return pendingRequestsAsyncValue.when(
+                                data: (value) {
+                                  return TextFormFieldItem(
+                                    controller: TextEditingController(
+                                      text: value.toString(),
+                                    ),
+                                    labelText: 'Pending Complaints',
+                                    canEdit: false,
+                                  );
+                                },
+                                loading: () => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                error: (error, stackTrace) =>
+                                    Text(error.toString()),
+                              );
+                            }),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.03,
+                            ),
+                          ],
+                        ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.03,
                     ),
@@ -185,32 +188,3 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
     );
   }
 }
-
-
-
-
-                          // StreamBuilder(
-                            //     stream: FirebaseFirestore.instance
-                            //         .collection('complaints')
-                            //         .where('status', isEqualTo: 'pending')
-                            //         .where('uid', isEqualTo: user.id)
-                            //         .snapshots(),
-                            //     builder: (context, snapshot) {
-                            //       if (snapshot.connectionState ==
-                            //           ConnectionState.waiting) {
-                            //         return const Center(
-                            //           child: CircularProgressIndicator(),
-                            //         );
-                            //       }
-                            //       final pendingRequests = snapshot.data!.docs
-                            //           .where((element) =>
-                            //               element['status'] == 'pending')
-                            //           .length;
-                            //       return TextFormFieldItem(
-                            //         controller: TextEditingController(
-                            //           text: pendingRequests.toString(),
-                            //         ),
-                            //         labelText: 'Pending Complaints',
-                            //         canEdit: false,
-                            //       );
-                            //     }),

@@ -44,7 +44,6 @@ class PersonalDetailsSection extends StatelessWidget {
           final pdv = ref.watch(pdProvider);
           return Visibility(
             visible: pdv,
-            // visible: ref.watch(pdProvider),
             child: Column(
               children: [
                 SizedBox(height: kFormSpacing),

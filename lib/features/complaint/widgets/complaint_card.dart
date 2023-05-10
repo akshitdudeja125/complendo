@@ -1,5 +1,6 @@
 import 'package:complaint_portal/common/theme/theme_provider.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
+import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/features/complaint/screens/view/view_complaint_screen.dart';
 import 'package:complaint_portal/features/complaint/widgets/bottom_sheet.dart';
 import 'package:complaint_portal/models/complaint_model.dart';
@@ -25,7 +26,7 @@ class ComplaintCard extends ConsumerWidget {
       onLongPress: () => bottomModelSheet(context, complaint, ref, user),
       onTap: () {
         Get.to(() => ComplaintScreen(
-              cid: complaint.cid!,
+              complaint: complaint,
             ));
       },
       child: Card(
@@ -78,7 +79,7 @@ class ComplaintCard extends ConsumerWidget {
                     Row(
                       children: [
                         Text(
-                          complaint.hostel!,
+                          complaint.hostel!.toString().toUpperCase(),
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 16,
@@ -103,15 +104,21 @@ class ComplaintCard extends ConsumerWidget {
                     complaint.status == null
                         ? const SizedBox()
                         : Text(
-                            complaint.status!.toUpperCase().toString(),
+                            // complaint.status!.toUpperCase().toString(),
+                            complaint.status!.toString().toUpperCase(),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: complaint.status == 'pending'
+                              color: complaint.status == ComplaintStatus.pending
                                   ? const Color.fromARGB(255, 195, 119, 5)
-                                  : complaint.status == 'resolved'
+                                  : complaint.status == ComplaintStatus.resolved
                                       ? Colors.green
                                       : Colors.red,
+                              // color: complaint.status == 'pending'
+                              //     ? const Color.fromARGB(255, 195, 119, 5)
+                              //     : complaint.status == 'resolved'
+                              //         ? Colors.green
+                              //         : Colors.red,
                             ),
                           ),
                   ],

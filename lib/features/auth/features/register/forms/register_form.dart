@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:complaint_portal/common/utils/validators.dart';
@@ -58,7 +59,7 @@ class RegisterForm extends ConsumerWidget {
             customDropDownMenu(
               context: context,
               headerText: "Hostel:",
-              items: hostels,
+              items: Hostel.getHostels(),
               hintText: "Select Hostel",
               value: ref.watch(hostelProvider),
               onChanged: (value) =>

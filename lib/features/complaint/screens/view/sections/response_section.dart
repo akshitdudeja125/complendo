@@ -1,4 +1,5 @@
 import 'package:complaint_portal/common/utils/constants.dart';
+import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/utils/extensions.dart';
 import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
 import 'package:complaint_portal/features/complaint/screens/view/provider/section_provider.dart';
@@ -14,7 +15,7 @@ class ResolvedDetailsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (complaint.status == 'resolved' || complaint.status == 'rejected') {
+    if (complaint.status != ComplaintStatus.pending) {
       return Column(
         children: [
           Row(
@@ -42,8 +43,7 @@ class ResolvedDetailsSection extends ConsumerWidget {
           Consumer(builder: (context, ref, _) {
             final rdv = ref.watch(rdProvider);
             return Visibility(
-              visible: complaint.status == 'resolved' ||
-                  complaint.status == 'rejected',
+              visible: complaint.status != ComplaintStatus.pending,
               child: Column(
                 children: [
                   Visibility(
@@ -65,7 +65,7 @@ class ResolvedDetailsSection extends ConsumerWidget {
                         if (complaint.resolvedAt != null)
                           SizedBox(height: kFormSpacing),
                         if (complaint.resolvedBy != null &&
-                            complaint.status == 'resolved')
+                            complaint.status == ComplaintStatus.resolved)
                           TextFormFieldItem(
                             controller: TextEditingController(
                               text: complaint.resolvedBy.toString(),
@@ -74,7 +74,7 @@ class ResolvedDetailsSection extends ConsumerWidget {
                             labelText: 'Resolved By',
                           ),
                         if (complaint.resolvedBy != null &&
-                            complaint.status == 'resolved')
+                            complaint.status == ComplaintStatus.resolved)
                           SizedBox(height: kFormSpacing),
                         GestureDetector(
                           onTap: () {

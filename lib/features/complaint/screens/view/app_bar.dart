@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/widgets/dialog.dart';
 import 'package:complaint_portal/features/complaint/repository/complaint_repository.dart';
 import 'package:complaint_portal/features/complaint/screens/edit/edit_complaint_screen.dart';
@@ -29,7 +30,9 @@ class ViewComplaintAppBar extends StatelessWidget with PreferredSizeWidget {
         children: [
           const Text('View Complaint'),
           const Spacer(),
-          if ((complaint.status == 'pending' && complaintUser.id == user.id))
+          if ((complaint.status == ComplaintStatus.pending &&
+                  complaintUser.id == user.id ||
+              (user.userType! == UserType.admin)))
             InkWell(
               onTap: () async {
                 Get.to(
@@ -43,8 +46,11 @@ class ViewComplaintAppBar extends StatelessWidget with PreferredSizeWidget {
               ),
             ),
           const SizedBox(width: 5),
-          if ((complaint.status == 'pending' && complaintUser.id == user.id) ||
-              (user.isAdmin != null && user.isAdmin!))
+          // if ((complaint.status == 'pending' && complaintUser.id == user.id) ||
+          // (user.isAdmin != null && user.isAdmin!))
+          if ((complaint.status == ComplaintStatus.pending &&
+                  complaintUser.id == user.id) ||
+              (user.userType!.value != 'student'))
             Consumer(
               builder: (context, ref, _) => IconButton(
                 icon: const Icon(FeatherIcons.trash2),

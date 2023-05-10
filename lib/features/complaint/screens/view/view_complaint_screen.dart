@@ -1,4 +1,5 @@
 import 'package:complaint_portal/common/utils/constants.dart';
+
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/features/complaint/providers/complaint_provider.dart';
 import 'package:complaint_portal/features/complaint/screens/view/app_bar.dart';
@@ -11,17 +12,24 @@ import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ComplaintScreen extends ConsumerWidget {
-  final String cid;
+class ComplaintScreen extends ConsumerStatefulWidget {
+  final Complaint complaint;
   const ComplaintScreen({
     super.key,
-    required this.cid,
+    required this.complaint,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final Complaint complaint = ref.watch(complaintProvider(cid));
-    final complaintUser = ref.watch(complaintUserProvider(complaint.uid!));
+  ConsumerState<ComplaintScreen> createState() => _ComplaintScreenState();
+}
+
+class _ComplaintScreenState extends ConsumerState<ComplaintScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final Complaint complaint =
+        ref.watch(complaintProvider(widget.complaint.cid!));
+    final complaintUser =
+        ref.watch(complaintUserProvider(widget.complaint.uid!));
     final UserModel user = ref.watch(userProvider);
     return Scaffold(
       appBar: ViewComplaintAppBar(
@@ -36,7 +44,7 @@ class ComplaintScreen extends ConsumerWidget {
               ComplaintDetailsSection(complaint: complaint),
               SizedBox(height: kFormSpacing),
               ResolvedDetailsSection(complaint: complaint),
-              AdminActionsSectioon(user: user, complaint: complaint),
+              AdminActionsSection(user: user, complaint: complaint),
             ],
           ),
         ),

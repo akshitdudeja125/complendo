@@ -132,7 +132,8 @@ class NotificationService {
           .then((value) {
         Get.to(
           () => ComplaintScreen(
-            cid: Complaint.fromMap(value.data()!).cid!,
+            // cid: Complaint.fromMap(value.data()!).cid!,
+            complaint: Complaint.fromMap(value.data()!),
           ),
         );
       });

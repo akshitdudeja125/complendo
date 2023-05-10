@@ -1,3 +1,5 @@
+import 'package:complaint_portal/common/utils/constants.dart';
+import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/features/complaint/providers/complaint_provider.dart';
 import 'package:complaint_portal/features/complaint/widgets/complaint_card.dart';
@@ -46,10 +48,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                   return ListTile(
                     title: Text(
                       "Welcome ${user.name.split(" ")[0].capitalizeFirst} ",
-                      // style: const TextStyle(
-                      //   fontSize: 23,
-                      //   fontWeight: FontWeight.bold,
-                      // ),
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
@@ -57,7 +55,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     trailing: InkWell(
                       onTap: () {
                         Get.to(
-                          () => const StudentProfile(),
+                          () => const Profile(),
                         );
                       },
                       child: CircleAvatar(
@@ -75,33 +73,71 @@ class _HomePageState extends ConsumerState<HomePage> {
                     builder: (BuildContext context, WidgetRef ref, _) {
                       final filterOptions = ref.watch(filteredOptionsProvider);
                       final user = ref.watch(userProvider);
-                      final List<Complaint> complaints = ref.watch(
-                          !user.isAdmin!
-                              ? myComplaintListProvider
-                              : complaintListProvider);
-                      //sort by date
-                      complaints.sort((a, b) {
+                      final List<Complaint> complaints =
+                          ref.watch(complaintListProvider);
+
+                      final filteredComplaints = complaints
+                          // .where((complaint) =>
+                          //     filterOptions['status']!
+                          //         .contains(complaint.status) ||
+                          //     filterOptions['status']!.isEmpty)
+                          .where((complaint) {
+                        // if (filterOptions['status']!.isEmpty) {
+                        //   return true;
+                        // }
+                        // if (filterOptions['status']!.contains('pending')) {
+                        //   return complaint.status == ComplaintStatus.pending;
+                        // }
+                        // if (filterOptions['status']!.contains('resolved')) {
+                        //   return complaint.status == ComplaintStatus.resolved;
+                        // }
+                        // if (filterOptions['status']!.contains('rejected')) {
+                        //   return complaint.status == ComplaintStatus.rejected;
+                        // }
+                        return filterOptions['status']!
+                                .contains(complaint.status!.value) ||
+                            filterOptions['status']!.isEmpty;
+                      }).where((complaint) {
+                        if (userTypeToComplaintTypeMap[user.userType!] !=
+                            null) {
+                          return complaint.category != null &&
+                              complaint.category! ==
+                                  userTypeToComplaintTypeMap[user.userType!];
+                        }
+                        return filterOptions['category']!
+                                .contains(complaint.category) ||
+                            filterOptions['category']!.isEmpty;
+                      }).where((complaint) {
+                        return filterOptions['hostel']!
+                                .contains(complaint.hostel!.value) ||
+                            filterOptions['hostel']!.isEmpty;
+                      }).where((complaint) {
+                        if (user.userType!.value == 'student') {
+                          return complaint.uid == user.id;
+                        }
+                        return true;
+                      }).toList();
+                      filteredComplaints.sort((a, b) {
                         return b.date!.compareTo(a.date!);
                       });
                       return ListView.builder(
-                        itemCount: complaints.length,
+                        itemCount: filteredComplaints.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final complaint = complaints[index];
-                          if (filterOptions['status']!
-                                  .contains(complaint.status) ||
-                              filterOptions['status']!.isEmpty &&
-                                  (filterOptions['category']!
-                                          .contains(complaint.category) ||
-                                      filterOptions['category']!.isEmpty) &&
-                                  (filterOptions['hostel']!
-                                          .contains(complaint.hostel) ||
-                                      filterOptions['hostel']!.isEmpty)) {
-                            return ComplaintCard(
-                              complaint: complaint,
-                              user: ref.watch(userProvider),
+                          if (filteredComplaints.isEmpty) {
+                            return const Center(
+                              child: Text(
+                                "No Complaints",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             );
                           }
-                          return Container();
+                          return ComplaintCard(
+                            complaint: filteredComplaints[index],
+                            user: ref.watch(userProvider),
+                          );
                         },
                       );
                     },
@@ -115,9 +151,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 }
-
-
-
 
 
 

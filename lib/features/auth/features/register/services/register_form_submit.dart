@@ -1,4 +1,5 @@
 import 'package:complaint_portal/common/services/network/connectivity_service.dart';
+import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
 import 'package:complaint_portal/features/auth/features/register/provider/register_form_providers.dart';
 import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
@@ -27,11 +28,11 @@ void setProfile(ref) async {
         name: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
-        hostel: ref.watch(hostelProvider),
+        hostel: Hostel.fromString(ref.watch(hostelProvider)),
         roomNo: ref.watch(roomNoProvider),
         phoneNumber: ref.watch(phoneNoProvider),
         rollNo: ref.watch(rollNoProvider),
-        isAdmin: false,
+        userType: UserType.student,
       ),
     );
     displaySnackBar('Success', 'User Registered Successfully');

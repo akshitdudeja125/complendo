@@ -1,5 +1,6 @@
 // ignore_for_file: unused_field, unused_local_variable, unused_element
 
+import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
 import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
 import 'package:complaint_portal/common/utils/validators.dart';
 import 'package:complaint_portal/common/widgets/clipper.dart';
@@ -15,6 +16,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  @override
+  void initState() {
+    super.initState();
+    //unfocus keyboard
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).unfocus();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -57,33 +67,23 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class LoginForm extends StatefulWidget {
+class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  ConsumerState<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends ConsumerState<LoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   void _showDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-        ),
-        child: Row(
-          children: [
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF181D3D)),
-            ),
-            Container(
-                margin: const EdgeInsets.only(left: 7),
-                child: const Text("  Logging in...")),
-          ],
+        height: 100,
+        child: const Center(
+          child: CircularProgressIndicator(),
         ),
       ),
     );
@@ -113,8 +113,8 @@ class _LoginFormState extends State<LoginForm> {
             TextFormFieldItem(
               controller: _passwordController,
               labelText: 'Password',
-              validator: (input) =>
-                  !isPassword(input!) ? 'Enter a valid password' : null,
+              obsureText: true,
+              validator: (input) => isPassword(input),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -128,7 +128,7 @@ class _LoginFormState extends State<LoginForm> {
                 'Login',
                 style: TextStyle(color: Colors.white, fontSize: 14),
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -136,6 +136,16 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   );
                   _showDialog(context);
+                  final result = await ref
+                      .watch(authRepositoryProvider)
+                      .signInWithEmailAndPassword(_emailController.text,
+                          _passwordController.text, context);
+                  if (result == true) {
+                    displaySnackBar('Success', 'Logged in successfully');
+                  } else {
+                    displaySnackBar('Error', 'Error logging in');
+                  }
+                  Navigator.pop(context);
                   // _createAccount();
                 }
               },
@@ -183,7 +193,13 @@ class GoogleSignInButton extends ConsumerWidget {
         ],
       ),
       onPressed: () async {
-        ref.read(authRepositoryProvider).signInWithGoogle();
+        final result =
+            await ref.read(authRepositoryProvider).signInWithGoogle();
+        if (result == true) {
+          displaySnackBar('Success', 'Logged in successfully');
+        } else {
+          displaySnackBar('Error', 'Error logging in');
+        }
       },
     );
   }

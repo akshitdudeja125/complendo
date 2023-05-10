@@ -1,4 +1,6 @@
 import 'package:complaint_portal/common/utils/constants.dart';
+import 'package:complaint_portal/common/utils/enums.dart';
+import 'package:complaint_portal/common/utils/extensions.dart';
 import 'package:complaint_portal/common/widgets/custom_app_bar.dart';
 import 'package:complaint_portal/common/widgets/custom_drop_down_menu.dart';
 import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
@@ -26,7 +28,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
   late TextEditingController _rollController;
   late TextEditingController _roomNoController;
   late final user = ref.read(userProvider);
-  String? hostel;
+  Hostel? hostel;
   @override
   void initState() {
     super.initState();
@@ -48,6 +50,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                 final updatedUser = user.copyWith(
                   phoneNumber: _phoneController.text,
                   rollNo: _rollController.text,
+                  // hostel: hostel,
+                  // hostel: hostel.toString(),
                   hostel: hostel,
                   roomNo: _roomNoController.text,
                 );
@@ -83,7 +87,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text(
-                  user.isAdmin! ? "Admin" : "Student",
+                  // user.isAdmin! ? "Admin" : "Student",
+                  user.userType!.value.capitalize(),
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 SizedBox(
@@ -143,11 +148,12 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                       customDropDownMenu(
                         headerText: 'Hostel',
                         hintText: 'Select Hostel',
-                        items: hostels,
-                        value: user.hostel,
+                        items: Hostel.getHostels(),
+                        value: user.hostel.toString(),
                         onChanged: (value) {
                           setState(() {
-                            hostel = value;
+                            hostel = Hostel.values.firstWhere(
+                                (element) => element.toString() == value);
                           });
                         },
                         context: context,

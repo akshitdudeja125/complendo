@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
 import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -38,16 +39,18 @@ class PersonalImformation extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.03,
         ),
         //for phone number
-        TextFormFieldItem(
-          controller: TextEditingController(
-            text: user.rollNo,
+        if (user.userType == UserType.student)
+          TextFormFieldItem(
+            controller: TextEditingController(
+              text: user.rollNo,
+            ),
+            labelText: 'Roll No.',
+            canEdit: false,
           ),
-          labelText: 'Roll No.',
-          canEdit: false,
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.03,
-        ),
+        if (user.userType == UserType.student)
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.03,
+          ),
         TextFormFieldItem(
           controller: TextEditingController(
             text: user.phoneNumber,
@@ -55,26 +58,31 @@ class PersonalImformation extends StatelessWidget {
           labelText: 'Phone Number',
           canEdit: false,
         ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.03,
-        ),
-        TextFormFieldItem(
-          controller: TextEditingController(
-            text: user.hostel,
+        if (user.userType == UserType.student)
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.03,
           ),
-          labelText: 'Hostel',
-          canEdit: false,
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.03,
-        ),
-        TextFormFieldItem(
-          controller: TextEditingController(
-            text: user.roomNo ?? '',
+        if (user.userType == UserType.student)
+          TextFormFieldItem(
+            controller: TextEditingController(
+              // text: user.hostel,
+              text: user.hostel.toString(),
+            ),
+            labelText: 'Hostel',
+            canEdit: false,
           ),
-          labelText: 'Room No.',
-          canEdit: false,
-        ),
+        if (user.userType == UserType.student)
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.03,
+          ),
+        if (user.userType == UserType.student)
+          TextFormFieldItem(
+            controller: TextEditingController(
+              text: user.roomNo ?? '',
+            ),
+            labelText: 'Room No.',
+            canEdit: false,
+          ),
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.03,
         ),

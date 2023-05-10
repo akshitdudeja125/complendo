@@ -1,9 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
+import 'package:complaint_portal/features/auth/repository/user_repository.dart';
 import 'package:complaint_portal/features/landing/landing_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
@@ -12,82 +15,60 @@ class AuthService {
 
   Stream<User?> get authStateChange => _auth.authStateChanges();
 
-  Future<void> signInWithEmailAndPassword(
+  Future<bool> signInWithEmailAndPassword(
       String email, String password, BuildContext context) async {
-    try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-    } on FirebaseAuthException catch (e) {
-      await showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Error Occured'),
-          content: Text(e.toString()),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                },
-                child: const Text("OK"))
-          ],
-        ),
-      );
-    }
+    await _auth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      return true;
+    }).catchError((error) {
+      debugPrint(error.toString());
+      // return false;
+    });
+    return false;
   }
 
-  // SignUp the user using Email and Password
-  Future<void> signUpWithEmailAndPassword(
-      String email, String password, BuildContext context) async {
+  Future<bool> signInWithGoogle() async {
     try {
-      _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser!.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
-    } on FirebaseAuthException catch (e) {
-      await showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-                  title: const Text('Error Occured'),
-                  content: Text(e.toString()),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(ctx).pop();
-                        },
-                        child: const Text("OK"))
-                  ]));
+
+      _auth.signInWithCredential(credential).then((value) {
+        return true;
+      }).onError((error, stackTrace) {
+        debugPrint("Error -e : $error");
+        return false;
+      });
+      return true;
     } catch (e) {
-      if (e == 'email-already-in-use') {
-        // print('Email already in use.');
-      } else {
-        // print('Error: $e');
-      }
+      debugPrint("Error -e : $e");
+      return false;
     }
   }
 
-  //  SignIn the user Google
-  Future<void> signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  Future<bool> signOut(WidgetRef ref) async {
+    try {
+      debugPrint("signing out");
+      final uid = _auth.currentUser!.uid;
 
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    //log out from other devices
-    await _auth.setPersistence(Persistence.LOCAL);
-
-    _auth.signInWithCredential(credential).then((value) {}).onError(
-        (error, stackTrace) =>
-            displaySnackBar("Error Occured", "Please try again later."));
-  }
-
-  //  SignOut the current user
-  Future<void> signOut(ref) async {
-    await _auth.signOut();
-    await _googleSignIn.signOut();
-    ref.read(isTermsCheckedProvider.notifier).state = false;
+      final UserRepository userRepo = ref.watch(userRepositoryProvider);
+      await _auth.signOut();
+      await _googleSignIn.signOut();
+      ref.watch(isTermsCheckedProvider.notifier).state = false;
+      await userRepo.deleteToken(
+        uid,
+      );
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
   }
 }

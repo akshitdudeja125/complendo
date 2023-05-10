@@ -1,5 +1,8 @@
 import 'package:complaint_portal/common/theme/theme_provider.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
+// import 'package:complaint_portal/common/utils/enums.dart';
+import 'package:complaint_portal/common/widgets/dialog.dart';
+import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
 import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/features/profile/profile.dart';
@@ -85,7 +88,7 @@ class SettingsPage extends StatelessWidget {
                             padding: const EdgeInsets.only(
                                 bottom: kDefaultSpacing / 2),
                             child: Text(
-                              user.isAdmin! ? "Admin" : "Student",
+                              user.userType!.value.capitalize!,
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                           ),
@@ -100,11 +103,11 @@ class SettingsPage extends StatelessWidget {
                         ),
                         SettingsTile(
                           title: "Profile",
-                          subtitle: "Edit your profile",
+                          subtitle: "View/Edit your profile",
                           icon: const Icon(Icons.person),
                           onTap: () {
                             Get.to(
-                              const StudentProfile(),
+                              const Profile(),
                             );
                           },
                         ),
@@ -123,22 +126,22 @@ class SettingsPage extends StatelessWidget {
                             },
                           ),
                         ),
-                        SettingsTile(
-                          title: "Notifications",
-                          subtitle: "Turn on/off notifications",
-                          icon: const Icon(Icons.notifications),
-                          onTap: () {
-                            //set user notif in firebase
-                          },
-                        ),
-                        SettingsTile(
-                          title: "Change Password",
-                          subtitle: "Change your password",
-                          icon: const Icon(Icons.lock),
-                          onTap: () {
-                            // show Get Dialog
-                          },
-                        ),
+                        // SettingsTile(
+                        //   title: "Notifications",
+                        //   subtitle: "Turn on/off notifications",
+                        //   icon: const Icon(Icons.notifications),
+                        //   onTap: () {
+                        //     //set user notif in firebase
+                        //   },
+                        // ),
+                        // SettingsTile(
+                        //   title: "Change Password",
+                        //   subtitle: "Change your password",
+                        //   icon: const Icon(Icons.lock),
+                        //   onTap: () {
+                        //     // show Get Dialog
+                        //   },
+                        // ),
                         SettingsTile(
                           title: "About",
                           subtitle: "About the app",
@@ -153,9 +156,17 @@ class SettingsPage extends StatelessWidget {
                           title: "Logout",
                           icon: const Icon(Icons.logout),
                           onTap: () async {
-                            await ref
-                                .watch(authRepositoryProvider)
-                                .signOut(ref);
+                            final bool? dResult = await dialogResult(
+                                'Logout', 'Are you sure you want to logout?');
+                            if (dResult == true) {
+                              final result = await ref
+                                  .read(authRepositoryProvider)
+                                  .signOut(ref);
+                              if (result) {
+                                displaySnackBar(
+                                    'Success', 'Logged out successfully');
+                              }
+                            }
                           },
                         ),
                         SizedBox(

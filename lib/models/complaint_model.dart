@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
+import 'package:complaint_portal/common/utils/enums.dart';
 
 class Complaint {
   final String? cid;
@@ -11,7 +11,8 @@ class Complaint {
   final String? category;
 
   final String? roomNo;
-  final String? hostel;
+  // final String? hostel;
+  final Hostel? hostel;
 
   final bool? isIndividual;
 
@@ -25,7 +26,7 @@ class Complaint {
 
   final List<String>? upvotes;
 
-  final String? status;
+  final ComplaintStatus? status;
   final String? complaintType;
 
   final String? imageLink;
@@ -62,7 +63,7 @@ class Complaint {
     String? status,
     String? complaintType,
     String? imageLink,
-    String? hostel,
+    Hostel? hostel,
     String? roomNo,
     String? resolvedBy,
     String? comment,
@@ -77,7 +78,10 @@ class Complaint {
       date: date ?? this.date,
       resolvedAt: resolvedAt ?? this.resolvedAt,
       upvotes: upvotes ?? this.upvotes,
-      status: status ?? this.status,
+      // status: status ?? this.status,
+      status: status != null
+          ? ComplaintStatus.values.firstWhere((e) => e.toString() == status)
+          : this.status,
       complaintType: complaintType ?? this.complaintType,
       imageLink: imageLink ?? this.imageLink,
       hostel: hostel ?? this.hostel,
@@ -98,10 +102,10 @@ class Complaint {
       'date': date,
       'resolvedAt': resolvedAt,
       'upvotes': upvotes,
-      'status': status,
+      'status': status?.toString(),
       'complaintType': complaintType,
       'imageLink': imageLink,
-      'hostel': hostel,
+      'hostel': hostel?.value,
       'roomNo': roomNo,
       'resolvedBy': resolvedBy,
       'comment': comment,
@@ -119,10 +123,15 @@ class Complaint {
       upvotes: data['upvotes'] as List<String>,
       date: data['date']?.toDate(),
       resolvedAt: data['resolvedAt']?.toDate(),
-      status: data['status'] as String,
+      status: data['status'] != null
+          ? ComplaintStatus.values
+              .firstWhere((e) => e.toString() == data['status'])
+          : null,
+      hostel: data['hostel'] != null
+          ? Hostel.fromString(data['hostel'] as String)
+          : null,
       imageLink: data['imageLink'] as String,
       complaintType: data['complaintType'] as String,
-      hostel: data['hostel'] as String,
       roomNo: data['roomNo'] as String,
       resolvedBy: data['resolvedBy'] as String,
       comment: data['comment'] as String,
@@ -139,10 +148,15 @@ class Complaint {
       date: map['date']?.toDate(),
       resolvedAt: map['resolvedAt']?.toDate(),
       upvotes: map['upvotes'] as List<String>,
-      status: map['status'] as String,
+      status: map['status'] != null
+          ? ComplaintStatus.values
+              .firstWhere((e) => e.toString() == map['status'])
+          : null,
+      hostel: map['hostel'] != null
+          ? Hostel.fromString(map['hostel'] as String)
+          : null,
       imageLink: map['imageLink'] as String,
       complaintType: map['complaintType'] as String,
-      hostel: map['hostel'] as String,
       roomNo: map['roomNo'] as String,
       resolvedBy: map['resolvedBy'] as String,
       comment: map['comment'] as String,

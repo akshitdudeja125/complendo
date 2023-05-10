@@ -1,19 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import '../common/utils/enums.dart';
+
 class UserModel {
   final String id;
   final String? rollNo;
   final String name;
   final String email;
-  final String? hostel;
+  final Hostel? hostel;
   final String? roomNo;
   final String? photoURL;
   final String? phoneNumber;
-  final bool? isAdmin;
   final List<String>? complaints;
   bool? notifications;
   final String? deviceToken;
+  final UserType? userType;
 
   UserModel({
     required this.id,
@@ -24,10 +26,10 @@ class UserModel {
     this.roomNo,
     this.photoURL,
     this.phoneNumber,
-    this.isAdmin,
     this.complaints,
     this.notifications = true,
     this.deviceToken,
+    this.userType,
   });
 
   UserModel copyWith({
@@ -35,28 +37,29 @@ class UserModel {
     String? rollNo,
     String? name,
     String? email,
-    String? hostel,
+    Hostel? hostel,
     String? roomNo,
     String? photoURL,
     String? phoneNumber,
-    bool? isAdmin,
     List<String>? complaints,
     bool? notifications,
     String? deviceToken,
+    UserType? userType,
   }) {
     return UserModel(
       id: id ?? this.id,
       rollNo: rollNo ?? this.rollNo,
       name: name ?? this.name,
       email: email ?? this.email,
+      // hostel: hostel ?? this.hostel,
       hostel: hostel ?? this.hostel,
       roomNo: roomNo ?? this.roomNo,
       photoURL: photoURL ?? this.photoURL,
       phoneNumber: phoneNumber ?? this.phoneNumber,
-      isAdmin: isAdmin ?? this.isAdmin,
       complaints: complaints ?? this.complaints,
       notifications: notifications ?? this.notifications,
       deviceToken: deviceToken ?? this.deviceToken,
+      userType: userType ?? this.userType,
     );
   }
 
@@ -66,14 +69,14 @@ class UserModel {
       'rollNo': rollNo,
       'name': name,
       'email': email,
-      'hostel': hostel,
+      'hostel': hostel?.value,
       'roomNo': roomNo,
       'photoURL': photoURL,
       'phoneNumber': phoneNumber,
-      'isAdmin': isAdmin,
       'complaints': complaints,
       'notifications': notifications,
       'deviceToken': deviceToken,
+      'userType': userType?.value,
     };
   }
 
@@ -83,12 +86,13 @@ class UserModel {
       rollNo: map['rollNo'] != null ? map['rollNo'] as String : null,
       name: map['name'] as String,
       email: map['email'] as String,
-      hostel: map['hostel'] != null ? map['hostel'] as String : null,
+      hostel: map['hostel'] != null
+          ? Hostel.fromString(map['hostel'] as String)
+          : null,
       roomNo: map['roomNo'] != null ? map['roomNo'] as String : null,
       photoURL: map['photoURL'] != null ? map['photoURL'] as String : null,
       phoneNumber:
           map['phoneNumber'] != null ? map['phoneNumber'] as String : null,
-      isAdmin: map['isAdmin'] != null ? map['isAdmin'] as bool : null,
       complaints: map['complaints'] != null
           ? List<String>.from(map['complaints'] as List<dynamic>)
           : null,
@@ -96,6 +100,7 @@ class UserModel {
           map['notifications'] != null ? map['notifications'] as bool : null,
       deviceToken:
           map['deviceToken'] != null ? map['deviceToken'] as String : null,
+      userType: UserType.fromString(map['userType'] as String?),
     );
   }
 
