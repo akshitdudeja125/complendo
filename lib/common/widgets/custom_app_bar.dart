@@ -21,14 +21,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ? const SizedBox()
             : Text(
                 heading!,
-                style: const TextStyle(
-                  fontSize: 23,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).iconTheme.color,
+          ),
         ),
         trailing: trailing,
       ),

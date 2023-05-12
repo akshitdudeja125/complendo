@@ -28,7 +28,10 @@ class ViewComplaintAppBar extends StatelessWidget with PreferredSizeWidget {
       elevation: 0,
       title: Row(
         children: [
-          const Text('View Complaint'),
+          Text(
+            'View Complaint',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const Spacer(),
           if ((complaint.status == ComplaintStatus.pending &&
                   complaintUser.id == user.id ||
@@ -41,8 +44,9 @@ class ViewComplaintAppBar extends StatelessWidget with PreferredSizeWidget {
                   ),
                 );
               },
-              child: const Icon(
+              child: Icon(
                 FeatherIcons.edit,
+                color: Theme.of(context).iconTheme.color,
               ),
             ),
           const SizedBox(width: 5),
@@ -53,7 +57,10 @@ class ViewComplaintAppBar extends StatelessWidget with PreferredSizeWidget {
               (user.userType!.value != 'student'))
             Consumer(
               builder: (context, ref, _) => IconButton(
-                icon: const Icon(FeatherIcons.trash2),
+                icon: Icon(
+                  FeatherIcons.trash2,
+                  color: Theme.of(context).iconTheme.color,
+                ),
                 onPressed: () async {
                   // final result = await deleteComplaintDialog(context);
                   final result = await dialogResult("Delete Complaint",
@@ -71,7 +78,10 @@ class ViewComplaintAppBar extends StatelessWidget with PreferredSizeWidget {
         ],
       ),
       leading: IconButton(
-        icon: const Icon(FeatherIcons.arrowLeft),
+        icon: Icon(
+          FeatherIcons.arrowLeft,
+          color: Theme.of(context).iconTheme.color,
+        ),
         onPressed: () => Navigator.of(context).pop(),
       ),
     );

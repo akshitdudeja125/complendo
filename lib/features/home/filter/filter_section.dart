@@ -33,7 +33,10 @@ class FilterSection extends ConsumerWidget {
                 child: FilterChip(
                     showCheckmark: false,
                     pressElevation: 0,
-                    selectedColor: Colors.blue,
+                    selectedColor:
+                        Theme.of(context).brightness == Brightness.dark
+                            ? Colors.grey.shade400
+                            : Colors.blue.shade100,
                     label: Text(e),
                     labelPadding: const EdgeInsets.all(0),
                     selected: ref

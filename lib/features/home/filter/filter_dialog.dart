@@ -1,6 +1,7 @@
 import 'package:complaint_portal/common/utils/enums.dart';
-import 'package:complaint_portal/features/auth/providers/user_provider.dart';
+import 'package:complaint_portal/features/home/filter/filter_provider.dart';
 import 'package:complaint_portal/features/home/filter/filter_section.dart';
+import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -13,15 +14,22 @@ class FilterDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final UserModel? user = ref.watch(userProvider);
     return ListTile(
-      title: const Text(
+      title: Text(
         "Complaints:",
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              fontWeight: FontWeight.w300,
+            ),
       ),
       trailing: IconButton(
-        icon: const Icon(FeatherIcons.filter),
+        icon: Icon(
+          Icons.filter_list_rounded,
+          // color: Theme.of(context).iconTheme.color,
+          color: ref.watch(filteredOptionsProvider)['status']!.isNotEmpty ||
+                  ref.watch(filteredOptionsProvider)['category']!.isNotEmpty ||
+                  ref.watch(filteredOptionsProvider)['hostel']!.isNotEmpty
+              ? Theme.of(context).iconTheme.color!.withOpacity(0.5)
+              : Theme.of(context).iconTheme.color,
+        ),
         onPressed: () async {
           return await Get.dialog(
             StatefulBuilder(

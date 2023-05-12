@@ -44,7 +44,7 @@ class _ComplaintSectionState extends ConsumerState<ComplaintSection> {
 
   @override
   Widget build(BuildContext context) {
-    print('ComplaintSection build');
+    debugPrint('ComplaintSection build');
     final isLoading = ref.watch(isLoadingProvider);
     return Column(
       children: [
@@ -160,7 +160,10 @@ class _ComplaintSectionState extends ConsumerState<ComplaintSection> {
           width: double.infinity,
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
-            border: Border.all(color: Colors.black.withOpacity(0.3)),
+            // border: Border.all(color: Colors.black.withOpacity(0.3)),
+            border: Theme.of(context).brightness == Brightness.light
+                ? Border.all(color: Colors.black.withOpacity(0.3))
+                : Border.all(color: Colors.grey.shade400),
             borderRadius: const BorderRadius.all(Radius.circular(20)),
           ),
           child: ImageSection(ref: ref),

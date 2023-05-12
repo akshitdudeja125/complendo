@@ -1,5 +1,4 @@
 import 'package:complaint_portal/common/utils/constants.dart';
-import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/features/complaint/providers/complaint_provider.dart';
 import 'package:complaint_portal/features/complaint/widgets/complaint_card.dart';
@@ -48,9 +47,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                   return ListTile(
                     title: Text(
                       "Welcome ${user.name.split(" ")[0].capitalizeFirst} ",
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
+                      style: const TextStyle(
+                        fontSize: 23,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
                     trailing: InkWell(
                       onTap: () {
@@ -76,24 +76,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       final List<Complaint> complaints =
                           ref.watch(complaintListProvider);
 
-                      final filteredComplaints = complaints
-                          // .where((complaint) =>
-                          //     filterOptions['status']!
-                          //         .contains(complaint.status) ||
-                          //     filterOptions['status']!.isEmpty)
-                          .where((complaint) {
-                        // if (filterOptions['status']!.isEmpty) {
-                        //   return true;
-                        // }
-                        // if (filterOptions['status']!.contains('pending')) {
-                        //   return complaint.status == ComplaintStatus.pending;
-                        // }
-                        // if (filterOptions['status']!.contains('resolved')) {
-                        //   return complaint.status == ComplaintStatus.resolved;
-                        // }
-                        // if (filterOptions['status']!.contains('rejected')) {
-                        //   return complaint.status == ComplaintStatus.rejected;
-                        // }
+                      final filteredComplaints = complaints.where((complaint) {
                         return filterOptions['status']!
                                 .contains(complaint.status!.value) ||
                             filterOptions['status']!.isEmpty;

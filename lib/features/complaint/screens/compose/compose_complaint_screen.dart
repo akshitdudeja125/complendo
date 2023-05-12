@@ -39,8 +39,9 @@ class ComposeComplaint extends StatelessWidget {
                           ],
                         ),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.info,
+                        color: Theme.of(context).iconTheme.color,
                         size: 30,
                       ),
                     )),

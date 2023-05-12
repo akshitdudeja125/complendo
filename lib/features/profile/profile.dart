@@ -35,7 +35,10 @@ class _ProfileState extends ConsumerState<Profile> {
           onPressed: () {
             Get.to(() => const EditProfile());
           },
-          icon: const Icon(FeatherIcons.edit),
+          icon: Icon(
+            FeatherIcons.edit,
+            color: Theme.of(context).iconTheme.color,
+          ),
         ),
       ),
       body: SingleChildScrollView(

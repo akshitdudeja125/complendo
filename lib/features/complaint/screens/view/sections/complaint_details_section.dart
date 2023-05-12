@@ -20,12 +20,16 @@ class ComplaintDetailsSection extends ConsumerWidget {
       children: [
         Row(
           children: [
-            const Text(
+            Text(
               "Complaint Details",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              // style: TextStyle(
+              //   fontSize: 18,
+              //   fontWeight: FontWeight.bold,
+              // ),
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const Spacer(),
             InkWell(
@@ -33,8 +37,9 @@ class ComplaintDetailsSection extends ConsumerWidget {
                 ref.read(cdProvider.notifier).state =
                     !ref.read(cdProvider.notifier).state;
               },
-              child: const Icon(
+              child: Icon(
                 Icons.arrow_drop_down_circle_outlined,
+                color: Theme.of(context).iconTheme.color,
               ),
             ),
           ],
@@ -125,10 +130,12 @@ class ComplaintDetailsSection extends ConsumerWidget {
                 SizedBox(height: kFormSpacing),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    // color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: Colors.black.withOpacity(0.3),
+                      // color: Colors.black.withOpacity(0.3),
+                      color: Theme.of(context).dividerColor,
                     ),
                   ),
                   child: Column(
@@ -142,10 +149,17 @@ class ComplaintDetailsSection extends ConsumerWidget {
                               Text.rich(
                                 TextSpan(
                                   text: "Uploaded Image ",
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  // style: const TextStyle(
+                                  //   fontSize: 13,
+                                  //   fontWeight: FontWeight.bold,
+                                  // ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                   children: <TextSpan>[
                                     if (complaint.imageLink == null)
                                       const TextSpan(
@@ -166,10 +180,11 @@ class ComplaintDetailsSection extends ConsumerWidget {
                                       imageLink: complaint.imageLink!,
                                     );
                                   },
-                                  child: const Padding(
-                                    padding: EdgeInsets.only(right: 10.0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 10.0),
                                     child: Icon(
                                       Icons.image,
+                                      color: Theme.of(context).iconTheme.color,
                                       size: 30,
                                     ),
                                   ),

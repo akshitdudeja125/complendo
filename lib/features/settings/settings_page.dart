@@ -46,13 +46,19 @@ class SettingsPage extends StatelessWidget {
                         final prefs = await SharedPreferences.getInstance();
                         prefs.setBool('isDark', isDark);
                       },
-                      icon: const Icon(Icons.light),
+                      icon: Icon(
+                        Icons.light,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
                     ),
                     IconButton(
                       onPressed: () async {
                         await ref.read(authRepositoryProvider).signOut(ref);
                       },
-                      icon: const Icon(Icons.logout),
+                      icon: Icon(
+                        Icons.logout,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
                     ),
                   ],
                 ),
@@ -104,7 +110,7 @@ class SettingsPage extends StatelessWidget {
                         SettingsTile(
                           title: "Profile",
                           subtitle: "View/Edit your profile",
-                          icon: const Icon(Icons.person),
+                          iconData: Icons.person,
                           onTap: () {
                             Get.to(
                               const Profile(),
@@ -114,7 +120,7 @@ class SettingsPage extends StatelessWidget {
                         SettingsTile(
                           title: "Dark Mode",
                           subtitle: "Turn on/off dark mode",
-                          icon: const Icon(Icons.dark_mode),
+                          iconData: Icons.dark_mode,
                           trailing: Switch(
                             activeColor: kPrimaryColor,
                             value: ref.watch(isDarkProvider),
@@ -145,7 +151,7 @@ class SettingsPage extends StatelessWidget {
                         SettingsTile(
                           title: "About",
                           subtitle: "About the app",
-                          icon: const Icon(Icons.info),
+                          iconData: Icons.info,
                           onTap: () {
                             Get.to(
                               const AboutPage(),
@@ -154,7 +160,7 @@ class SettingsPage extends StatelessWidget {
                         ),
                         SettingsTile(
                           title: "Logout",
-                          icon: const Icon(Icons.logout),
+                          iconData: Icons.logout,
                           onTap: () async {
                             final bool? dResult = await dialogResult(
                                 'Logout', 'Are you sure you want to logout?');

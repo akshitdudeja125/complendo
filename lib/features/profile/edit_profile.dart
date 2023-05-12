@@ -1,16 +1,13 @@
-import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/utils/extensions.dart';
 import 'package:complaint_portal/common/widgets/custom_app_bar.dart';
-import 'package:complaint_portal/common/widgets/custom_drop_down_menu.dart';
+import 'package:complaint_portal/common/widgets/dropdown_dialog.dart';
 import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/features/auth/repository/user_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:popup_banner/popup_banner.dart';
-
-import '../../models/user_model.dart';
 import 'image_detail_screen.dart';
 
 class EditProfile extends ConsumerStatefulWidget {
@@ -50,8 +47,6 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                 final updatedUser = user.copyWith(
                   phoneNumber: _phoneController.text,
                   rollNo: _rollController.text,
-                  // hostel: hostel,
-                  // hostel: hostel.toString(),
                   hostel: hostel,
                   roomNo: _roomNoController.text,
                 );
@@ -60,7 +55,10 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                 Navigator.pop(context);
               }
             },
-            icon: const Icon(Icons.done)),
+            icon: Icon(
+              Icons.done,
+              color: Theme.of(context).iconTheme.color,
+            )),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -87,7 +85,6 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text(
-                  // user.isAdmin! ? "Admin" : "Student",
                   user.userType!.value.capitalize(),
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
@@ -143,63 +140,39 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                         labelText: 'Phone Number',
                       ),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.01,
+                        height: MediaQuery.of(context).size.height * 0.03,
                       ),
-                      customDropDownMenu(
-                        headerText: 'Hostel',
-                        hintText: 'Select Hostel',
-                        items: Hostel.getHostels(),
-                        value: user.hostel.toString(),
-                        onChanged: (value) {
-                          setState(() {
-                            hostel = Hostel.values.firstWhere(
-                                (element) => element.toString() == value);
-                          });
+                      TextFormFieldItem(
+                        labelText: 'Hostel',
+                        controller: TextEditingController(
+                          text: hostel.toString(),
+                        ),
+                        enabled: true,
+                        suffixIcon: FeatherIcons.chevronDown,
+                        canEdit: false,
+                        onSuffixTap: () async {
+                          final selected = await showDropDownDialog(
+                            title: 'Select Hostel',
+                            items: Hostel.getHostels(),
+                          );
+                          if (selected != null) {
+                            setState(() {
+                              hostel = Hostel.values.firstWhere(
+                                  (element) => element.toString() == selected);
+                            });
+                          }
                         },
-                        context: context,
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.03,
                       ),
                       TextFormFieldItem(
-                        // controller: TextEditingController(
-                        //   text: user.roomNo ?? '',
-                        // ),
                         controller: _roomNoController,
                         labelText: 'Room No.',
-                        // canEdit: false,
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.03,
                       ),
-                      //submit button
-                      // ElevatedButton(
-                      //   style: ElevatedButton.styleFrom(
-                      //     backgroundColor: kPrimaryColor,
-                      //     foregroundColor: Colors.white,
-                      //     textStyle: const TextStyle(
-                      //       fontSize: 20,
-                      //       fontWeight: FontWeight.bold,
-                      //     ),
-                      //     shape: const RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.all(Radius.circular(20)),
-                      //     ),
-                      //   ),
-                      //   onPressed: () {
-                      //     if (_formKey.currentState!.validate()) {
-                      //       final updatedUser = user.copyWith(
-                      //         phoneNumber: _phoneController.text,
-                      //         rollNo: _rollController.text,
-                      //         hostel: hostel,
-                      //         roomNo: _roomNoController.text,
-                      //       );
-                      //       final userRepo = ref.read(userRepositoryProvider);
-                      //       userRepo.setUser(updatedUser);
-                      //       Navigator.pop(context);
-                      //     }
-                      //   },
-                      //   child: const Text('Update'),
-                      // ),
                     ],
                   ),
                 ),

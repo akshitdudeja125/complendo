@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/theme/theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -62,27 +63,44 @@ class SubmitButton extends ConsumerWidget {
 
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
-        backgroundColor: isLoading ? Colors.grey : Colors.black,
+        // backgroundColor:    !isLoading ? Colors.grey : Colors.black,
+        backgroundColor: Theme.of(context).brightness != Brightness.dark
+            ? isLoading
+                ? Colors.grey
+                : Colors.black
+            : !isLoading
+                ? Colors.white
+                : Colors.grey,
+
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
       ),
       icon: isLoading
-          ? const SizedBox(
+          ? SizedBox(
               height: 20,
               width: 20,
               child: CircularProgressIndicator(
-                color: Colors.white,
+                color: Theme.of(context).brightness != Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
                 strokeWidth: 1,
               ),
             )
-          : const Icon(Icons.send),
+          : Icon(
+              Icons.send,
+              color: Theme.of(context).brightness != Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
+            ),
       label: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
           isLoading ? 'Submitting' : 'Submit',
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: Theme.of(context).brightness != Brightness.dark
+                ? Colors.white
+                : Colors.black,
             fontSize: 18,
           ),
         ),
@@ -92,38 +110,6 @@ class SubmitButton extends ConsumerWidget {
   }
 }
 
-// class CustomElevatedButton extends ConsumerWidget {
-//   final void Function() onPressed;
-//   Color? bgColor;
-//   final String text;
-//   CustomElevatedButton({
-//     super.key,
-//     this.bgColor = Colors.black,
-//     required this.onPressed,
-//     required this.text,
-//   });
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     return ElevatedButton(
-//       style: ElevatedButton.styleFrom(
-//         backgroundColor: bgColor,
-//         shape: RoundedRectangleBorder(
-//           borderRadius: BorderRadius.circular(20),
-//         ),
-//       ),
-//       child: Text(
-//         text,
-//         style: const TextStyle(
-//           color: Colors.white,
-//           fontSize: 18,
-//         ),
-//       ),
-//       onPressed: () => onPressed,
-//     );
-//   }
-// }
-
 class CustomElevatedButton extends StatelessWidget {
   final void Function() onClick;
   final String text;
@@ -131,7 +117,7 @@ class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({
     super.key,
     required this.onClick,
-    this.bgColor = Colors.black,
+    this.bgColor,
     required this.text,
   });
 
@@ -143,7 +129,11 @@ class CustomElevatedButton extends StatelessWidget {
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: bgColor,
+          // backgroundColor: bgColor,
+          backgroundColor: bgColor ??
+              (Theme.of(context).brightness != Brightness.dark
+                  ? Colors.black
+                  : Colors.grey.shade700),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -153,8 +143,11 @@ class CustomElevatedButton extends StatelessWidget {
           child: Text(
             text,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              // color: Colors.white,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.grey.shade200
+                  : Colors.white,
               fontSize: 18,
             ),
           ),

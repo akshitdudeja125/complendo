@@ -5,7 +5,8 @@ class SettingsTile extends StatelessWidget {
   final String title;
   String? imageUrl;
   String? subtitle;
-  Icon? icon;
+  IconData? iconData;
+  // IconData? trailingIcon;
   IconData? trailingIcon;
   final VoidCallback? onTap;
   Widget? trailing;
@@ -14,7 +15,7 @@ class SettingsTile extends StatelessWidget {
     required this.title,
     this.subtitle = "",
     this.imageUrl,
-    this.icon,
+    this.iconData,
     this.onTap,
     this.trailing,
     this.trailingIcon = Icons.chevron_right,
@@ -30,12 +31,18 @@ class SettingsTile extends StatelessWidget {
                 ? const EdgeInsets.symmetric(horizontal: 8)
                 : const EdgeInsets.all(8),
             child: imageUrl == null
-                ? icon
+                ? Icon(
+                    iconData,
+                    size: 30,
+                    color: Theme.of(context).iconTheme.color!.withOpacity(0.8),
+                    // color: Theme.of(context).iconTheme.color,
+                  )
                 : Image.network(
                     imageUrl!,
                     fit: BoxFit.cover,
                     width: 40,
                     height: 40,
+                    color: Theme.of(context).iconTheme.color!.withOpacity(0.5),
                   )),
         title: Text(
           title,
@@ -44,7 +51,11 @@ class SettingsTile extends StatelessWidget {
         subtitle: Text(
           subtitle ?? "",
           style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                color: Colors.black54,
+                color: Theme.of(context)
+                    .textTheme
+                    .titleSmall!
+                    .color!
+                    .withOpacity(0.5),
               ),
         ),
         trailing: trailing ??
@@ -53,7 +64,7 @@ class SettingsTile extends StatelessWidget {
               child: Icon(
                 trailingIcon,
                 size: 20,
-                color: Colors.black26,
+                color: Theme.of(context).iconTheme.color!.withOpacity(0.5),
               ),
             ),
       ),

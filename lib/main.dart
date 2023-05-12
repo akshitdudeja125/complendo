@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final container = ProviderContainer();
 @pragma('vm:entry-point')

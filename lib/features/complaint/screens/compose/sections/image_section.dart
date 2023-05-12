@@ -21,25 +21,39 @@ class ImageSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
-                  ref.watch(pickedImageProvider) == null
-                      ? 'Upload an Image'
-                      : "Uploaded Image",
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF181D3D))),
+                ref.watch(pickedImageProvider) == null
+                    ? 'Upload an Image'
+                    : "Uploaded Image",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.grey.shade400
+                      : Colors.black,
+                ),
+              ),
             ),
             const Spacer(),
             ref.watch(pickedImageProvider) == null
                 ? IconButton(
-                    icon: const Icon(Icons.image),
+                    icon: Icon(
+                      Icons.image,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.grey.shade400
+                          : Colors.black,
+                    ),
                     onPressed: () async {
                       ref.watch(pickedImageProvider.notifier).state =
                           await pickImage(ImageSource.gallery);
                     },
                   )
                 : IconButton(
-                    icon: const Icon(Icons.edit),
+                    icon: Icon(
+                      Icons.edit,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.grey.shade400
+                          : Colors.black,
+                    ),
                     onPressed: () async {
                       ref.watch(pickedImageProvider.notifier).state =
                           await pickImage(ImageSource.gallery);
@@ -47,14 +61,24 @@ class ImageSection extends StatelessWidget {
                   ),
             ref.watch(pickedImageProvider) == null
                 ? IconButton(
-                    icon: const Icon(Icons.camera_alt),
+                    icon: Icon(
+                      Icons.camera_alt,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.grey.shade400
+                          : Colors.black,
+                    ),
                     onPressed: () async {
                       ref.watch(pickedImageProvider.notifier).state =
                           await pickImage(ImageSource.camera);
                     },
                   )
                 : IconButton(
-                    icon: const Icon(Icons.delete),
+                    icon: Icon(
+                      Icons.delete,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.grey.shade400
+                          : Colors.black,
+                    ),
                     onPressed: () =>
                         ref.watch(pickedImageProvider.notifier).state = null,
                   ),
