@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -21,16 +22,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ? const SizedBox()
             : Text(
                 heading!,
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: TextStyles(Theme.of(context).brightness).appbarTextStyle,
               ),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: Icon(
             Icons.arrow_back_ios,
-            color: Theme.of(context).iconTheme.color,
+            color: ThemeColors.iconColorLight[Theme.of(context).brightness],
           ),
         ),
         trailing: trailing,

@@ -1,6 +1,5 @@
-// ignore_for_file: unused_local_variable, unused_field, avoid_print
-
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/widgets/bottom_navbar.dart';
 import 'package:complaint_portal/features/complaint/screens/compose/compose_complaint_screen.dart';
 
@@ -21,7 +20,6 @@ class _PageNavigatorState extends ConsumerState<PageNavigator> {
   @override
   Widget build(BuildContext context) {
     final pageController = ref.watch(pageControllerProvider);
-    final int currentIndex = ref.watch(indexProvider) as int;
     return Scaffold(
       body: SafeArea(
         child: PageView(
@@ -38,7 +36,7 @@ class _PageNavigatorState extends ConsumerState<PageNavigator> {
       ),
       bottomNavigationBar: BottomBar(
         currentIndex: ref.watch(indexProvider) as int,
-        items: bottomBarItems,
+        items: bottomBarItems(context),
         onTap: (index) {
           ref.read(onPageChangeProvider).call(index);
           pageController.animateToPage(
@@ -52,26 +50,34 @@ class _PageNavigatorState extends ConsumerState<PageNavigator> {
   }
 }
 
-List<BottomNavyBarItem> bottomBarItems = [
-  BottomNavyBarItem(
-    icon: const Icon(Icons.home),
-    title: const Text('Home'),
-    inactiveColor: Colors.white,
-    activeColor: Colors.white,
-    textAlign: TextAlign.center,
-  ),
-  BottomNavyBarItem(
-    icon: const Icon(Icons.add),
-    title: const Text('Compose'),
-    textAlign: TextAlign.center,
-    inactiveColor: Colors.white,
-    activeColor: Colors.white,
-  ),
-  BottomNavyBarItem(
-    icon: const Icon(Icons.person),
-    title: const Text('Profile'),
-    inactiveColor: Colors.white,
-    activeColor: Colors.white,
-    textAlign: TextAlign.center,
-  ),
-];
+List<BottomNavyBarItem> bottomBarItems(context) {
+  return [
+    BottomNavyBarItem(
+      icon: const Icon(Icons.home),
+      title: const Text('Home'),
+      inactiveColor:
+          ThemeColors.bottomBarInactiveColor[Theme.of(context).brightness],
+      activeColor:
+          ThemeColors.bottomBarActiveColor[Theme.of(context).brightness]!,
+      textAlign: TextAlign.center,
+    ),
+    BottomNavyBarItem(
+      icon: const Icon(Icons.add),
+      title: const Text('Compose'),
+      textAlign: TextAlign.center,
+      inactiveColor:
+          ThemeColors.bottomBarInactiveColor[Theme.of(context).brightness],
+      activeColor:
+          ThemeColors.bottomBarActiveColor[Theme.of(context).brightness]!,
+    ),
+    BottomNavyBarItem(
+      icon: const Icon(Icons.person),
+      title: const Text('Profile'),
+      inactiveColor:
+          ThemeColors.bottomBarInactiveColor[Theme.of(context).brightness],
+      activeColor:
+          ThemeColors.bottomBarActiveColor[Theme.of(context).brightness]!,
+      textAlign: TextAlign.center,
+    ),
+  ];
+}

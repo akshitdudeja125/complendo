@@ -62,7 +62,7 @@ class TextFormFieldItem extends StatelessWidget {
           ),
           initialValue: initValue,
           cursorColor: Theme.of(context).colorScheme.secondary,
-          autofocus: true,
+          autofocus: false,
           enableSuggestions: true,
           readOnly: !canEdit!,
           cursorHeight: 20,

@@ -2,36 +2,37 @@ import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/widgets/custom_app_bar.dart';
 import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
-import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/features/complaint/providers/complaint_provider.dart';
+import 'package:complaint_portal/features/profile/edit_profile.dart';
 import 'package:complaint_portal/features/profile/image_detail_screen.dart';
+import 'package:complaint_portal/features/profile/personal_information.dart';
+import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import '../../models/user_model.dart';
-import 'edit_profile.dart';
-import 'personal_information.dart';
 
-class Profile extends ConsumerStatefulWidget {
-  const Profile({
+class UserDetailsScreen extends ConsumerStatefulWidget {
+  final UserModel user;
+  const UserDetailsScreen({
     super.key,
+    required this.user,
   });
 
   @override
-  ConsumerState<Profile> createState() => _ProfileState();
+  ConsumerState<UserDetailsScreen> createState() => _UserDetailsScreenState();
 }
 
-class _ProfileState extends ConsumerState<Profile> {
+class _UserDetailsScreenState extends ConsumerState<UserDetailsScreen> {
   bool _pdv = true;
   bool _cdv = false;
 
   @override
   Widget build(BuildContext context) {
-    final UserModel user = ref.watch(userProvider);
+    final user = widget.user;
     return Scaffold(
       appBar: CustomAppBar(
-        heading: "Profile",
+        heading: "User Details",
         trailing: IconButton(
           onPressed: () {
             Get.to(() => EditProfile(
@@ -131,11 +132,6 @@ class _ProfileState extends ConsumerState<Profile> {
                         children: [
                           Text(
                             "Complaint Data",
-                            // style: TextStyle(
-                            //   fontSize: 18,
-                            //   fontWeight: FontWeight.bold,
-                            // ),
-                            // detailsTextStyle
                             style: TextStyles(Theme.of(context).brightness)
                                 .detailsTextStyle,
                           ),

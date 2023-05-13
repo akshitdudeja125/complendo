@@ -6,7 +6,13 @@ final ThemeData lightThemeData = ThemeData(
   useMaterial3: true,
   iconButtonTheme: IconButtonThemeData(
     style: ButtonStyle(
-      overlayColor: MaterialStateProperty.all(Colors.transparent),
+      overlayColor:
+          MaterialStateProperty.all(const Color.fromARGB(255, 6, 56, 97)),
+    ),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all(Colors.black),
     ),
   ),
   switchTheme: SwitchThemeData(
@@ -29,6 +35,7 @@ final ThemeData lightThemeData = ThemeData(
         color: Colors.red,
       ),
     ),
+
     focusedBorder: const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(20)),
       borderSide: BorderSide(
@@ -117,6 +124,11 @@ final ThemeData darkThemeData = ThemeData(
         borderSide: BorderSide(
           color: Colors.red.shade700,
         ),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.grey.shade700),
       ),
     ),
     colorScheme: const ColorScheme(

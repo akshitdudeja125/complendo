@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -34,29 +35,26 @@ class SettingsTile extends StatelessWidget {
                 ? Icon(
                     iconData,
                     size: 30,
-                    color: Theme.of(context).iconTheme.color!.withOpacity(0.8),
-                    // color: Theme.of(context).iconTheme.color,
+                    color: ThemeColors
+                        .settingsIconColor[Theme.of(context).brightness],
                   )
                 : Image.network(
                     imageUrl!,
                     fit: BoxFit.cover,
                     width: 40,
                     height: 40,
-                    color: Theme.of(context).iconTheme.color!.withOpacity(0.5),
+                    color: ThemeColors
+                        .settingsIconColor[Theme.of(context).brightness],
                   )),
         title: Text(
           title,
-          style: Theme.of(context).textTheme.titleMedium,
+          style:
+              TextStyles(Theme.of(context).brightness).settingsTitleTextStyle,
         ),
         subtitle: Text(
           subtitle ?? "",
-          style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                color: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
-                    .color!
-                    .withOpacity(0.5),
-              ),
+          style: TextStyles(Theme.of(context).brightness)
+              .settingsSubtitleTextStyle,
         ),
         trailing: trailing ??
             Padding(
@@ -64,7 +62,8 @@ class SettingsTile extends StatelessWidget {
               child: Icon(
                 trailingIcon,
                 size: 20,
-                color: Theme.of(context).iconTheme.color!.withOpacity(0.5),
+                color:
+                    ThemeColors.settingsIconColor[Theme.of(context).brightness],
               ),
             ),
       ),

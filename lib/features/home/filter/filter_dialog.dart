@@ -1,10 +1,10 @@
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/features/home/filter/filter_provider.dart';
 import 'package:complaint_portal/features/home/filter/filter_section.dart';
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
@@ -15,27 +15,55 @@ class FilterDialog extends ConsumerWidget {
     final UserModel? user = ref.watch(userProvider);
     return ListTile(
       title: Text(
-        "Complaints:",
+        // "Your Complaints",
+        user!.userType! == UserType.student
+            ? "Your Complaints"
+            : user.userType == UserType.admin
+                ? "All Complaints"
+                : user.userType == UserType.warden
+                    ? "Hostel Complaints"
+                    : "All Complaints",
         style: Theme.of(context).textTheme.titleLarge!.copyWith(
-              fontWeight: FontWeight.w300,
+              fontWeight: FontWeight.w800,
+              fontSize: 25,
+              // color: const Color.fromARGB(255, 6, 56, 97).withOpacity(0.8)
+              //,
+              // color: Theme.of(context).brightness == Brightness.light
+              //     ? const Color.fromARGB(255, 6, 56, 97).withOpacity(0.8)
+              //     : const Color.fromARGB(255, 101, 185, 253).withOpacity(0.8),
+              color:
+                  ThemeColors.homePageFontColor[Theme.of(context).brightness],
             ),
       ),
       trailing: IconButton(
         icon: Icon(
           Icons.filter_list_rounded,
           // color: Theme.of(context).iconTheme.color,
-          color: ref.watch(filteredOptionsProvider)['status']!.isNotEmpty ||
-                  ref.watch(filteredOptionsProvider)['category']!.isNotEmpty ||
-                  ref.watch(filteredOptionsProvider)['hostel']!.isNotEmpty
-              ? Theme.of(context).iconTheme.color!.withOpacity(0.5)
-              : Theme.of(context).iconTheme.color,
+          color:
+              ref.watch(complaintFilterOptionsProvider)['status']!.isNotEmpty ||
+                      ref
+                          .watch(complaintFilterOptionsProvider)['category']!
+                          .isNotEmpty ||
+                      ref
+                          .watch(complaintFilterOptionsProvider)['hostel']!
+                          .isNotEmpty
+                  ? Theme.of(context).iconTheme.color!.withOpacity(0.5)
+                  : Theme.of(context).iconTheme.color,
         ),
         onPressed: () async {
           return await Get.dialog(
             StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 return AlertDialog(
-                  title: const Text("Filter Options"),
+                  backgroundColor: ThemeColors.filterDialogBackgroundColor[
+                      Theme.of(context).brightness],
+                  title: Center(
+                    child: Text(
+                      "Filter Options",
+                      style: TextStyles(Theme.of(context).brightness)
+                          .filterHeaderTextStyle,
+                    ),
+                  ),
                   content: SingleChildScrollView(
                     child: Column(
                       children: [
@@ -44,7 +72,7 @@ class FilterDialog extends ConsumerWidget {
                           filtername: 'status',
                         ),
                         Visibility(
-                          visible: user!.userType! == UserType.student ||
+                          visible: user.userType! == UserType.student ||
                               user.userType == UserType.admin ||
                               user.userType == UserType.warden,
                           child: const FilterSection(
@@ -53,7 +81,8 @@ class FilterDialog extends ConsumerWidget {
                           ),
                         ),
                         Visibility(
-                          visible: user.userType != UserType.student,
+                          visible: user.userType != UserType.student &&
+                              user.userType != UserType.warden,
                           child: const FilterSection(
                             headerText: 'Hostel',
                             filtername: 'hostel',
@@ -63,12 +92,72 @@ class FilterDialog extends ConsumerWidget {
                     ),
                   ),
                   actions: [
-                    TextButton(
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            // Theme.of(context).brightness == Brightness.light
+                            //     ? const Color.fromARGB(255, 6, 56, 97)
+                            //         .withOpacity(0.8)
+                            //     : Colors.grey.shade400,
+                            ThemeColors.elevatedButtonColor[
+                                Theme.of(context).brightness],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () {
+                        // ref
+                        //     .watch(complaintFilterOptionsProvider.notifier)={
+                        //   'status': [],
+                        //   'category': [],
+                        //   'hostel': [],
+
+                        //     };
+                      },
+                      child: Text(
+                        "Clear",
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 20,
+                              // color: Theme.of(context).brightness ==
+                              //         Brightness.light
+                              //     ? Colors.white
+                              //     : Colors.black,
+                              color: ThemeColors.filterDoneButtonColor[
+                                  Theme.of(context).brightness],
+                            ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            // Theme.of(context).brightness == Brightness.light
+                            //     ? const Color.fromARGB(255, 6, 56, 97)
+                            //         .withOpacity(0.8)
+                            //     : Colors.grey.shade400,
+                            ThemeColors.elevatedButtonColor[
+                                Theme.of(context).brightness],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                       onPressed: () {
                         Get.back();
                       },
-                      child: const Text("Done"),
-                    ),
+                      child: Text(
+                        "Done",
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 20,
+                              // color: Theme.of(context).brightness ==
+                              //         Brightness.light
+                              //     ? Colors.white
+                              //     : Colors.black,
+                              color: ThemeColors.filterDoneButtonColor[
+                                  Theme.of(context).brightness],
+                            ),
+                      ),
+                    )
                   ],
                 );
               },

@@ -205,20 +205,38 @@ void changeCommentDialog({
   final textController = TextEditingController();
   Get.dialog(
     AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(Get.context!).colorScheme.background,
       title: const Text('Edit Complaint'),
       content: TextFormFieldItem(
         labelText: 'Comment',
         controller: textController,
+        textColor: Theme.of(Get.context!).colorScheme.onBackground,
       ),
       actions: [
-        TextButton(
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor:
+                Theme.of(Get.context!).brightness == Brightness.light
+                    ? Colors.grey.shade800
+                    : Theme.of(Get.context!).colorScheme.primary,
+          ),
           onPressed: () {
             Get.back();
           },
-          child: const Text('Cancel'),
+          child: Text(
+            'Cancel',
+            style: TextStyle(
+              color: Theme.of(Get.context!).colorScheme.onPrimary,
+            ),
+          ),
         ),
-        TextButton(
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor:
+                Theme.of(Get.context!).brightness == Brightness.light
+                    ? Colors.grey.shade800
+                    : Theme.of(Get.context!).colorScheme.primary,
+          ),
           onPressed: () {
             Get.back();
             ref.read(complaintRepositoryProvider).changeComplaintStatus(
@@ -228,8 +246,14 @@ void changeCommentDialog({
                   to: status,
                 );
           },
-          child: const Text('Submit'),
+          child: Text(
+            'Submit',
+            style: TextStyle(
+              color: Theme.of(Get.context!).colorScheme.onPrimary,
+            ),
+          ),
         ),
+        // ),
       ],
     ),
   );

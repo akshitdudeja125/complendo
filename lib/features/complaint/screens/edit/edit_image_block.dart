@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:complaint_portal/common/services/image_picker.dart';
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/features/complaint/providers/edit_complaint_form_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:photo_view/photo_view.dart';
 
 class EditImageBlock extends StatelessWidget {
   const EditImageBlock({
@@ -18,7 +18,12 @@ class EditImageBlock extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
-        border: Border.all(color: Colors.black.withOpacity(0.3)),
+        border: Border.all(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.grey.shade400
+              : const Color.fromARGB(255, 6, 56, 97),
+          // ThemeColors.containerBorderColor[Theme.of(context).brightness],
+        ),
         borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
       child: Consumer(builder: (context, ref, child) {
@@ -33,17 +38,23 @@ class EditImageBlock extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   child: Text(
                       image == null ? 'Upload an Image' : "Uploaded Image",
-                      style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF181D3D))),
+                      style: TextStyles(Theme.of(context).brightness)
+                          .complaintTextMedium),
                 ),
                 const Spacer(),
                 if (loading == false)
                   IconButton(
                     icon: image == null
-                        ? const Icon(Icons.image)
-                        : const Icon(Icons.edit),
+                        ? Icon(
+                            Icons.image,
+                            color: ThemeColors
+                                .iconColorLight[Theme.of(context).brightness],
+                          )
+                        : Icon(
+                            Icons.edit,
+                            color: ThemeColors
+                                .iconColorLight[Theme.of(context).brightness],
+                          ),
                     onPressed: () async {
                       if (loading) return;
                       ref.watch(imageProvider.notifier).state =
@@ -53,7 +64,11 @@ class EditImageBlock extends StatelessWidget {
                 if (loading == false)
                   image == null
                       ? IconButton(
-                          icon: const Icon(Icons.camera_alt),
+                          icon: Icon(
+                            Icons.camera_alt,
+                            color: ThemeColors
+                                .iconColorLight[Theme.of(context).brightness],
+                          ),
                           onPressed: () async {
                             if (loading) return;
                             ref.watch(imageProvider.notifier).state =

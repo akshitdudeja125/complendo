@@ -1,10 +1,12 @@
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/theme/theme_provider.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
-// import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/widgets/dialog.dart';
 import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
 import 'package:complaint_portal/features/auth/providers/auth_provider.dart';
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
+import 'package:complaint_portal/features/auth/repository/user_repository.dart';
+import 'package:complaint_portal/features/manage_users/manage_user_screen.dart';
 import 'package:complaint_portal/features/profile/profile.dart';
 import 'package:complaint_portal/features/settings/about_page.dart';
 import 'package:complaint_portal/features/settings/settings_tile.dart';
@@ -24,18 +26,15 @@ class SettingsPage extends StatelessWidget {
       body: Consumer(builder: (context, ref, _) {
         final user = ref.watch(userProvider);
         final isDark = ref.watch(isDarkProvider);
-        // print("user: $user");
         return Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
-                title: const Text(
+                title: Text(
                   'Settings',
-                  style: TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style:
+                      TextStyles(Theme.of(context).brightness).appbarTextStyle,
                 ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -48,7 +47,8 @@ class SettingsPage extends StatelessWidget {
                       },
                       icon: Icon(
                         Icons.light,
-                        color: Theme.of(context).iconTheme.color,
+                        color: ThemeColors
+                            .settingsIconColor[Theme.of(context).brightness],
                       ),
                     ),
                     IconButton(
@@ -57,7 +57,8 @@ class SettingsPage extends StatelessWidget {
                       },
                       icon: Icon(
                         Icons.logout,
-                        color: Theme.of(context).iconTheme.color,
+                        color: ThemeColors
+                            .settingsIconColor[Theme.of(context).brightness],
                       ),
                     ),
                   ],
@@ -84,10 +85,8 @@ class SettingsPage extends StatelessWidget {
                                 const EdgeInsets.only(top: kDefaultSpacing / 2),
                             child: Text(
                               user.name,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(fontSize: 20),
+                              style: TextStyles(Theme.of(context).brightness)
+                                  .settingsTitleTextStyle2,
                             ),
                           ),
                           Padding(
@@ -95,7 +94,8 @@ class SettingsPage extends StatelessWidget {
                                 bottom: kDefaultSpacing / 2),
                             child: Text(
                               user.userType!.value.capitalize!,
-                              style: Theme.of(context).textTheme.titleSmall,
+                              style: TextStyles(Theme.of(context).brightness)
+                                  .settingsSubtitleTextStyle2,
                             ),
                           ),
                         ],
@@ -117,6 +117,18 @@ class SettingsPage extends StatelessWidget {
                             );
                           },
                         ),
+                        if (user.userType!.value == 'admin' ||
+                            user.userType!.value == 'warden')
+                          SettingsTile(
+                            title: "Users",
+                            subtitle: "Manage users",
+                            iconData: Icons.people,
+                            onTap: () {
+                              Get.to(
+                                const ManageUsers(),
+                              );
+                            },
+                          ),
                         SettingsTile(
                           title: "Dark Mode",
                           subtitle: "Turn on/off dark mode",
@@ -129,6 +141,22 @@ class SettingsPage extends StatelessWidget {
                                   await SharedPreferences.getInstance();
                               prefs.setBool('isDark', value);
                               ref.watch(isDarkProvider.notifier).state = value;
+                            },
+                          ),
+                        ),
+                        SettingsTile(
+                          title: "Notifications",
+                          subtitle: "Turn on/off notifications",
+                          iconData: Icons.notifications,
+                          trailing: Switch(
+                            activeColor: kPrimaryColor,
+                            value: user.notifications ?? true,
+                            onChanged: (value) async {
+                              ref.watch(userRepositoryProvider).updateUserField(
+                                    user.id,
+                                    'notifications',
+                                    value,
+                                  );
                             },
                           ),
                         ),
@@ -148,16 +176,16 @@ class SettingsPage extends StatelessWidget {
                         //     // show Get Dialog
                         //   },
                         // ),
-                        SettingsTile(
-                          title: "About",
-                          subtitle: "About the app",
-                          iconData: Icons.info,
-                          onTap: () {
-                            Get.to(
-                              const AboutPage(),
-                            );
-                          },
-                        ),
+                        // SettingsTile(
+                        //   title: "About",
+                        //   subtitle: "About the app",
+                        //   iconData: Icons.info,
+                        //   onTap: () {
+                        //     Get.to(
+                        //       const AboutPage(),
+                        //     );
+                        //   },
+                        // ),
                         SettingsTile(
                           title: "Logout",
                           iconData: Icons.logout,

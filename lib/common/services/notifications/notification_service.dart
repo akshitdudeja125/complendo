@@ -130,6 +130,10 @@ class NotificationService {
           .doc(cid)
           .get()
           .then((value) {
+        //check if complaint still exists
+        if (!value.exists) {
+          return;
+        }
         Get.to(
           () => ComplaintScreen(
             // cid: Complaint.fromMap(value.data()!).cid!,

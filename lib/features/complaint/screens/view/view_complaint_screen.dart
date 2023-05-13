@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
 
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
@@ -33,10 +34,13 @@ class _ComplaintScreenState extends ConsumerState<ComplaintScreen> {
     final UserModel user = ref.watch(userProvider);
     return Scaffold(
       appBar: ViewComplaintAppBar(
-          complaint: complaint, complaintUser: complaintUser, user: user),
+        complaint: complaint,
+        complaintUser: complaintUser,
+        user: user,
+      ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 40, right: 40, top: 16),
+          padding: const EdgeInsets.only(left: 35, right: 35, top: 16),
           child: Column(
             children: [
               PersonalDetailsSection(ref: ref, complaintUser: complaintUser),

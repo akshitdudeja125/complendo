@@ -1,4 +1,5 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatelessWidget {
@@ -19,8 +20,7 @@ class BottomBar extends StatelessWidget {
       animationDuration: const Duration(
         milliseconds: 300,
       ),
-      
-      backgroundColor: const Color(0xFF181D3D),
+      backgroundColor: ThemeColors.bottomBarColor[Theme.of(context).brightness],
       selectedIndex: currentIndex,
       showElevation: true,
       onItemSelected: onTap,

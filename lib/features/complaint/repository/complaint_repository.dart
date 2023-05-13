@@ -64,21 +64,26 @@ class ComplaintRepository {
                 )
                 .toMap(),
           );
-
+      Get.back();
       final receiver = complaint.uid;
       final recieverToken = FirebaseFirestore.instance
           .collection('users')
           .doc(receiver)
           .get()
-          .then((value) => value.data()!['deviceToken']);
+          .then((value) {
+        if (value.data() == null) return null;
+        if (value['notifcations'] == true) {
+          return value.data()!['deviceToken'];
+        }
+      });
       recieverToken.then((value) {
+        //check if the reciever has notifcation as enabled
         NotificationService().sendNotifcationToUser(
           reciever: value,
           title: 'Complaint Rejected',
           body: 'Your complaint has been rejected',
           cid: complaint.cid,
         );
-        Get.back();
       });
     }
     if (to == 'resolved') {
@@ -93,12 +98,16 @@ class ComplaintRepository {
                 resolvedAt: DateTime.now(),
               )
               .toMap());
+      Get.back();
       final receiver = complaint.uid;
       final recieverToken = FirebaseFirestore.instance
           .collection('users')
           .doc(receiver)
           .get()
-          .then((value) => value.data()!['deviceToken']);
+          .then((value) {
+        if (value.data() == null) return null;
+        if (value['notifcations'] == true) return value.data()!['deviceToken'];
+      });
       recieverToken.then((value) {
         NotificationService().sendNotifcationToUser(
           reciever: value,
@@ -106,7 +115,6 @@ class ComplaintRepository {
           body: 'Your complaint has been resolved',
           cid: complaint.cid,
         );
-        Get.back();
       });
     }
     if (to == 'pending') {

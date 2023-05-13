@@ -17,6 +17,8 @@ class UserModel {
   final String? deviceToken;
   final UserType? userType;
 
+  bool? blocked;
+
   UserModel({
     required this.id,
     required this.name,
@@ -30,6 +32,7 @@ class UserModel {
     this.notifications = true,
     this.deviceToken,
     this.userType,
+    this.blocked = false,
   });
 
   UserModel copyWith({
@@ -45,6 +48,7 @@ class UserModel {
     bool? notifications,
     String? deviceToken,
     UserType? userType,
+    bool? blocked,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -60,6 +64,7 @@ class UserModel {
       notifications: notifications ?? this.notifications,
       deviceToken: deviceToken ?? this.deviceToken,
       userType: userType ?? this.userType,
+      blocked: blocked ?? this.blocked,
     );
   }
 
@@ -77,6 +82,7 @@ class UserModel {
       'notifications': notifications,
       'deviceToken': deviceToken,
       'userType': userType?.value,
+      'blocked': blocked,
     };
   }
 
@@ -101,6 +107,7 @@ class UserModel {
       deviceToken:
           map['deviceToken'] != null ? map['deviceToken'] as String : null,
       userType: UserType.fromString(map['userType'] as String?),
+      blocked: map['blocked'] != null ? map['blocked'] as bool : null,
     );
   }
 

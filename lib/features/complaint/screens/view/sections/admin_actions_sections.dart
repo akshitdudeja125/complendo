@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/widgets/custom_elevated_button.dart';
@@ -40,8 +41,10 @@ class AdminActionsSection extends ConsumerWidget {
                   ref.read(adProvider.notifier).state =
                       !ref.read(adProvider.notifier).state;
                 },
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_drop_down_circle_outlined,
+                  color: ThemeColors
+                      .dropDownIconColor[Theme.of(context).brightness],
                 ),
               ),
             ],

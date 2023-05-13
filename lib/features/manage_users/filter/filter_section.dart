@@ -1,6 +1,6 @@
 import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
-import 'package:complaint_portal/features/home/filter/filter_provider.dart';
+import 'package:complaint_portal/features/manage_users/filter/filter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,6 +15,7 @@ class FilterSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    debugPrint("FilterSection");
     return Column(
       children: [
         Center(
@@ -27,10 +28,10 @@ class FilterSection extends ConsumerWidget {
         const SizedBox(height: 10),
         Wrap(
           children: [
-            for (var e in filterOptions[filtername]!)
+            for (var e in userFilterOptions[filtername]!)
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 2.5, vertical: 2),
+                    const EdgeInsets.symmetric(horizontal: 2.5, vertical: 3),
                 child: Padding(
                   padding: const EdgeInsets.all(0),
                   child: FilterChip(
@@ -52,8 +53,8 @@ class FilterSection extends ConsumerWidget {
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: ref
-                                    .watch(complaintFilterOptionsProvider)[
-                                        filtername]!
+                                    .watch(
+                                        userFilterOptionsProvider)[filtername]!
                                     .contains(e)
                                 ? ThemeColors.selectedFilterChipTextColor[
                                     Theme.of(context).brightness]
@@ -62,22 +63,19 @@ class FilterSection extends ConsumerWidget {
                       ),
                       labelPadding: const EdgeInsets.all(0),
                       selected: ref
-                          .watch(complaintFilterOptionsProvider)[filtername]!
+                          .watch(userFilterOptionsProvider)[filtername]!
                           .contains(e),
                       onSelected: (value) {
-                        ref
-                            .read(complaintFilterOptionsProvider.notifier)
-                            .state = {
-                          ...ref.watch(complaintFilterOptionsProvider),
+                        ref.read(userFilterOptionsProvider.notifier).state = {
+                          ...ref.watch(userFilterOptionsProvider),
                           filtername: value
                               ? [
-                                  ...ref.watch(complaintFilterOptionsProvider)[
-                                      filtername]!,
+                                  ...ref.watch(
+                                      userFilterOptionsProvider)[filtername]!,
                                   e
                                 ]
                               : ref
-                                  .watch(complaintFilterOptionsProvider)[
-                                      filtername]!
+                                  .watch(userFilterOptionsProvider)[filtername]!
                                   .where((element) => element != e)
                                   .toList(),
                         };

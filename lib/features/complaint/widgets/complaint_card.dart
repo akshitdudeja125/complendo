@@ -23,7 +23,8 @@ class ComplaintCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onLongPress: () => bottomModelSheet(context, complaint, ref, user),
+      onLongPress: () =>
+          complaintBottomModelSheet(context, complaint, ref, user),
       onTap: () {
         Get.to(() => ComplaintScreen(
               complaint: complaint,
@@ -47,11 +48,6 @@ class ComplaintCard extends ConsumerWidget {
                     : Image(
                         height: 40,
                         width: 40,
-                        //set color only in dark mode
-                        // color: ref.watch(isDarkProvider)
-                        // ? Colors.white
-                        // : Colors.black,
-
                         image: AssetImage(
                           categoryImageMap[complaint.category]!,
                         ),

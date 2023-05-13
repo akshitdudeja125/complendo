@@ -21,6 +21,15 @@ enum UserType {
     );
   }
 
+  static List<String> getUserTypes() {
+    List<String> categories = [];
+    for (var category in UserType.values) {
+      categories.add(category.value);
+    }
+    
+    return categories;
+  }
+
   @override
   String toString() => value.toLowerCase().removeAllWhitespace;
 }

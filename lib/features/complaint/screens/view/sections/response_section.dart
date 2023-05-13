@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/utils/extensions.dart';
@@ -20,22 +21,21 @@ class ResolvedDetailsSection extends ConsumerWidget {
         children: [
           Row(
             children: [
-              const Text(
+              Text(
                 "Resolved Details",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyles(Theme.of(context).brightness)
+                    .detailsTextStyle,
               ),
               const Spacer(),
-              // down arrow to expand
               InkWell(
                 onTap: () {
                   ref.watch(rdProvider.notifier).state =
                       !ref.watch(rdProvider.notifier).state;
                 },
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_drop_down_circle_outlined,
+                  color: ThemeColors
+                      .dropDownIconColor[Theme.of(context).brightness],
                 ),
               ),
             ],
@@ -54,7 +54,6 @@ class ResolvedDetailsSection extends ConsumerWidget {
                         if (complaint.resolvedAt != null)
                           TextFormFieldItem(
                             controller: TextEditingController(
-                              // text: complaint.resolvedAt?.toString(),
                               text: complaint.resolvedAt == null
                                   ? ""
                                   : complaint.resolvedAt!.formattedDate,
@@ -76,64 +75,64 @@ class ResolvedDetailsSection extends ConsumerWidget {
                         if (complaint.resolvedBy != null &&
                             complaint.status == ComplaintStatus.resolved)
                           SizedBox(height: kFormSpacing),
-                        GestureDetector(
-                          onTap: () {
-                            //open dialogue to display comment
-                            if (complaint.comment != null) {
-                              Get.dialog(
-                                Dialog(
-                                  clipBehavior: Clip.antiAlias,
-                                  child: SizedBox(
-                                    height: 300,
-                                    width: 300,
-                                    child: Column(
-                                      children: [
-                                        const Align(
-                                          alignment: Alignment.center,
-                                          child: Padding(
-                                            padding: EdgeInsets.all(10.0),
-                                            child: Text(
-                                              "Comment",
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: SingleChildScrollView(
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  complaint.comment ??
-                                                      'No Comments',
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                          child: TextFormFieldItem(
-                            controller: TextEditingController(
-                              text: complaint.comment?.toString() ??
-                                  'No Comments',
-                            ),
-                            canEdit: false,
-                            labelText: 'Comment',
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     if (complaint.comment != null) {
+                        //       Get.dialog(
+                        //         Dialog(
+                        //           clipBehavior: Clip.antiAlias,
+                        //           child: SizedBox(
+                        //             height: 300,
+                        //             width: 300,
+                        //             child: Column(
+                        //               children: [
+                        //                 const Align(
+                        //                   alignment: Alignment.center,
+                        //                   child: Padding(
+                        //                     padding: EdgeInsets.all(10.0),
+                        //                     child: Text(
+                        //                       "Comment",
+                        //                       style: TextStyle(
+                        //                         fontSize: 18,
+                        //                         fontWeight: FontWeight.bold,
+                        //                       ),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //                 Expanded(
+                        //                   child: Padding(
+                        //                     padding: const EdgeInsets.all(10.0),
+                        //                     child: SingleChildScrollView(
+                        //                       child: Align(
+                        //                         alignment: Alignment.center,
+                        //                         child: Text(
+                        //                           complaint.comment ??
+                        //                               'No Comments',
+                        //                           style: const TextStyle(
+                        //                             fontSize: 16,
+                        //                           ),
+                        //                         ),
+                        //                       ),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ],
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       );
+                        //     }
+                        //   },
+                        //   child:
+                        TextFormFieldItem(
+                          controller: TextEditingController(
+                            text:
+                                complaint.comment?.toString() ?? 'No Comments',
                           ),
+                          canEdit: false,
+                          labelText: 'Comment',
                         ),
+                        // ),
                         if (complaint.comment != null)
                           SizedBox(height: kFormSpacing),
                       ],

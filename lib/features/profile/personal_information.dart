@@ -58,11 +58,13 @@ class PersonalImformation extends StatelessWidget {
           labelText: 'Phone Number',
           canEdit: false,
         ),
-        if (user.userType == UserType.student)
+        if (user.userType == UserType.student ||
+            user.userType == UserType.warden)
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.03,
           ),
-        if (user.userType == UserType.student)
+        if (user.userType == UserType.student ||
+            user.userType == UserType.warden)
           TextFormFieldItem(
             controller: TextEditingController(
               // text: user.hostel,

@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/utils/extensions.dart';
@@ -22,14 +23,8 @@ class ComplaintDetailsSection extends ConsumerWidget {
           children: [
             Text(
               "Complaint Details",
-              // style: TextStyle(
-              //   fontSize: 18,
-              //   fontWeight: FontWeight.bold,
-              // ),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: TextStyles(Theme.of(context).brightness)
+                  .detailsTextStyle,
             ),
             const Spacer(),
             InkWell(
@@ -39,7 +34,8 @@ class ComplaintDetailsSection extends ConsumerWidget {
               },
               child: Icon(
                 Icons.arrow_drop_down_circle_outlined,
-                color: Theme.of(context).iconTheme.color,
+                color:
+                    ThemeColors.dropDownIconColor[Theme.of(context).brightness],
               ),
             ),
           ],
@@ -48,7 +44,6 @@ class ComplaintDetailsSection extends ConsumerWidget {
           final cdv = ref.watch(cdProvider);
           return Visibility(
             visible: cdv,
-            // visible: ref.watch(cdProvider),
             child: Column(
               children: [
                 SizedBox(height: kFormSpacing),
@@ -130,12 +125,12 @@ class ComplaintDetailsSection extends ConsumerWidget {
                 SizedBox(height: kFormSpacing),
                 Container(
                   decoration: BoxDecoration(
-                    // color: Colors.white,
                     color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      // color: Colors.black.withOpacity(0.3),
-                      color: Theme.of(context).dividerColor,
+                      // color: Theme.of(context).dividerColor,
+                      color: ThemeColors
+                          .borderColorL2[Theme.of(context).brightness]!,
                     ),
                   ),
                   child: Column(
@@ -149,10 +144,6 @@ class ComplaintDetailsSection extends ConsumerWidget {
                               Text.rich(
                                 TextSpan(
                                   text: "Uploaded Image ",
-                                  // style: const TextStyle(
-                                  //   fontSize: 13,
-                                  //   fontWeight: FontWeight.bold,
-                                  // ),
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleSmall!
@@ -175,7 +166,6 @@ class ComplaintDetailsSection extends ConsumerWidget {
                               if (complaint.imageLink != null)
                                 GestureDetector(
                                   onTap: () {
-                                    //show image preview
                                     imageDialog(
                                       imageLink: complaint.imageLink!,
                                     );
@@ -184,7 +174,8 @@ class ComplaintDetailsSection extends ConsumerWidget {
                                     padding: const EdgeInsets.only(right: 10.0),
                                     child: Icon(
                                       Icons.image,
-                                      color: Theme.of(context).iconTheme.color,
+                                      color: ThemeColors.dropDownIconColor[
+                                          Theme.of(context).brightness],
                                       size: 30,
                                     ),
                                   ),

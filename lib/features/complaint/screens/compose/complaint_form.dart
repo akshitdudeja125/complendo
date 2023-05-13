@@ -1,10 +1,10 @@
+import 'package:complaint_portal/common/theme/custom_colors.dart';
+import 'package:complaint_portal/common/widgets/submit_button.dart';
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/features/complaint/providers/complaint_form_provider.dart';
 import 'package:complaint_portal/features/complaint/screens/compose/sections/complaint_section.dart';
 import 'package:complaint_portal/features/complaint/screens/compose/sections/user_data_section.dart';
 import 'package:complaint_portal/features/complaint/widgets/submit_complaint_form.dart';
-import 'package:complaint_portal/common/utils/constants.dart';
-import 'package:complaint_portal/common/widgets/custom_elevated_button.dart';
 import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +14,7 @@ class ComplaintForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print('ComplaintForm build');
+    debugPrint('ComplaintForm build');
     final isLoading = ref.watch(isLoadingProvider);
     return Stack(
       children: [
@@ -30,9 +30,9 @@ class ComplaintForm extends ConsumerWidget {
                   child: Column(
                     children: [
                       UserDataSection(user: user),
-                      SizedBox(height: kFormSpacing),
+                      const SizedBox(height: kFormSpacing),
                       const ComplaintSection(),
-                      SizedBox(height: kFormSpacing),
+                      const SizedBox(height: kFormSpacing),
                       SubmitButton(
                         isLoadingProvider: isLoadingProvider,
                         onClick: () {
@@ -50,5 +50,3 @@ class ComplaintForm extends ConsumerWidget {
     );
   }
 }
-
-

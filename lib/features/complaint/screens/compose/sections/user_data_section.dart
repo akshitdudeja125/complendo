@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
 import 'package:complaint_portal/models/user_model.dart';
@@ -22,14 +23,14 @@ class UserDataSection extends StatelessWidget {
           labelText: 'Name',
           enabled: false,
         ),
-        SizedBox(height: kFormSpacing),
+        const SizedBox(height: kFormSpacing),
         TextFormFieldItem(
           initValue: user.email,
           labelText: 'Email',
           canEdit: false,
           enabled: false,
         ),
-        SizedBox(height: kFormSpacing),
+        const SizedBox(height: kFormSpacing),
         TextFormFieldItem(
           initValue: user.rollNo,
           labelText: 'Roll Number',

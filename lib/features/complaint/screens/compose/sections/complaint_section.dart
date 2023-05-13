@@ -1,3 +1,4 @@
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/utils/validators.dart';
@@ -65,7 +66,7 @@ class _ComplaintSectionState extends ConsumerState<ComplaintSection> {
             }
           },
         ),
-        SizedBox(height: kFormSpacing),
+        const SizedBox(height: kFormSpacing),
         TextFormFieldItem(
           controller: roomNoController,
           onChanged: (value) {
@@ -82,7 +83,7 @@ class _ComplaintSectionState extends ConsumerState<ComplaintSection> {
             ref.watch(roomNoProvider.notifier).state = null;
           },
         ),
-        SizedBox(height: kFormSpacing),
+        const SizedBox(height: kFormSpacing),
         TextFormFieldItem(
           labelText: 'Complaint Category',
           controller: TextEditingController(
@@ -100,7 +101,7 @@ class _ComplaintSectionState extends ConsumerState<ComplaintSection> {
             }
           },
         ),
-        SizedBox(height: kFormSpacing),
+        const SizedBox(height: kFormSpacing),
         TextFormFieldItem(
           labelText: 'Complaint Type',
           controller: TextEditingController(
@@ -119,7 +120,7 @@ class _ComplaintSectionState extends ConsumerState<ComplaintSection> {
             }
           },
         ),
-        SizedBox(height: kFormSpacing),
+        const SizedBox(height: kFormSpacing),
         TextFormFieldItem(
           onChanged: (value) {
             ref.watch(titleProvider.notifier).state = value;
@@ -137,7 +138,7 @@ class _ComplaintSectionState extends ConsumerState<ComplaintSection> {
             ref.watch(titleProvider.notifier).state = null;
           },
         ),
-        SizedBox(height: kFormSpacing),
+        const SizedBox(height: kFormSpacing),
         TextFormFieldItem(
           labelText: 'Description',
           onChanged: (value) {
@@ -155,7 +156,7 @@ class _ComplaintSectionState extends ConsumerState<ComplaintSection> {
           },
           maxLines: 4,
         ),
-        SizedBox(height: kFormSpacing),
+        const SizedBox(height: kFormSpacing),
         Container(
           width: double.infinity,
           decoration: BoxDecoration(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'enums.dart';
 
-
 List<String> complaintCategories = [
   'Electrical',
   'Plumbing',
@@ -28,7 +27,15 @@ final filterOptions = {
   "category": complaintCategories
 };
 
-double kFormSpacing = 20;
+final userFilterOptions = {
+  // "status": ["pending", "resolved", "rejected"],
+  "hostel": Hostel.getHostels(),
+  "usertype": UserType.getUserTypes(),
+  "status": ["Blocked", "Unblocked"]
+  // "category": complaintCategories
+};
+
+// double kFormSpacing = 20;
 
 const double kDefaultSpacing = 16.0;
 

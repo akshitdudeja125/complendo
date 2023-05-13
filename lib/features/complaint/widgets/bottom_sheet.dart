@@ -11,9 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
-bottomModelSheet(
+complaintBottomModelSheet(
     BuildContext context, Complaint complaint, WidgetRef ref, UserModel user) {
   return showModalBottomSheet(
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.grey[900]
+          : Colors.white,
       context: context,
       builder: (context) {
         return Column(
@@ -21,14 +24,10 @@ bottomModelSheet(
           children: [
             ListTile(
               title: const Text('View Details'),
-              // onTap: () => Get.to(() => ComplaintScreen(cid: complaint.cid!)),
               onTap: () => Get.to(() => ComplaintScreen(
                     complaint: complaint,
                   )),
             ),
-            // if (complaint.status == 'pending' &&
-            // (complaint.uid == user.id || user.isAdmin!))
-            // if (complaint.status == 'pending' &&
             if (complaint.status == ComplaintStatus.pending &&
                 (complaint.uid == user.id || user.userType!.value != 'student'))
               ListTile(
@@ -40,8 +39,6 @@ bottomModelSheet(
             if ((complaint.status == ComplaintStatus.pending &&
                     complaint.uid == user.id) ||
                 user.userType!.value != 'student')
-              // if ((complaint.status == 'pending' && complaint.uid == user.id) ||
-              //     user.isAdmin!)
               ListTile(
                 title: const Text('Delete'),
                 onTap: () async {
@@ -56,7 +53,6 @@ bottomModelSheet(
                   Get.back();
                 },
               ),
-            // if (user.isAdmin! && complaint.status == 'pending')
             if (user.userType!.value != 'student' &&
                 complaint.status == ComplaintStatus.pending)
               ListTile(
@@ -69,7 +65,6 @@ bottomModelSheet(
                       user: user,
                     );
                   }),
-            // if (user.isAdmin! && complaint.status == 'pending')
             if (user.userType!.value != 'student' &&
                 complaint.status == ComplaintStatus.pending)
               ListTile(
@@ -81,7 +76,6 @@ bottomModelSheet(
                       ref: ref,
                     );
                   }),
-            // if (user.isAdmin! && complaint.status == 'rejected')
             if (user.userType!.value != 'student' &&
                 complaint.status == ComplaintStatus.rejected)
               ListTile(
@@ -94,7 +88,6 @@ bottomModelSheet(
                   );
                 },
               ),
-            // if (user.isAdmin! && complaint.status == 'resolved')
             if (user.userType!.value != 'student' &&
                 complaint.status == ComplaintStatus.resolved)
               ListTile(

@@ -23,6 +23,12 @@ class UserRepository {
         );
   }
 
+  //delete user
+  Future<void> deleteUser(String uid) async {
+    final db = FirebaseFirestore.instance.collection('users');
+    await db.doc(uid).delete();
+  }
+
   Future<void> updateUserField(
     String docId,
     String field,
@@ -30,6 +36,14 @@ class UserRepository {
   ) async {
     FirebaseFirestore.instance.collection('users').doc(docId).update(
       {field: value},
+    );
+  }
+
+  //block user
+  Future<void> changeBlockStatus(String uid, bool org) async {
+    final db = FirebaseFirestore.instance.collection('users');
+    await db.doc(uid).update(
+      {'blocked': !org},
     );
   }
 

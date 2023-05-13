@@ -1,8 +1,8 @@
+import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/widgets/dialog.dart';
 import 'package:complaint_portal/features/complaint/repository/complaint_repository.dart';
 import 'package:complaint_portal/features/complaint/screens/edit/edit_complaint_screen.dart';
-import 'package:complaint_portal/features/complaint/widgets/dialog.dart';
 import 'package:complaint_portal/models/complaint_model.dart';
 import 'package:complaint_portal/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +26,12 @@ class ViewComplaintAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
+      backgroundColor: ThemeColors.appBarColor[Theme.of(context).brightness],
       title: Row(
         children: [
           Text(
             'View Complaint',
-            style: Theme.of(context).textTheme.titleLarge,
+            style: TextStyles(Theme.of(context).brightness).appbarTextStyle,
           ),
           const Spacer(),
           if ((complaint.status == ComplaintStatus.pending &&
@@ -46,12 +47,11 @@ class ViewComplaintAppBar extends StatelessWidget with PreferredSizeWidget {
               },
               child: Icon(
                 FeatherIcons.edit,
-                color: Theme.of(context).iconTheme.color,
+                color:
+                    ThemeColors.dropDownIconColor[Theme.of(context).brightness],
               ),
             ),
           const SizedBox(width: 5),
-          // if ((complaint.status == 'pending' && complaintUser.id == user.id) ||
-          // (user.isAdmin != null && user.isAdmin!))
           if ((complaint.status == ComplaintStatus.pending &&
                   complaintUser.id == user.id) ||
               (user.userType!.value != 'student'))
@@ -59,10 +59,10 @@ class ViewComplaintAppBar extends StatelessWidget with PreferredSizeWidget {
               builder: (context, ref, _) => IconButton(
                 icon: Icon(
                   FeatherIcons.trash2,
-                  color: Theme.of(context).iconTheme.color,
+                  color: ThemeColors
+                      .dropDownIconColor[Theme.of(context).brightness],
                 ),
                 onPressed: () async {
-                  // final result = await deleteComplaintDialog(context);
                   final result = await dialogResult("Delete Complaint",
                       "Are you sure you want to delete this complaint?");
                   if (result == true) {
@@ -80,7 +80,7 @@ class ViewComplaintAppBar extends StatelessWidget with PreferredSizeWidget {
       leading: IconButton(
         icon: Icon(
           FeatherIcons.arrowLeft,
-          color: Theme.of(context).iconTheme.color,
+          color: ThemeColors.dropDownIconColor[Theme.of(context).brightness],
         ),
         onPressed: () => Navigator.of(context).pop(),
       ),

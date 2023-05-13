@@ -35,41 +35,32 @@ Column customDropDownMenu({
                 ),
               ),
             ),
-      Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
-          border: Border.all(color: Colors.black.withOpacity(0.3)),
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButtonFormField2(
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-            ),
-            hint: Text(
-              hintText,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(fontSize: 16),
-            ),
-            value: value,
-            onChanged: onChanged,
-            validator: validator,
-            isExpanded: true,
-            items: items
-                .map((item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontSize: 16),
-                      ),
-                    ))
-                .toList(),
+      DropdownButtonHideUnderline(
+        child: DropdownButtonFormField2(
+          decoration: const InputDecoration(
+            border: InputBorder.none,
           ),
+          hint: Text(
+            hintText,
+            style:
+                Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 16),
+          ),
+          value: value,
+          onChanged: onChanged,
+          validator: validator,
+          isExpanded: true,
+          items: items
+              .map((item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontSize: 16),
+                    ),
+                  ))
+              .toList(),
         ),
       ),
     ],
