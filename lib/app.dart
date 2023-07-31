@@ -29,6 +29,10 @@ class _MyAppState extends ConsumerState<MyApp> {
     });
   }
 
+  // final prefs =
+  //                                 await SharedPreferences.getInstance();
+  //                             prefs.setBool('isDark', value);
+//                             ref.watch(isDarkProvider.notifier).state = value;
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -43,6 +47,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       debugShowCheckedModeBanner: false,
       home: AuthChecker(
         container: widget.container,
+        prefs: widget.prefs,
       ),
     );
   }

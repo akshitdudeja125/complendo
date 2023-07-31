@@ -13,11 +13,14 @@ import 'package:complaint_portal/features/navigation/navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthChecker extends ConsumerStatefulWidget {
   final ProviderContainer container;
+  final SharedPreferences prefs;
 
-  const AuthChecker({Key? key, required this.container}) : super(key: key);
+  const AuthChecker({Key? key, required this.container, required this.prefs})
+      : super(key: key);
 
   @override
   ConsumerState<AuthChecker> createState() => _AuthCheckerState();
@@ -69,7 +72,9 @@ class _AuthCheckerState extends ConsumerState<AuthChecker> {
                           ref.read(userRepositoryProvider);
                       repo.updateToken(token, authuser.uid);
                     }
-                    return const PageNavigator();
+                    return PageNavigator(
+                      prefs: widget.prefs,
+                    );
                   },
                   loading: () => const LoadingScreen(),
                   error: (e, trace) => ErrorScreen(e, trace),
