@@ -206,18 +206,18 @@ class SettingsPage extends StatelessWidget {
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.04,
                         ),
-                        Center(
-                          child: Column(
-                            children: const [
-                              Text(
-                                "Version 1.0.0",
-                              ),
-                              Text(
-                                "Made with ❤️ by Akshit",
-                              ),
-                            ],
-                          ),
-                        ),
+                        // Center(
+                        //   child: Column(
+                        //     children: const [
+                        //       Text(
+                        //         "Version 1.0.0",
+                        //       ),
+                        //       Text(
+                        //         "Made with ❤️ by Akshit",
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.04,
                         ),

@@ -1,8 +1,12 @@
 import 'package:complaint_portal/common/theme/custom_colors.dart';
 import 'package:complaint_portal/common/utils/constants.dart';
+import 'package:complaint_portal/common/utils/enums.dart';
+import 'package:complaint_portal/common/widgets/custom_elevated_button.dart';
+import 'package:complaint_portal/common/widgets/display_snack_bar.dart';
 
 import 'package:complaint_portal/features/auth/providers/user_provider.dart';
 import 'package:complaint_portal/features/complaint/providers/complaint_provider.dart';
+import 'package:complaint_portal/features/complaint/repository/complaint_repository.dart';
 import 'package:complaint_portal/features/complaint/screens/view/app_bar.dart';
 import 'package:complaint_portal/features/complaint/screens/view/sections/admin_actions_sections.dart';
 import 'package:complaint_portal/features/complaint/screens/view/sections/complaint_details_section.dart';
@@ -44,9 +48,83 @@ class _ComplaintScreenState extends ConsumerState<ComplaintScreen> {
           child: Column(
             children: [
               PersonalDetailsSection(ref: ref, complaintUser: complaintUser),
-              SizedBox(height: kFormSpacing),
+              const SizedBox(height: kFormSpacing),
               ComplaintDetailsSection(complaint: complaint),
-              SizedBox(height: kFormSpacing),
+
+              if (complaint.complaintType == "Common")
+                const SizedBox(height: kFormSpacing),
+              if (complaint.complaintType == "Common")
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomElevatedButton(
+                          bgColor: (complaint.upvotes ?? []).contains(user.id)
+                              ? Colors.green
+                              : Colors.white,
+                          textColor: (complaint.upvotes ?? []).contains(user.id)
+                              ? Colors.white
+                              : Colors.black,
+                          onClick: () async {
+                            if (complaint.uid == user.id) {
+                              displaySnackBar('Failure',
+                                  "Cannot upvote your own complaint");
+                            } else if (complaint.status ==
+                                ComplaintStatus.resolved) {
+                              displaySnackBar('Failure',
+                                  "Cannot upvote a resolved complaint");
+                            } else if (complaint.status ==
+                                ComplaintStatus.rejected) {
+                              displaySnackBar('Failure',
+                                  "Cannot upvote a rejected complaint");
+                            } else {
+                              await ref
+                                  .watch(complaintRepositoryProvider)
+                                  .upvoteComplaint(complaint.cid!, ref);
+                            }
+                          },
+                          text:
+                              "Upvote (${((complaint.upvotes ?? []).length)})"),
+                      const SizedBox(width: 10),
+                      CustomElevatedButton(
+                          onClick: () async {
+                            if (complaint.uid == user.id) {
+                              displaySnackBar('Failure',
+                                  "Cannot downvote your own complaint");
+                            } else if (complaint.status ==
+                                ComplaintStatus.resolved) {
+                              displaySnackBar('Failure',
+                                  "Cannot downvote a resolved complaint");
+                            } else if (complaint.status ==
+                                ComplaintStatus.rejected) {
+                              displaySnackBar('Failure',
+                                  "Cannot downvote a rejected complaint");
+                            } else {
+                              await ref
+                                  .watch(complaintRepositoryProvider)
+                                  .downVoteComplaint(complaint.cid!, ref);
+                            }
+                          },
+                          bgColor: (complaint.downvotes ?? []).contains(user.id)
+                              ? Colors.red
+                              : Colors.white,
+                          textColor:
+                              (complaint.downvotes ?? []).contains(user.id)
+                                  ? Colors.white
+                                  : Colors.black,
+                          text:
+                              "Downvote (${((complaint.downvotes ?? []).length)})"),
+                    ],
+                  ),
+                ),
+
+              // if (complaint.status != ComplaintStatus.resolved &&
+              //     !complaint.votes!.contains(user.id))
+              //   CustomElevatedButton(
+              //     onClick: () {},
+              //     text: "Downvote",
+              //   ),
+              const SizedBox(height: kFormSpacing),
               ResolvedDetailsSection(complaint: complaint),
               AdminActionsSection(user: user, complaint: complaint),
             ],

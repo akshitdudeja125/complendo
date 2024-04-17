@@ -43,21 +43,34 @@ class FilteredComplaints extends StatelessWidget {
             return true;
           }).where((complaint) {
             if (user.userType!.value == 'student') {
-              return complaint.uid == user.id;
+              return complaint.uid == user.id ||
+                  (complaint.hostel == user.hostel &&
+                      complaint.complaintType == "Common");
             }
             return true;
           }).where((complaint) {
             if (filterOptions['selectedDateRange'] == null) {
               return true;
             }
-            return complaint.date!.isAtSameMomentAs(
-                    filterOptions['selectedDateRange']!.start) ||
-                complaint.date!.isAtSameMomentAs(
-                    filterOptions['selectedDateRange']!.end) ||
-                (complaint.date!
-                        .isAfter(filterOptions['selectedDateRange']!.start) &&
-                    complaint.date!
-                        .isBefore(filterOptions['selectedDateRange']!.end));
+            // print(filterOptions['selectedDateRange']!.start);
+            // print(filterOptions['selectedDateRange']!.end);
+            print({
+              'complaint.date': complaint.date,
+              'filterOptions': filterOptions['selectedDateRange'],
+              'same as start': complaint.date!
+                  .isAtSameMomentAs(filterOptions['selectedDateRange']!.start),
+              'same as end': complaint.date!
+                  .isAtSameMomentAs(filterOptions['selectedDateRange']!.end),
+              'between': complaint.date!
+                      .isAfter(filterOptions['selectedDateRange']!.start) &&
+                  complaint.date!
+                      .isBefore(filterOptions['selectedDateRange']!.end),
+            });
+            return (complaint.date!
+                    .isAfter(filterOptions['selectedDateRange']!.start) &&
+                complaint.date!.isBefore(filterOptions['selectedDateRange']!
+                    .end
+                    .add(const Duration(days: 1))));
           }).toList();
           filteredComplaints.sort((a, b) {
             return b.date!.compareTo(a.date!);

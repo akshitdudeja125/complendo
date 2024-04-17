@@ -64,7 +64,9 @@ class _AuthCheckerState extends ConsumerState<AuthChecker> {
                     if (value == null) {
                       return const RegisterScreen();
                     }
-                    if (value['deviceToken'] != token) {
+                    print(value);
+                    if (!value.containsKey('deviceToken') ||
+                        value['deviceToken'] != token) {
                       final UserRepository repo =
                           ref.read(userRepositoryProvider);
                       repo.updateToken(token, authuser.uid);

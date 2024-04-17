@@ -16,6 +16,120 @@ class ComplaintRepository {
     });
   }
 
+  Future<void> downVoteComplaint(String cid, ref) async {
+    try {
+      final user = ref.read(firebaseAuthProvider).currentUser!;
+      final firestore = ref.watch(firebaseFirestoreProvider);
+
+      final docRef = firestore.collection('complaints').doc(cid);
+      final docSnapshot = await docRef.get();
+      // Update votes collection based on the complaint's upvote status
+
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data() as Map<String, dynamic>;
+        final List<dynamic> downvotes = data['downvotes'] ?? [];
+
+        if (downvotes.contains(user.uid)) {
+          // User has already downvoted, remove the downvote
+          await docRef.update({
+            'downvotes': FieldValue.arrayRemove([user.uid]),
+          });
+        } else {
+          // User hasn't downvoted, add the downvote
+          await docRef.update({
+            'downvotes': FieldValue.arrayUnion([user.uid]),
+            'upvotes': FieldValue.arrayRemove([user.uid]),
+          });
+        }
+      } else {
+        throw 'Complaint not found';
+      }
+      final votesRef = firestore.collection('votes').doc(cid);
+      final votesSnapshot = await votesRef.get();
+      if (votesSnapshot.exists) {
+        final data = docSnapshot.data() as Map<String, dynamic>;
+        final List<dynamic> downvotes = data['downvotes'] ?? [];
+
+        if (downvotes.contains(user.uid)) {
+          // User has already downvoted, remove the downvote
+          await votesRef.update({
+            'downvotes': FieldValue.arrayRemove([user.uid]),
+          });
+        } else {
+          // User hasn't downvoted, add the downvote
+          await votesRef.update({
+            'downvotes': FieldValue.arrayUnion([user.uid]),
+            'upvotes': FieldValue.arrayRemove([user.uid]),
+          });
+        }
+      } else {
+        await votesRef.set({
+          'downvotes': FieldValue.arrayUnion([user.uid]),
+        });
+      }
+    } catch (e) {
+      print(e);
+      displaySnackBar('Error', 'Error toggling downvote for complaint');
+    }
+  }
+
+  Future<void> upvoteComplaint(String cid, ref) async {
+    try {
+      final user = ref.read(firebaseAuthProvider).currentUser!;
+      final firestore = ref.watch(firebaseFirestoreProvider);
+
+      final docRef = firestore.collection('complaints').doc(cid);
+      final docSnapshot = await docRef.get();
+
+      final votesRef = firestore.collection('votes').doc(cid);
+
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data() as Map<String, dynamic>;
+        final List<dynamic> upvotes = data['upvotes'] ?? [];
+
+        if (upvotes.contains(user.uid)) {
+          // User has already downvoted, remove the downvote
+          await docRef.update({
+            'upvotes': FieldValue.arrayRemove([user.uid]),
+          });
+        } else {
+          // User hasn't downvoted, add the downvote
+          await docRef.update({
+            'upvotes': FieldValue.arrayUnion([user.uid]),
+            'downvotes': FieldValue.arrayRemove([user.uid]),
+          });
+        }
+      } else {
+        throw 'Complaint not found';
+      }
+      final votesSnapshot = await votesRef.get();
+      if (votesSnapshot.exists) {
+        final data = docSnapshot.data() as Map<String, dynamic>;
+        final List<dynamic> upvotes = data['upvotes'] ?? [];
+
+        if (upvotes.contains(user.uid)) {
+          // User has already downvoted, remove the downvote
+          await votesRef.update({
+            'upvotes': FieldValue.arrayRemove([user.uid]),
+          });
+        } else {
+          // User hasn't downvoted, add the downvote
+          await votesRef.update({
+            'upvotes': FieldValue.arrayUnion([user.uid]),
+            'downvotes': FieldValue.arrayRemove([user.uid]),
+          });
+        }
+      } else {
+        await votesRef.set({
+          'upvotes': FieldValue.arrayUnion([user.uid]),
+        });
+      }
+    } catch (e) {
+      print(e);
+      displaySnackBar('Error', 'Error toggling upvote for complaint');
+    }
+  }
+
   Future<void> registerComplaint(ref, Complaint complaint) async {
     final user = ref.read(firebaseAuthProvider).currentUser!;
     final firestore = ref.watch(firebaseFirestoreProvider);
@@ -71,10 +185,19 @@ class ComplaintRepository {
           .doc(receiver)
           .get()
           .then((value) {
-        if (value.data() == null) return null;
-        if (value['notifcations'] == true) {
+        print({"valuefromrecievertoken": value.data()});
+        // return value.data()!['deviceToken'];
+        //check if the reciever has notifcation as enabled
+        print(value.data()!['notifications']);
+        print(value.data()!['deviceToken']);
+        if (value.data()!['notifications'] == true) {
           return value.data()!['deviceToken'];
         }
+        print({
+          'recieverToken': value.data()!['deviceToken'],
+          'notifcations': value.data()!['notifications']
+        });
+        return null;
       });
       recieverToken.then((value) {
         //check if the reciever has notifcation as enabled
@@ -99,22 +222,46 @@ class ComplaintRepository {
               )
               .toMap());
       Get.back();
+      print("resolved");
       final receiver = complaint.uid;
+      print({receiver});
       final recieverToken = FirebaseFirestore.instance
           .collection('users')
           .doc(receiver)
           .get()
           .then((value) {
-        if (value.data() == null) return null;
-        if (value['notifcations'] == true) return value.data()!['deviceToken'];
+        print({"valuefromrecievertoken": value.data()});
+        // return value.data()!['deviceToken'];
+        //check if the reciever has notifcation as enabled
+        print(value.data()!['notifications']);
+        print(value.data()!['deviceToken']);
+        if (value.data()!['notifications'] == true) {
+          return value.data()!['deviceToken'];
+        }
+        print({
+          'recieverToken': value.data()!['deviceToken'],
+          'notifcations': value.data()!['notifications']
+        });
+        return null;
       });
+      print({recieverToken});
       recieverToken.then((value) {
+        print({"recieverToken": recieverToken});
+        print({
+          'reciever': value,
+          'title': 'Complaint Resolved',
+          'body': 'Your complaint has been resolved',
+          'cid': complaint?.cid,
+        });
         NotificationService().sendNotifcationToUser(
           reciever: value,
           title: 'Complaint Resolved',
           body: 'Your complaint has been resolved',
           cid: complaint.cid,
         );
+        print("resolved and sent notification");
+      }).onError((error, stackTrace) {
+        print({"error": error, "stackTrace": stackTrace});
       });
     }
     if (to == 'pending') {

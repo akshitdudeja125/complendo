@@ -3,6 +3,7 @@ import 'package:complaint_portal/common/utils/constants.dart';
 import 'package:complaint_portal/common/utils/enums.dart';
 import 'package:complaint_portal/common/utils/extensions.dart';
 import 'package:complaint_portal/common/utils/validators.dart';
+import 'package:complaint_portal/common/widgets/custom_elevated_button.dart';
 import 'package:complaint_portal/common/widgets/text_form_field_item.dart';
 import 'package:complaint_portal/features/complaint/screens/view/provider/section_provider.dart';
 import 'package:complaint_portal/common/widgets/image_dialog.dart';
@@ -23,8 +24,7 @@ class ComplaintDetailsSection extends ConsumerWidget {
           children: [
             Text(
               "Complaint Details",
-              style: TextStyles(Theme.of(context).brightness)
-                  .detailsTextStyle,
+              style: TextStyles(Theme.of(context).brightness).detailsTextStyle,
             ),
             const Spacer(),
             InkWell(
@@ -123,6 +123,8 @@ class ComplaintDetailsSection extends ConsumerWidget {
                   fontWeight: FontWeight.bold,
                 ),
                 SizedBox(height: kFormSpacing),
+                // if (complaint.status == ComplaintStatus.resolved)
+
                 Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardColor,
@@ -187,6 +189,18 @@ class ComplaintDetailsSection extends ConsumerWidget {
                     ],
                   ),
                 ),
+                // complaint.upvotes != null
+                //     ? SizedBox(height: kFormSpacing)
+                //     : Container(),
+                // complaint.upvotes!.contains(ref.read(userProvider).id
+                //     ? Text("You have upvoted this complaint")
+                //     : Container(),
+                // CustomElevatedButton(
+                //   onClick: () {
+                //     // markAsPendingDialog(complaint: complaint, ref: ref);
+                //   },
+                //   text: "Mark as Pending",
+                // ),
               ],
             ),
           );

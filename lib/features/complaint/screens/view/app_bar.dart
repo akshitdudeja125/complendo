@@ -10,7 +10,8 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
-class ViewComplaintAppBar extends StatelessWidget with PreferredSizeWidget {
+class ViewComplaintAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   const ViewComplaintAppBar({
     super.key,
     required this.complaint,

@@ -25,6 +25,7 @@ class Complaint {
   final String? resolvedBy;
 
   final List<String>? upvotes;
+  final List<String>? downvotes;
 
   final ComplaintStatus? status;
   final String? complaintType;
@@ -44,6 +45,7 @@ class Complaint {
     this.date,
     this.resolvedAt,
     this.upvotes,
+    this.downvotes,
     this.status,
     this.imageLink,
     this.complaintType,
@@ -59,6 +61,7 @@ class Complaint {
     bool? isIndividual,
     DateTime? date,
     DateTime? resolvedAt,
+    List<String>? downvotes,
     List<String>? upvotes,
     String? status,
     String? complaintType,
@@ -78,6 +81,7 @@ class Complaint {
       date: date ?? this.date,
       resolvedAt: resolvedAt ?? this.resolvedAt,
       upvotes: upvotes ?? this.upvotes,
+      downvotes: downvotes ?? this.downvotes,
       // status: status ?? this.status,
       status: status != null
           ? ComplaintStatus.values.firstWhere((e) => e.toString() == status)
@@ -102,6 +106,7 @@ class Complaint {
       'date': date,
       'resolvedAt': resolvedAt,
       'upvotes': upvotes,
+      'downvotes': downvotes,
       'status': status?.toString(),
       'complaintType': complaintType,
       'imageLink': imageLink,
@@ -120,9 +125,16 @@ class Complaint {
       title: data['title'] as String,
       description: data['description'] as String,
       category: data['category'] as String,
-      upvotes: data['upvotes'] as List<String>,
+      upvotes: data['upvotes'] != null
+          ? List<String>.from(data['upvotes'] as List<dynamic>)
+          : [],
+      downvotes: data['downvotes'] != null
+          ? List<String>.from(data['downvotes'] as List<dynamic>)
+          : [],
       date: data['date']?.toDate(),
-      resolvedAt: data['resolvedAt']?.toDate(),
+      // resolvedAt: data['resolvedAt']?.toDate(),
+      resolvedAt:
+          data['resolvedAt'] != null ? data['resolvedAt'].toDate() : null,
       status: data['status'] != null
           ? ComplaintStatus.values
               .firstWhere((e) => e.toString() == data['status'])
@@ -130,11 +142,16 @@ class Complaint {
       hostel: data['hostel'] != null
           ? Hostel.fromString(data['hostel'] as String)
           : null,
-      imageLink: data['imageLink'] as String,
+      // imageLink: data['imageLink'] as String,
+      imageLink: data['imageLink'] != null ? data['imageLink'] as String : null,
       complaintType: data['complaintType'] as String,
-      roomNo: data['roomNo'] as String,
-      resolvedBy: data['resolvedBy'] as String,
-      comment: data['comment'] as String,
+      // roomNo: data['roomNo'] as String,
+      roomNo: data['roomNo'] != null ? data['roomNo'] as String : null,
+      // resolvedBy: data['resolvedBy'] as String,
+      resolvedBy:
+          data['resolvedBy'] != null ? data['resolvedBy'] as String : null,
+      // comment: data['comment'] as String,
+      comment: data['comment'] != null ? data['comment'] as String : null,
     );
   }
   factory Complaint.fromMap(Map<String, dynamic> map) {
@@ -147,7 +164,13 @@ class Complaint {
       isIndividual: map['isIndividual'] as bool,
       date: map['date']?.toDate(),
       resolvedAt: map['resolvedAt']?.toDate(),
-      upvotes: map['upvotes'] as List<String>,
+      // upvotes: map['upvotes'] as List<String>,
+      upvotes: map['upvotes'] != null
+          ? List<String>.from(map['upvotes'] as List<dynamic>)
+          : [],
+      downvotes: map['downvotes'] != null
+          ? List<String>.from(map['downvotes'] as List<dynamic>)
+          : [],
       status: map['status'] != null
           ? ComplaintStatus.values
               .firstWhere((e) => e.toString() == map['status'])
@@ -155,11 +178,18 @@ class Complaint {
       hostel: map['hostel'] != null
           ? Hostel.fromString(map['hostel'] as String)
           : null,
-      imageLink: map['imageLink'] as String,
-      complaintType: map['complaintType'] as String,
-      roomNo: map['roomNo'] as String,
-      resolvedBy: map['resolvedBy'] as String,
-      comment: map['comment'] as String,
+      // imageLink: map['imageLink'] as String,
+      imageLink: map['imageLink'] != null ? map['imageLink'] as String : null,
+      // complaintType: map['complaintType'] as String,
+      complaintType:
+          map['complaintType'] != null ? map['complaintType'] as String : null,
+      // roomNo: map['roomNo'] as String,
+      roomNo: map['roomNo'] != null ? map['roomNo'] as String : null,
+      // resolvedBy: map['resolvedBy'] as String,
+      resolvedBy:
+          map['resolvedBy'] != null ? map['resolvedBy'] as String : null,
+      // comment: map['comment'] as String,
+      comment: map['comment'] != null ? map['comment'] as String : null,
     );
   }
 }

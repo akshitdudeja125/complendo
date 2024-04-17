@@ -6,12 +6,14 @@ class CustomElevatedButton extends StatelessWidget {
   final String text;
   final Color? bgColor;
   final double? maxWidth;
+  final Color? textColor;
   const CustomElevatedButton({
     super.key,
     required this.onClick,
     this.bgColor,
     required this.text,
     this.maxWidth,
+    this.textColor,
   });
 
   @override
@@ -37,8 +39,9 @@ class CustomElevatedButton extends StatelessWidget {
             // style: TextStyles(Theme.of(context).brightness)
             //     .elevatedButtonTextStyle,
             style: TextStyle(
-              color: ThemeColors
-                  .elevatedButtonTextColor[Theme.of(context).brightness],
+              color: textColor ??
+                  ThemeColors
+                      .elevatedButtonTextColor[Theme.of(context).brightness],
               fontWeight: FontWeight.w600,
               fontSize: 18,
             ),

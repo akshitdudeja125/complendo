@@ -69,7 +69,7 @@ class _FilterDialogState extends ConsumerState<FilterDialog> {
           Text(
             // "Your Complaints",
             user!.userType! == UserType.student
-                ? "Your Complaints"
+                ? "Hostel Complaints"
                 : user.userType == UserType.admin
                     ? "All Complaints"
                     : user.userType == UserType.warden

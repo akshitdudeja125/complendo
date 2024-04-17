@@ -46,17 +46,28 @@ final complaintStreamProvider =
     StreamProvider.autoDispose<List<Complaint>>((ref) {
   final firebaseInstance = ref.watch(firebaseFirestoreProvider);
   return firebaseInstance.collection('complaints').snapshots().map((event) {
-    return event.docs.map((e) => Complaint.fromObject(e.data())).toList();
+    return event.docs.map((e) {
+      // print("events");
+      // print({e: e.data()});
+      return Complaint.fromObject(e.data());
+    }).toList();
   });
 });
 
 final complaintListProvider = Provider.autoDispose<List<Complaint>>((ref) {
   final complaintData = ref.watch(complaintStreamProvider);
+  // print({"complaintData": complaintData});
   return complaintData.when(
     data: (data) {
+      // print({
+      //   data: {data}
+      // });
       return data;
     },
     loading: () => [],
-    error: (_, __) => [],
+    error: (_, __) {
+      print({"Error in complaintListProvider": _});
+      return [];
+    },
   );
 });

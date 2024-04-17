@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 enum UserType {
   student("student"),
   admin("admin"),
-  dev("developer"),
+  // dev("developer"),
   electrician("electrician"),
   warden("warden"),
   plumber("plumber");
@@ -26,7 +26,7 @@ enum UserType {
     for (var category in UserType.values) {
       categories.add(category.value);
     }
-    
+
     return categories;
   }
 
